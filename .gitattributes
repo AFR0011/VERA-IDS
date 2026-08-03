@@ -1,0 +1,22 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.docx binary
+*.gz binary
+*.joblib binary
+*.pkl binary
+*.pickle binary
+
+# Preserve byte-identical compact artifacts referenced by SOURCE_MANIFEST.csv.
+outputs/summaries/*.csv binary
+outputs/summaries/*.json binary
+
+# Git LFS is intentionally not configured: no necessary large binary is selected.

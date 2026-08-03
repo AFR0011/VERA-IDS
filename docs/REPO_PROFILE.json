@@ -1,0 +1,13 @@
+{
+  "schema_version": "agentic-workflow/v2",
+  "root": ".",
+  "source_root": "external read-only research archive",
+  "source_files_scanned": 5102,
+  "scan_truncated": false,
+  "primary_type": "mixed",
+  "traits": ["research", "data-ml", "software", "documentation"],
+  "confidence": "high",
+  "generated_source_root": "outputs",
+  "protected_source_root": "external read-only research archive",
+  "active_batch": "PUBLIC-RELEASE-002"
+}

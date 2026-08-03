@@ -1,0 +1,3 @@
+holdout_family,unknown_val,unknown_test,known_train_min,eligible
+Synthetic-A,250,240,300,true
+Synthetic-B,180,220,300,false

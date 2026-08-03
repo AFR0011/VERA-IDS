@@ -1,0 +1,17 @@
+# Copy to `config/datasets.local.yml` and edit locally. That file is ignored.
+paths:
+  raw_datasets_root: data/raw
+  outputs_root: outputs
+  processed_protocol_a: data/processed/protocol_a
+  processed_protocol_b: data/processed/protocol_b
+
+datasets:
+  primary:
+    - CICIDS2017
+    - CICIoT2023
+  external_stress:
+    - NSL-KDD
+    - UNSW-NB15
+
+# Split definitions and seeds are scientific settings. Use the audited protocol
+# files instead of changing them casually.

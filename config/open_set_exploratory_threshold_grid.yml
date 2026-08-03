@@ -1,0 +1,56 @@
+experimental_lane:
+  id: exploratory_broad_threshold_grid
+  status: exploratory
+  scope: Broad sensitivity grid; not the active rejection policy and not universally canonical.
+
+threshold_selection:
+  discipline: validation_only
+  warning: Do not select thresholds, reject policies, tau, or calibration parameters on test labels.
+  stage1_target_fpr_grid:
+    - 0.001
+    - 0.002
+    - 0.005
+    - 0.010
+    - 0.015
+    - 0.020
+    - 0.050
+  tau_grid:
+    - 0.10
+    - 0.30
+    - 0.50
+    - 0.70
+    - 0.80
+    - 0.90
+  max_false_unknown_rate_all: 0.05
+  max_false_unknown_rate_known_attacks: 0.10
+  max_overall_reject_rate: 0.01
+
+open_set_rejection:
+  methods:
+    - max_softmax
+    - margin
+    - entropy
+    - conformal
+    - sink_aware
+  legacy_overrides:
+    open_set_baselines:
+      best_csv: outputs/supplementary/exploratory/thesis_full_scope_pack/protocol_b_best_per_holdout_standardized.csv
+      audit_roots:
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery
+      base_helper_script: ids_eval_framework/src/two_stage_engine.py
+      grid_script: ids_eval_framework._native.protocol_b_grid
+      runs_root: outputs/supplementary/exploratory/open_set_broad_threshold_grid
+      summary_dirname: summary
+      bootstrap_resamples: 1000
+      random_seed: 123
+    sink_aware_rejector:
+      step5_root: outputs/supplementary/exploratory/open_set_broad_threshold_grid
+      failure_modes_csv: outputs/supplementary/exploratory/thesis_full_scope_pack/protocol_b_failure_modes.csv
+      runs_root: outputs/supplementary/exploratory/sink_aware_broad_threshold_grid
+      bootstrap_resamples: 200
+      random_seed: 123
+experimental_lane:
+  id: exploratory_broad_threshold_grid
+  status: exploratory
+  scope: Broad sensitivity grid; not the active rejection policy and not universally canonical.

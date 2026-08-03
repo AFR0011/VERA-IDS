@@ -1,0 +1,11 @@
+threshold,dataset,total_holdouts,eligible_holdouts,all_holdouts_eligible
+50,CICIDS2017,6,6,True
+50,CICIoT2023,6,6,True
+100,CICIDS2017,6,6,True
+100,CICIoT2023,6,6,True
+200,CICIDS2017,6,6,True
+200,CICIoT2023,6,6,True
+250,CICIDS2017,6,0,False
+250,CICIoT2023,6,6,True
+500,CICIDS2017,6,0,False
+500,CICIoT2023,6,6,True

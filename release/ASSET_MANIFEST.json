@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "release_tag": "v2026.08",
+  "package_version": "2026.8",
+  "repository": "https://github.com/AFR0011/VERA-IDS",
+  "asset": {
+    "filename": "VERA-IDS-Thesis.pdf",
+    "release_url": "https://github.com/AFR0011/VERA-IDS/releases/download/v2026.08/VERA-IDS-Thesis.pdf",
+    "bytes": 3803300,
+    "page_count": 191,
+    "sha256": "14DF7A720CC989F1DD5BE515B5F919A11CE25654C0C91B4167A60C7C48720306",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "repository_cover_pages": 1,
+    "thesis_body_pages": 190
+  },
+  "authoritative_source": {
+    "filename": "Beyond Closed-Set Accuracy - A Validity-Aware Evaluation Framework for Machine Learning-Based Intrusion Detection.docx",
+    "sha256": "534D1346FC6AF42A93FA9893C9D488AB665CEE4863752B41647C134F569C00CC",
+    "published": false
+  },
+  "correction_supplement": "https://github.com/AFR0011/VERA-IDS/blob/v2026.08/PROTOCOL_A_CORRECTION.md"
+}

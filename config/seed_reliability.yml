@@ -1,0 +1,28 @@
+seed_reliability:
+  description: Resumable repeated-seed reruns for manuscript reliability claims.
+  seeds:
+    - 123
+    - 124
+    - 125
+    - 126
+    - 127
+  parallelism:
+    n_jobs: 24
+    rationale: Historical experiment setting; reduce for smaller systems.
+  output_root: outputs/10_seed_reliability
+  lanes:
+    protocol_a_two_stage:
+      enabled: true
+      runner: protocol_a_two_stage
+      base_config: config/protocol_a.yml
+      output_subdir: protocol_a_two_stage
+    protocol_a_flat:
+      enabled: true
+      runner: protocol_a_flat
+      base_config: config/protocol_a.yml
+      output_subdir: protocol_a_flat
+    protocol_b_loao:
+      enabled: true
+      runner: protocol_b_loao
+      base_config: config/protocol_b_loao.yml
+      output_subdir: protocol_b_loao

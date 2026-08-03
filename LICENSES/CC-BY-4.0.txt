@@ -1,0 +1,15 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Ali Farrokhnejad
+
+The content identified in CONTENT_LICENSE.md is licensed under the Creative
+Commons Attribution 4.0 International Public License.
+
+License deed: https://creativecommons.org/licenses/by/4.0/
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Official plain text: https://creativecommons.org/licenses/by/4.0/legalcode.txt
+
+You are free to share and adapt the licensed material for any purpose, subject
+to the license conditions. Attribution must identify Ali Farrokhnejad, retain
+the copyright and license notices, link to the license, and indicate changes.
+The linked legal code is authoritative.

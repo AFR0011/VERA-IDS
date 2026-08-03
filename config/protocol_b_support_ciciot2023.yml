@@ -1,0 +1,26 @@
+protocol:
+  name: Protocol B support-audited LOAO
+  split: B_day_file
+  unknown_family_setting: simulated_unknown_family
+
+support_audit_rules:
+  require_unknown_in_val_when_tuning_tau: true
+  min_benign_rows:
+    val: 200
+    test: 200
+  min_family_support:
+    train: 200
+    val: 200
+    test: 200
+  unknown_support_for_holdout:
+    val: 200
+    test: 200
+  min_known_families_after_holdout: 2
+  require_all_remaining_train_families_to_be_valid: true
+
+support_audit:
+  legacy_overrides:
+    processed_root: outputs/02_prepared_data/processed_V5
+    out_root: outputs/04_protocol_b_support_audit/protocolB_support_audit_out
+    datasets:
+      - CICIoT2023

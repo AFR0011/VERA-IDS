@@ -1,0 +1,67 @@
+paths:
+  raw_datasets_root: data/raw
+  outputs_root: outputs
+  processed_protocol_a: outputs/02_prepared_data/processed_V5
+  processed_protocol_b: outputs/02_prepared_data/processed_V5_cicids17_recovery
+  processed_external_protocol_a: outputs/02_prepared_data/processed_V5_external_validation
+  processed_external_protocol_b: outputs/02_prepared_data/processed_V5_external_protocolb
+  dataset_audit_out: outputs/01_dataset_audit/IDS_dataset_analysis_out
+  split_leakage_audit_out: outputs/01_dataset_audit/q2_reproducibility_audit
+  external_runs_root: outputs/07_external_stress/runs_two_stage_V5_A_external_validation
+
+datasets:
+  primary:
+    - CICIDS2017
+    - CICIoT2023
+  external_stress:
+    - NSL-KDD
+    - UNSW-NB15
+
+split_settings:
+  protocol_a:
+    protocol: A_stratified
+    split_fracs:
+      train: 0.70
+      val: 0.15
+      test: 0.15
+    seed: 123
+  protocol_b:
+    protocol: B_day_file
+    split_mode: support_aware
+    seed: 123
+
+dataset_audit:
+  enabled_checks:
+    - schema_summary
+    - split_leakage
+  legacy_overrides:
+    analyze_datasets:
+      out_dir: outputs/01_dataset_audit/IDS_dataset_analysis_out
+    split_leakage:
+      dataset_root: outputs/02_prepared_data/processed_V5_cicids17_recovery/B_day_file/CICIDS2017
+      out_root: outputs/01_dataset_audit/q2_reproducibility_audit
+      chunksize: 200000
+
+preparation:
+  legacy_overrides:
+    protocol: B_day_file
+    out_root: outputs/02_prepared_data/processed_V5_cicids17_recovery
+    active_datasets:
+      - CICIDS2017
+    seed: 123
+
+external_stress:
+  legacy_overrides:
+    prepare_script: ids_eval_framework._native.prepare_datasets
+    audit_script: ids_eval_framework._native.protocol_b_support_audit
+    core_runner_script: ids_eval_framework._native.protocol_a_core
+    processed_root_a: outputs/02_prepared_data/processed_V5_external_validation
+    processed_root_b: outputs/02_prepared_data/processed_V5_external_protocolb
+    runs_root_a: outputs/07_external_stress/runs_two_stage_V5_A_external_validation
+    audit_root_b: outputs/04_protocol_b_support_audit/protocolB_support_audit_out_external_validation
+    datasets_a:
+      - NSL-KDD
+      - UNSW-NB15
+    datasets_b:
+      - UNSW-NB15
+    external_summary_csv: external_protocol_a_summary.csv

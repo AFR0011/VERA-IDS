@@ -1,0 +1,215 @@
+reference_framework_eval:
+  out_root: outputs/11_reference_framework_eval
+  closed_set_reference_values:
+    - paper: adewole2025_xgb
+      dataset: CICIDS2017
+      task: family
+      accuracy: 0.9961957521876804
+      macro_f1: 0.9205930209401167
+    - paper: adewole2025_xgb
+      dataset: CICIoT2023
+      task: binary
+      accuracy: 0.988768
+      macro_f1: 0.9394575205434568
+    - paper: neto2023_rf
+      dataset: CICIoT2023
+      task: family
+      accuracy: 0.97974
+      macro_f1: 0.904974505109935
+  enabled_profiles:
+    - adewole2025_xgb_profile
+    - neto2023_rf_profile
+
+  profiles:
+    adewole2025_xgb_profile:
+      paper: adewole2025_xgb
+      model_family: xgb
+      stage1_weight_modes:
+        - none
+      stage2_weight_modes:
+        - none
+      stage1_params:
+        n_estimators: 100
+        max_depth: 6
+        learning_rate: 0.3
+        subsample: 0.5
+      stage2_params:
+        n_estimators: 100
+        max_depth: 6
+        learning_rate: 0.3
+        subsample: 0.5
+    neto2023_rf_profile:
+      paper: neto2023_rf
+      model_family: rf
+      stage1_weight_modes:
+        - none
+      stage2_weight_modes:
+        - none
+      stage1_params:
+        n_estimators: 100
+      stage2_params:
+        n_estimators: 100
+
+  protocol_a:
+    processed_root: outputs/02_prepared_data/processed_V5
+    protocol: A_stratified
+    datasets_by_profile:
+      adewole2025_xgb_profile:
+        - CICIDS2017
+        - CICIoT2023
+      neto2023_rf_profile:
+        - CICIoT2023
+    seed: 123
+    n_jobs: 8
+    chunksize_rows: 200000
+    max_train_rows: 1000000
+    max_val_rows: 600000
+    max_test_rows: 1000000
+    stage1_threshold:
+      policy: target_fpr_family_aware
+      target_fpr: 0.015
+      min_family_support: 50
+      sweep_points: 60
+      objective_mode: min_family_recall
+      p10_quantile: 0.10
+    cascade_gate:
+      enabled: true
+      grid_points: 30
+      max_val_rows_for_sweep: 700000
+    abstain:
+      enabled: true
+      policy: abstain
+      label: Unknown
+      max_benign_family_fp_rate: 0.02
+      max_benign_reject_rate: 0.10
+      max_overall_reject_rate: 0.01
+      sweep_enabled: true
+      max_benign_family_fp_rate_list:
+        - 0.01
+        - 0.02
+        - 0.03
+      max_overall_reject_rate_list:
+        - 0.01
+      grid:
+        - 0.0
+        - 0.2
+        - 0.3
+        - 0.4
+        - 0.5
+        - 0.6
+        - 0.7
+        - 0.8
+        - 0.9
+      also_try_quantiles: true
+      quantiles:
+        - 0.05
+        - 0.10
+        - 0.20
+        - 0.30
+      max_val_rows_for_sweep: 700000
+    calibration_reporting:
+      enabled: true
+      ece_bins: 15
+      plot_dpi: 160
+
+  protocol_b:
+    datasets_by_profile:
+      adewole2025_xgb_profile:
+        - CICIDS2017
+        - CICIoT2023
+      neto2023_rf_profile:
+        - CICIoT2023
+    legacy_overrides:
+      audit_root: outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery
+      audit_roots:
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery
+      manifest_glob:
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out/*/manifests/*.json
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery/*/manifests/*.json
+      base_helper_script: ids_eval_framework/src/two_stage_engine.py
+      apply_loao_stage1_values:
+        - true
+      random_seed: 123
+      n_jobs: 8
+      max_train_rows:
+        CICIDS2017: 900000
+        CICIoT2023: 1500000
+      max_val_rows:
+        CICIDS2017: 500000
+        CICIoT2023: 700000
+      max_test_rows:
+        CICIDS2017:
+        CICIoT2023:
+      stage1_threshold_search:
+        target_fpr_list:
+          - 0.01
+          - 0.02
+        min_family_support_list:
+          - 100
+        objective_mode_list:
+          - min_family_recall
+          - p10_family_recall
+        p10_quantile_list:
+          - 0.10
+        sweep_points: 40
+        selection_tiebreak: objective_then_tpr
+      tau_search:
+        grid:
+          - 0.3
+          - 0.5
+          - 0.7
+        also_try_quantiles: false
+        quantiles:
+          - 0.10
+        max_benign_family_fp_rate_list:
+          - 0.02
+        max_benign_reject_rate_list:
+          - 0.10
+        max_overall_reject_rate_list:
+          - 0.03
+        max_false_unknown_rate_all_known: 0.05
+        max_false_unknown_rate_known_attacks: 0.10
+
+  open_set:
+    legacy_overrides:
+      audit_roots:
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out
+        - outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery
+      summary_dirname: summary
+      bootstrap_resamples: 200
+      random_seed: 123
+
+  sink_aware:
+    legacy_overrides:
+      failure_modes_csv: outputs/supplementary/exploratory/thesis_full_scope_pack/protocol_b_failure_modes.csv
+      bootstrap_resamples: 200
+      random_seed: 123
+
+  smoke:
+    out_root: outputs/11_reference_framework_eval_smoke
+    protocol_a:
+      max_train_rows: 30000
+      max_val_rows: 20000
+      max_test_rows: 30000
+    protocol_b:
+      max_train_rows:
+        CICIDS2017: 30000
+        CICIoT2023: 30000
+      max_val_rows:
+        CICIDS2017: 20000
+        CICIoT2023: 20000
+      max_test_rows:
+        CICIDS2017: 30000
+        CICIoT2023: 30000
+      max_manifests: 1
+      n_jobs: 2
+    open_set:
+      bootstrap_resamples: 50
+      case_parallel_workers: 1
+      threads_per_worker: 2
+      selected_cases: []
+    sink_aware:
+      bootstrap_resamples: 50
+      case_parallel_workers: 1
+      selected_cases: []

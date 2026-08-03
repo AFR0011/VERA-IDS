@@ -1,0 +1,48 @@
+name: release-verification
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Python 3.12 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.12.1"
+          python-version: "3.12.10"
+          enable-cache: true
+      - name: Install locked environment
+        run: uv sync --locked --extra test
+      - name: Heavy imports
+        run: uv run python -c "import numpy,pandas,scipy,sklearn,xgboost,lightgbm,catboost,shap,numba,pyarrow,matplotlib,imblearn,docx,pypdf,reportlab,psutil,joblib,yaml"
+      - name: Compile
+        run: uv run python -m compileall -q src scripts tests
+      - name: Unit and release tests
+        run: uv run python -m pytest -p no:cacheprovider
+      - name: Advertised CLI and synthetic workflows
+        run: uv run python scripts/verify_cli_workflows.py --all
+      - name: Protocol A exact correction
+        run: uv run python scripts/recompute_protocol_a_metrics.py --check
+      - name: Manifests and links
+        run: |
+          uv run python scripts/verify_manifests.py
+          uv run python scripts/check_links.py
+      - name: Smoke workflow
+        run: uv run python scripts/smoke_test.py
+      - name: Public release scan
+        run: uv run python scripts/release_audit.py scan .

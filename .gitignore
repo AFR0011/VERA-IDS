@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Environments and local tooling
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+*.code-workspace
+
+# OS and office temporary files
+.DS_Store
+Thumbs.db
+Desktop.ini
+~$*
+*.tmp
+*.temp
+*.bak
+*.old
+*~
+
+# Logs, locks, caches, and private configuration
+*.log
+*.lock
+!uv.lock
+config/local_paths.yml
+config/datasets.local.yml
+secrets/
+.release-audit/
+
+# Raw/prepared benchmark data and row-level outputs
+data/raw/
+data/processed/
+datasets/
+Datasets/
+outputs/**
+!outputs/summaries/
+!outputs/summaries/**
+!outputs/evidence/
+!outputs/evidence/**
+
+# Models and bulk prediction artifacts
+models/
+*.joblib
+*.pkl
+*.pickle
+*.onnx
+*.pt
+*.pth
+*scores*.csv
+*scores*.csv.gz
+*predictions*.csv
+*predictions*.csv.gz
+
+# Credentials and private keys
+*.pem
+*.key
+*.p12
+*.pfx
+*.ovpn

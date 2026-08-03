@@ -1,0 +1,23 @@
+{
+  "candidate_thresholds": [
+    50,
+    100,
+    200,
+    250,
+    500
+  ],
+  "selected_threshold": 200,
+  "selection_rule": "Highest candidate threshold retaining every candidate LOAO fold across both primary datasets.",
+  "total_holdouts": 12,
+  "eligible_holdouts_at_selected_threshold": 12,
+  "confidence_level": 0.95,
+  "worst_case_wilson_half_width": 0.06863914039610812,
+  "model_retraining_required": false,
+  "retraining_rationale": "The selected threshold retained the same folds and did not alter the prepared data or training procedure.",
+  "historical_run_manifests_rewritten": false,
+  "historical_manifest_rationale": "Run-directory manifest copies retain the eligibility rules recorded at execution time. Final eligibility is established by the regenerated support-audit artifacts and this sensitivity analysis.",
+  "support_tables": {
+    "CICIoT2023": "ids_eval_framework/outputs/04_protocol_b_support_audit/protocolB_support_audit_out/CICIoT2023/family_support_by_split.csv",
+    "CICIDS2017": "ids_eval_framework/outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery/CICIDS2017/family_support_by_split.csv"
+  }
+}

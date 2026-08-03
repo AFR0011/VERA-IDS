@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use VERA-IDS, cite this software release and its repository-edition thesis."
+title: "VERA-IDS: A Validity-Aware Evaluation Framework for Machine Learning-Based Intrusion Detection"
+type: software
+authors:
+  - family-names: Farrokhnejad
+    given-names: Ali
+abstract: >-
+  A validity-aware framework and compact evidence release for trustworthy
+  evaluation of two-stage machine-learning intrusion-detection systems under
+  closed-set, support-audited LOAO, rejection, external-stress, and repeated-seed
+  settings.
+version: "2026.8"
+date-released: 2026-08-03
+license: MIT
+repository-code: "https://github.com/AFR0011/VERA-IDS"
+url: "https://github.com/AFR0011/VERA-IDS/releases/tag/v2026.08"
+identifiers:
+  - type: url
+    value: "https://github.com/AFR0011/VERA-IDS/blob/v2026.08/PROTOCOL_A_CORRECTION.md"
+    description: "Protocol A correction supplement"
+keywords:
+  - intrusion detection
+  - machine learning
+  - open-set evaluation
+  - reproducibility
+  - support audit
+references:
+  - type: thesis
+    title: "Beyond Closed-Set Accuracy: A Validity-Aware Evaluation Framework for Machine Learning-Based Intrusion Detection"
+    authors:
+      - family-names: Farrokhnejad
+        given-names: Ali
+    year: 2026
+    url: "https://github.com/AFR0011/VERA-IDS/releases/download/v2026.08/VERA-IDS-Thesis.pdf"

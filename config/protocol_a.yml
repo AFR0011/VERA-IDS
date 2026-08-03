@@ -1,0 +1,45 @@
+protocol:
+  name: Protocol A closed-set
+  split: A_stratified
+
+outputs:
+  two_stage_runs_root: outputs/03_protocol_a_two_stage/runs_two_stage_V5_A_core
+  flat_baseline_runs_root: outputs/03b_protocol_a_flat_baseline/runs_competitive_metrics
+  competitive_pack_root: outputs/03b_protocol_a_flat_baseline/competitive_metrics_pack
+
+model_settings:
+  random_seed: 123
+  stage1_models:
+    - xgb
+    - rf
+  stage2_models:
+    - xgb
+    - rf
+
+two_stage_engine:
+  legacy_overrides:
+    processed_root: outputs/02_prepared_data/processed_V5
+    protocol: A_stratified
+    datasets:
+      - CICIDS2017
+      - CICIoT2023
+    model_families:
+      - xgb
+      - rf
+    runs_root: outputs/03_protocol_a_two_stage/runs_two_stage_V5_A_core
+    helper_script: ids_eval_framework/src/two_stage_engine.py
+    random_seed: 123
+    n_jobs: 24
+
+flat_multiclass_baseline:
+  legacy_overrides:
+    processed_root: outputs/02_prepared_data/processed_V5
+    protocol: A_stratified
+    datasets:
+      - CICIDS2017
+      - CICIoT2023
+    runs_root: outputs/03b_protocol_a_flat_baseline/runs_competitive_metrics
+    baseline_runs_root: outputs/03_protocol_a_two_stage/runs_two_stage_V5_A_core
+    helper_script: ids_eval_framework/src/two_stage_engine.py
+    random_seed: 123
+    n_jobs: 24

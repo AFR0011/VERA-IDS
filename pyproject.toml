@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vera-ids"
+version = "2026.8"
+description = "Validity-aware evaluation tools and evidence for two-stage intrusion-detection experiments"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+authors = [{ name = "Ali Farrokhnejad" }]
+license = { file = "LICENSE" }
+keywords = ["intrusion-detection", "machine-learning", "open-set", "reproducibility"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "numpy==2.4.4",
+  "pandas==3.0.5",
+  "scipy==1.18.0",
+  "scikit-learn==1.9.0",
+  "xgboost==3.3.0",
+  "joblib==1.5.3",
+  "matplotlib==3.11.1",
+  "pyarrow==25.0.0",
+  "PyYAML==6.0.3",
+  "python-docx==1.2.0",
+  "pypdf==6.10.0",
+  "reportlab==4.4.9",
+  "psutil==7.2.2",
+  "imbalanced-learn==0.14.2",
+  "lightgbm==4.7.0",
+  "catboost==1.2.10",
+  "shap==0.52.0",
+  "numba==0.66.0",
+  "llvmlite==0.48.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.4.2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.uv]
+environments = [
+  "sys_platform == 'win32'",
+  "sys_platform == 'linux'",
+]

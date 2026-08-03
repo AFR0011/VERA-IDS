@@ -1,0 +1,9 @@
+# Machine-specific paths belong only in an ignored local copy.
+paths:
+  raw_datasets_root: data/raw
+  processed_root: data/processed
+  outputs_root: outputs
+
+# Optional manuscript source. Leave unset unless publication rights are confirmed.
+manuscript:
+  source: null

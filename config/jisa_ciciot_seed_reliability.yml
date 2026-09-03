@@ -1,0 +1,18 @@
+seed_reliability:
+  description: JISA CICIoT2023 Protocol B repeated-seed reliability block.
+  seeds:
+    - 123
+    - 124
+    - 125
+    - 126
+    - 127
+  parallelism:
+    n_jobs: 24
+    rationale: Match the historical Protocol B execution setting.
+  output_root: outputs/12_jisa_finalization/09_ciciot_seed_reliability
+  lanes:
+    protocol_b_loao:
+      enabled: true
+      runner: protocol_b_loao
+      base_config: config/jisa_ciciot_protocol_b_seed.yml
+      output_subdir: protocol_b_loao_ciciot2023

@@ -1,0 +1,151 @@
+protocol:
+  name: JISA CICIoT2023 repeated-seed Protocol B
+  split: B_day_file
+  unknown_family_setting: simulated_unknown_family
+
+protocol_b_grid:
+  legacy_overrides:
+    audit_root: outputs/12_jisa_finalization/08_ciciot_support_audit
+    audit_roots:
+      - outputs/12_jisa_finalization/08_ciciot_support_audit
+    manifest_glob: outputs/12_jisa_finalization/08_ciciot_support_audit/*/manifests/*.json
+    base_helper_script: ids_eval_framework.src.two_stage_engine
+    runs_root: outputs/12_jisa_finalization/09_ciciot_seed_reliability/manual_base
+    dry_run: false
+    max_manifests: null
+    reuse_preprocessor_if_present: true
+
+    max_train_rows:
+      CICIoT2023: 1500000
+    max_val_rows:
+      CICIoT2023: 700000
+    max_test_rows:
+      CICIoT2023: null
+    random_seed: 123
+    n_jobs: 24
+
+    # Freeze the three candidate profiles used by the historical CICIoT2023
+    # validation-selected Protocol B comparison. Selection across profiles is
+    # performed later from validation metrics only; test-ranked summary files
+    # are completion aids and are not scientific selectors.
+    model_profiles:
+      xgb_inv_family_clipped:
+        model_family: xgb
+        datasets:
+          - CICIoT2023
+        stage1_weight_modes:
+          - inv_family_clipped
+        stage2_weight_modes:
+          - balanced
+        stage1_param_grid:
+          - n_estimators: 800
+            max_depth: 6
+            learning_rate: 0.05
+            subsample: 0.8
+            colsample_bytree: 0.8
+            reg_lambda: 1.0
+        stage2_param_grid:
+          - n_estimators: 1400
+            max_depth: 8
+            learning_rate: 0.03
+            subsample: 0.8
+            colsample_bytree: 0.8
+            reg_lambda: 1.0
+      rf_inv_family_clipped:
+        model_family: rf
+        datasets:
+          - CICIoT2023
+        stage1_weight_modes:
+          - inv_family_clipped
+        stage2_weight_modes:
+          - balanced
+        stage1_param_grid:
+          - n_estimators: 300
+            max_depth: null
+            min_samples_leaf: 1
+            max_features: sqrt
+        stage2_param_grid:
+          - n_estimators: 300
+            max_depth: null
+            min_samples_leaf: 1
+            max_features: sqrt
+      rf_class_weight_balanced:
+        model_family: rf
+        datasets:
+          - CICIoT2023
+        stage1_weight_modes:
+          - class_weight_balanced
+        stage2_weight_modes:
+          - balanced
+        stage1_param_grid:
+          - n_estimators: 300
+            max_depth: null
+            min_samples_leaf: 1
+            max_features: sqrt
+        stage2_param_grid:
+          - n_estimators: 300
+            max_depth: null
+            min_samples_leaf: 1
+            max_features: sqrt
+
+    apply_loao_stage1_values:
+      - true
+    inv_family_clip_max: 20.0
+
+    stage1_threshold_search:
+      target_fpr_list:
+        - 0.01
+        - 0.02
+      min_family_support_list:
+        - 100
+      objective_mode_list:
+        - min_family_recall
+        - p10_family_recall
+      p10_quantile_list:
+        - 0.10
+      sweep_points: 40
+      selection_tiebreak: objective_then_tpr
+
+    tau_search:
+      grid:
+        - 0.3
+        - 0.5
+        - 0.7
+      also_try_quantiles: false
+      quantiles:
+        - 0.10
+      max_benign_family_fp_rate_list:
+        - 0.02
+      max_benign_reject_rate_list:
+        - 0.10
+      max_overall_reject_rate_list:
+        - 0.03
+      max_false_unknown_rate_all_known: 0.05
+      max_false_unknown_rate_known_attacks: 0.10
+
+    xgb_binary_defaults:
+      objective: binary:logistic
+      tree_method: hist
+      device: cuda
+      predictor: null
+      n_jobs: 24
+      verbosity: 1
+      eval_metric: logloss
+    xgb_multi_defaults:
+      objective: multi:softprob
+      tree_method: hist
+      device: cuda
+      predictor: null
+      n_jobs: 24
+      verbosity: 1
+      eval_metric: mlogloss
+
+protocol_b_summary:
+  run_after_grid: true
+  legacy_overrides:
+    runs_root: outputs/12_jisa_finalization/09_ciciot_seed_reliability/manual_base
+    aggregate_csv: outputs/12_jisa_finalization/09_ciciot_seed_reliability/manual_base/aggregate_results.csv
+    out_dir: outputs/12_jisa_finalization/09_ciciot_seed_reliability/manual_base/summary
+    best_per_holdout_group_cols:
+      - dataset
+      - holdout_family

@@ -1,0 +1,27 @@
+protocol:
+  name: JISA finalization support-audited LOAO
+  split: B_group_safe
+  unknown_family_setting: simulated_unknown_family
+
+support_audit_rules:
+  require_unknown_in_val_when_tuning_tau: true
+  min_benign_rows:
+    val: 200
+    test: 200
+  min_family_support:
+    train: 200
+    val: 200
+    test: 200
+  unknown_support_for_holdout:
+    val: 200
+    test: 200
+  min_known_families_after_holdout: 2
+  require_all_remaining_train_families_to_be_valid: true
+
+support_audit:
+  legacy_overrides:
+    processed_root: outputs/12_jisa_finalization/04_group_safe_surface
+    protocol: B_group_safe
+    out_root: outputs/12_jisa_finalization/05_group_safe_support_audit
+    datasets:
+      - CICIDS2017

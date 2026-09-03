@@ -1,0 +1,27 @@
+protocol:
+  name: JISA CICIoT2023 day-file Protocol B support audit
+  split: B_day_file
+  unknown_family_setting: simulated_unknown_family
+
+support_audit_rules:
+  require_unknown_in_val_when_tuning_tau: true
+  min_benign_rows:
+    val: 200
+    test: 200
+  min_family_support:
+    train: 200
+    val: 200
+    test: 200
+  unknown_support_for_holdout:
+    val: 200
+    test: 200
+  min_known_families_after_holdout: 2
+  require_all_remaining_train_families_to_be_valid: true
+
+support_audit:
+  legacy_overrides:
+    processed_root: processed_V5
+    protocol: B_day_file
+    out_root: outputs/12_jisa_finalization/08_ciciot_support_audit
+    datasets:
+      - CICIoT2023

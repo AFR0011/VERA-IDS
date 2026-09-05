@@ -1,0 +1,67 @@
+experimental_lane:
+  id: jisa_canonical_rejector_tradeoff
+  status: journal_finalization
+  scope: Validation-only rejection replay on the 12 canonical Protocol B cases after CICIDS group-safe repair and CICIoT validation-only model selection.
+
+threshold_selection:
+  discipline: validation_only
+  warning: Do not select rejector thresholds or methods from test metrics.
+
+open_set_rejection:
+  methods:
+    - max_softmax
+    - margin
+    - entropy
+    - conformal
+  legacy_overrides:
+    open_set_baselines:
+      best_csv: outputs/12_jisa_finalization/13_rejector_tradeoff_input/rejector_cases.csv
+      audit_roots:
+        - outputs/12_jisa_finalization/05_group_safe_support_audit
+        - outputs/12_jisa_finalization/08_ciciot_support_audit
+      base_helper_script: ids_eval_framework.src.two_stage_engine
+      grid_script: ids_eval_framework._native.protocol_b_grid
+      runs_root: outputs/12_jisa_finalization/14_rejector_tradeoff_runs
+      summary_dirname: summary
+      selected_cases: []
+      max_train_rows:
+        CICIDS2017: 900000
+        CICIoT2023: 1500000
+      max_val_rows:
+        CICIDS2017: 500000
+        CICIoT2023: 700000
+      max_test_rows:
+        CICIDS2017: null
+        CICIoT2023: null
+      tau_grid:
+        - 0.10
+        - 0.30
+        - 0.50
+        - 0.70
+        - 0.80
+        - 0.90
+      margin_quantiles:
+        - 0.05
+        - 0.10
+        - 0.15
+        - 0.20
+        - 0.25
+        - 0.30
+      entropy_quantiles:
+        - 0.60
+        - 0.70
+        - 0.80
+        - 0.90
+        - 0.95
+      conformal_alpha_grid:
+        - 0.01
+        - 0.05
+        - 0.10
+        - 0.15
+        - 0.20
+      bootstrap_resamples: 1000
+      random_seed: 123
+      case_parallel_workers: 1
+      threads_per_worker: 24
+      parallel_backend: process
+      xgb_device: auto

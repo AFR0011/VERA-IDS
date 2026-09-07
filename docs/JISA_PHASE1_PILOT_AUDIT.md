@@ -1,10 +1,9 @@
 # JISA Phase 1 Pilot Audit
 
-Status: CORRECTED CANONICAL PILOT ACCEPTED
+Status: CICIDS2017 RF/XGB PILOTS ACCEPTED; CICIOT2023 SCALE PILOT NEXT
 Date: 2026-09-07
-Pilot item: CICIDS2017 / RF / seed 123
 
-## Initial pilot
+## Initial RF pilot
 
 The first controlled-direct pilot completed successfully and confirmed that the
 prepared Protocol-A data, preprocessing, direct classifier training, validation-only
@@ -16,7 +15,7 @@ explicitly described a family-aware validation sweep, that initial execution was
 marked diagnostic rather than claim-bearing and was rerun with the corrected
 canonical selector before any batch execution.
 
-## Corrected canonical pilot
+## Corrected canonical RF pilot
 
 The canonical rerun used
 `scripts/jisa_phase1_run_controlled_direct_familyaware.py` and selected the same
@@ -35,7 +34,7 @@ threshold and produced the same prediction metrics as the initial pilot:
 
 The corrected result is the canonical Phase-1 result for CICIDS2017 / RF / seed 123.
 
-## Why the threshold remained identical
+## Why the RF threshold remained identical
 
 For one fixed classifier, gate recall for every attack family is monotone as the
 attack threshold is relaxed. Therefore, among thresholds satisfying the same benign
@@ -50,6 +49,31 @@ For the RF model, the 300-tree probability grid creates tied/quantized score val
 consequently the closest feasible validation operating point realizes 1.1853% benign
 FPR rather than exactly 1.5%.
 
+## Canonical XGBoost pilot
+
+CICIDS2017 / XGB / seed 123 completed successfully under the same canonical
+family-aware runner:
+
+- fit time: 138.7 s
+- selected validation threshold: 0.000198852107862
+- validation benign FPR: 0.012822
+- validation attack recall: 0.999576
+- ordinary argmax test macro-F1: 0.914292
+- ordinary argmax test accuracy: 0.996646
+- ordinary argmax benign-to-family FPR: 0.000324
+- constraint-matched test macro-F1: 0.813588
+- constraint-matched test accuracy: 0.989469
+- constraint-matched benign-to-family FPR: 0.012110
+- constraint-matched attack-to-benign rate: 0.000502
+
+The XGBoost runtime emitted a device-mismatch prediction warning because the fitted
+booster is on CUDA while prediction input remains CPU-backed sparse data. XGBoost
+fell back to DMatrix prediction. This is a performance/memory warning rather than a
+selection or metric-validity failure; the run completed normally and the warning did
+not alter the frozen estimator configuration or test-isolation rules.
+
+The CICIDS2017 / XGB / seed 123 result is accepted as canonical Phase-1 evidence.
+
 ## Interpretation boundary
 
 The secondary direct surface is best described as **validation-constraint matched**
@@ -58,8 +82,17 @@ select their operating point under the same validation benign-FPR ceiling, while
 realized test FPR is reported rather than forced to match after observing test labels.
 This preserves test-set isolation.
 
+The large macro-F1 decrease from ordinary argmax to the validation-constraint-matched
+surface should not be interpreted as a model defect. The gate deliberately moves the
+system to a high attack-recall operating point under the allowed benign-FPR ceiling,
+changing the class-error trade-off. This is precisely why ordinary closed-set argmax
+and operating-point-constrained results are reported as separate surfaces.
+
 ## Gate
 
-The RF pilot is accepted. The next execution gate is one XGBoost pilot on the same
-CICIDS2017 split to verify the CUDA/XGBoost path and probability-based gate before
-batching remaining seeds and datasets.
+The CICIDS2017 RF and XGB seed-123 pilots are accepted. Before launching all remaining
+items, execute one CICIoT2023 scale pilot. CICIoT2023 is materially larger (1.5M
+training-row cap, 650k validation-row cap, and full 911,053-row test evaluation), so
+this final pilot is intended to validate memory/runtime behavior and taxonomy handling
+on the larger prepared dataset. If that succeeds, the remaining Phase-1 matrix may be
+batched with resumable per-item execution.

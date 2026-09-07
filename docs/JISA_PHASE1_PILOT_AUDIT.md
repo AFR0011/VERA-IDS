@@ -1,6 +1,6 @@
 # JISA Phase 1 Pilot Audit
 
-Status: CICIDS2017 RF/XGB PILOTS ACCEPTED; CICIOT2023 SCALE PILOT NEXT
+Status: RF/XGB CICIIDS2017 PILOTS AND CICIOT2023 SCALE PILOT ACCEPTED; BATCH EXECUTION OPEN
 Date: 2026-09-07
 
 ## Initial RF pilot
@@ -74,6 +74,38 @@ not alter the frozen estimator configuration or test-isolation rules.
 
 The CICIDS2017 / XGB / seed 123 result is accepted as canonical Phase-1 evidence.
 
+## CICIoT2023 scale pilot
+
+CICIoT2023 / RF / seed 123 completed successfully at the full frozen Phase-1 scale:
+1,500,000 sampled training rows, 650,000 validation rows, and all 911,053 test rows.
+
+- fit time: 1888.7 s
+- selected validation threshold: 0.86
+- validation benign FPR: 0.014887
+- validation attack recall: 0.975541
+- ordinary argmax test macro-F1: 0.917892
+- ordinary argmax test accuracy: 0.979920
+- ordinary argmax benign-to-family FPR: 0.100606
+- constraint-matched test macro-F1: 0.882629
+- constraint-matched test accuracy: 0.969551
+- constraint-matched benign-to-family FPR: 0.016857
+- constraint-matched attack-to-benign rate: 0.024639
+
+The realized test benign FPR of 1.6857% is above the 1.5% validation constraint. This
+is not a protocol violation because the operating threshold was selected on validation
+only and the test set is evaluation-only. The difference is reported as held-out
+operating-point drift rather than corrected after observing test labels.
+
+The CICIoT2023 result also illustrates why ordinary argmax and validation-constraint-
+matched surfaces must remain separate. Ordinary argmax achieves stronger macro-F1 but
+allows a 10.06% benign-to-family false-positive rate, whereas the predeclared validation
+constraint reduces that test false-positive rate to 1.69% at the cost of lower macro-F1
+and higher attack-to-benign error. No superiority claim between direct and two-stage
+architectures is made from this pilot alone; the matched comparison requires the full
+seed matrix and corresponding two-stage evidence.
+
+The CICIoT2023 / RF / seed 123 scale pilot is accepted as canonical Phase-1 evidence.
+
 ## Interpretation boundary
 
 The secondary direct surface is best described as **validation-constraint matched**
@@ -82,17 +114,17 @@ select their operating point under the same validation benign-FPR ceiling, while
 realized test FPR is reported rather than forced to match after observing test labels.
 This preserves test-set isolation.
 
-The large macro-F1 decrease from ordinary argmax to the validation-constraint-matched
-surface should not be interpreted as a model defect. The gate deliberately moves the
-system to a high attack-recall operating point under the allowed benign-FPR ceiling,
-changing the class-error trade-off. This is precisely why ordinary closed-set argmax
-and operating-point-constrained results are reported as separate surfaces.
+The macro-F1 movement from ordinary argmax to the validation-constraint-matched
+surface should not be interpreted as a model defect. The gate deliberately changes
+the class-error trade-off under a fixed validation operating constraint. Depending on
+the dataset, this may increase or decrease realized benign false positives relative to
+ordinary multiclass argmax because the two decision rules are different.
 
 ## Gate
 
-The CICIDS2017 RF and XGB seed-123 pilots are accepted. Before launching all remaining
-items, execute one CICIoT2023 scale pilot. CICIoT2023 is materially larger (1.5M
-training-row cap, 650k validation-row cap, and full 911,053-row test evaluation), so
-this final pilot is intended to validate memory/runtime behavior and taxonomy handling
-on the larger prepared dataset. If that succeeds, the remaining Phase-1 matrix may be
-batched with resumable per-item execution.
+The CICIDS2017 RF and XGB seed-123 pilots and the CICIoT2023 RF seed-123 scale pilot
+are accepted. Phase-1 batch execution is now open for the remaining dataset/model/seed
+items. Execution should remain sequential and resumable; completed items are skipped
+by the canonical runner unless `--force` is supplied. Do not parallelize RF and XGB
+items on the same workstation because CICIoT2023 RF already exercises substantial CPU
+and memory resources, while XGBoost uses the GPU and CPU-backed prediction matrices.

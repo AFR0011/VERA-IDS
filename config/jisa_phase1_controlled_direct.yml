@@ -1,0 +1,41 @@
+experiment:
+  name: JISA Phase 1 controlled direct comparison
+  output_root: outputs/13_jisa_q1_revision/phase1_controlled_direct
+  seeds: [123, 124, 125, 126, 127]
+  datasets: [CICIDS2017, CICIoT2023]
+  processed_root: processed_V5
+  protocol: A_stratified
+
+model_profiles:
+  rf:
+    model_family: rf
+    params:
+      n_estimators: 300
+      max_depth: null
+      min_samples_leaf: 1
+      max_features: sqrt
+  xgb:
+    model_family: xgb
+    params:
+      n_estimators: 800
+      max_depth: 6
+      learning_rate: 0.05
+      subsample: 0.8
+      colsample_bytree: 0.8
+      reg_lambda: 1.0
+
+fpr_matched_gate:
+  target_benign_fpr: 0.015
+  min_family_support: 50
+  sweep_points: 200
+  objective: min_family_recall
+  tie_break: attack_tpr_then_highest_threshold
+
+reporting:
+  primary_system_macro_f1: supported_true_labels
+  save_test_predictions: false
+  save_validation_predictions: false
+  save_models: false
+  save_probabilities: false
+  save_confusion_matrices: true
+  save_per_family_metrics: true

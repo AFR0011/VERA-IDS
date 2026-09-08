@@ -1,6 +1,6 @@
 # JISA Phase 3A Pilot Audit
 
-Status: BRUTEFORCE UNIQUE-PROFILE PATH ACCEPTED; BOTNET TIE-PATH PENDING
+Status: BOTH PILOT PATHS ACCEPTED; FULL PHASE-3A MATRIX OPEN
 Date: 2026-09-08
 Branch: `jisa-q1-revision`
 Parent execution spec: `docs/JISA_PHASE3_EXECUTION_ADDENDUM.md`
@@ -29,14 +29,33 @@ The candidate-profile selection file contains one eligible member of the histori
 
 The XGBoost CUDA/CPU DMatrix warning observed during prediction is an execution/performance warning only and does not change the frozen scientific protocol.
 
+## Botnet seed 123
+
+The second pilot exercised the two-candidate RF tie path for CICIoT2023 with `Botnet` held out.
+
+Observed completion record:
+
+- historical top-equivalence set: `rf_class_weight_balanced`, `rf_inv_family_clipped`;
+- both candidates recomputed the same blind-validation Stage-2 macro-F1: `0.9219984587949888`;
+- `rf_class_weight_balanced` blind-validation Stage-1 AUROC: `0.9969831286430979`;
+- `rf_inv_family_clipped` blind-validation Stage-1 AUROC: `0.9965140597387833`;
+- selected candidate: `rf_class_weight_balanced`;
+- selected Stage-1 threshold: `0.9166666666666666`;
+- blind validation rows: `599278`;
+- hidden held-out validation rows: `100722`;
+- loaded training rows: `1500000`;
+- full test rows: `1190899`;
+- held-out validation used for selection: `false`;
+- test used for selection: `false`;
+- preprocessor exposure: `historical_full_train_unsupervised_feature_exposure`.
+
+The two RF candidates share the same Stage-2 definition, and the runner caches Stage-2 models by Stage-2 signature. Their identical stored Stage-2 blind-validation macro-F1 is consistent with that shared definition. The candidate tie is resolved by Stage-1 AUROC computed only on the heldout-free validation surface; `rf_class_weight_balanced` wins by approximately `0.00046907` AUROC. The Stage-1 threshold is then selected after the profile choice is frozen.
+
 ## Pilot verdict
 
-The unique-profile path is accepted. The next required pilot is CICIoT2023 `Botnet`, seed 123, which must exercise the two-candidate RF tie path and prove that:
+Both required execution paths are accepted:
 
-1. both `rf_class_weight_balanced` and `rf_inv_family_clipped` are evaluated;
-2. their Stage-2 definition is shared/reused;
-3. profile selection is resolved by Stage-1 AUROC on heldout-free validation traffic only;
-4. the Stage-1 threshold is selected only after the blind profile choice is frozen;
-5. no held-out validation or test information enters selection.
+1. unique-profile XGB path (`BruteForce`, seed 123);
+2. two-candidate shared-Stage-2 RF tie path (`Botnet`, seed 123).
 
-The full 30-case Phase-3A matrix remains gated until the Botnet tie-path pilot passes.
+The full 30-case Phase-3A score-generation matrix is now open. Completed cases must remain resumable/skippable without `--force`. After all 30 cases finish, the score-generation summary and a structural audit must pass before Phase 3B rejector replay begins.

@@ -1,7 +1,7 @@
 # JISA Phase 3A Pilot Audit
 
-Status: BOTH PILOT PATHS ACCEPTED; FULL PHASE-3A MATRIX OPEN
-Date: 2026-09-08
+Status: BOTH PILOT PATHS ACCEPTED; FULL 30-CASE MATRIX COMPLETED LOCALLY; STRUCTURAL AUDIT PENDING
+Date: 2026-09-12
 Branch: `jisa-q1-revision`
 Parent execution spec: `docs/JISA_PHASE3_EXECUTION_ADDENDUM.md`
 Runner: `scripts/jisa_phase3a_generate_validation_blind_scores.py`
@@ -51,11 +51,19 @@ Observed completion record:
 
 The two RF candidates share the same Stage-2 definition, and the runner caches Stage-2 models by Stage-2 signature. Their identical stored Stage-2 blind-validation macro-F1 is consistent with that shared definition. The candidate tie is resolved by Stage-1 AUROC computed only on the heldout-free validation surface; `rf_class_weight_balanced` wins by approximately `0.00046907` AUROC. The Stage-1 threshold is then selected after the profile choice is frozen.
 
-## Pilot verdict
+## Full matrix completion checkpoint
 
-Both required execution paths are accepted:
+On 2026-09-12 the local Phase-3A score-generation summary reported `completed cases: 30/30` for all five seeds and all six CICIoT2023 holdouts. The summary showed a stable selected profile by holdout across all five seeds:
 
-1. unique-profile XGB path (`BruteForce`, seed 123);
-2. two-candidate shared-Stage-2 RF tie path (`Botnet`, seed 123).
+- `Botnet`: `rf_class_weight_balanced`;
+- `BruteForce`: `xgb_inv_family_clipped`;
+- `DDoS`: `rf_class_weight_balanced`;
+- `DoS`: `rf_class_weight_balanced`;
+- `Other`: `rf_class_weight_balanced`;
+- `Scan/Recon`: `rf_class_weight_balanced`.
 
-The full 30-case Phase-3A score-generation matrix is now open. Completed cases must remain resumable/skippable without `--force`. After all 30 cases finish, the score-generation summary and a structural audit must pass before Phase 3B rejector replay begins.
+All 30 cases reported the full test size `1190899`. The summary is an execution checkpoint, not yet the frozen Phase-3A evidence surface. A separate structural/deep audit must verify the case artifacts, selection rule, held-out validation exclusion, score schemas, test-row support, and model-persistence boundary before Phase 3B begins.
+
+## Current gate
+
+Both required pilot paths are accepted and the full 30-case matrix has completed locally. Phase 3B remains blocked until `scripts/jisa_phase3a_audit_results.py --deep` passes all 30 cases.

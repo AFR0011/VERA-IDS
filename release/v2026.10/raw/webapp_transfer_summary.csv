@@ -1,0 +1,2 @@
+dataset,holdout_family,budget,method,validation_overall_reject_rate,validation_false_unknown_rate_all_known,test_overall_reject_rate,test_false_unknown_rate_all_known
+CICIDS2017,Web_App,0.03,family_conditional,0.0171155,0.0166432,0.1536155,0.1532317

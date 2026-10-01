@@ -11,6 +11,15 @@ Thesis PDF: <https://github.com/AFR0011/VERA-IDS/releases/download/v2026.08/VERA
 Protocol A correction: [PROTOCOL_A_CORRECTION.md](PROTOCOL_A_CORRECTION.md)
 Asset hashes and page counts: [release/ASSET_MANIFEST.json](release/ASSET_MANIFEST.json)
 
+## Computer Communications reproducibility snapshot
+
+The manuscript-specific `v2026.10` evidence snapshot is available at
+[release/v2026.10/README.md](release/v2026.10/README.md). It adds the frozen
+post-thesis aggregate evidence used by the Computer Communications manuscript,
+including the direct/staged comparison, validation-blind and validation-visible
+rejector surfaces, residual routing, partition sensitivity, and literature-profile
+provenance.
+
 ## Scientific scope
 
 - Protocol A: closed-set stratified evaluation. The primary system macro-F1

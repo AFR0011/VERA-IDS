@@ -534,10 +534,13 @@ def run_model_competence(
     datasets: Sequence[str] | None = None,
     seeds: Sequence[int] | None = None,
     model_families: Sequence[str] | None = None,
+    processed_root: str | Path | None = None,
 ) -> Path:
     cfg = competence_cfg(config)
     if not cfg:
         raise ValueError("Missing model_competence configuration.")
+    if processed_root is not None:
+        cfg["processed_root"] = str(processed_root)
     selected_datasets = list(datasets or cfg.get("datasets", []))
     selected_seeds = [int(x) for x in (seeds or cfg.get("seeds", []))]
     selected_models = list(model_families or cfg.get("model_families", []))
@@ -547,8 +550,13 @@ def run_model_competence(
         selected_seeds = [int(x) for x in smoke_cfg.get("seeds", selected_seeds)]
 
     out_root = resolve_path(cfg.get("out_root", "outputs/12_model_competence"))
+    resolved_processed_root = resolve_path(cfg["processed_root"])
     if dry_run:
         print(f"[dry-run] out_root={out_root}")
+        print(
+            f"[dry-run] processed_root={resolved_processed_root} "
+            f"exists={resolved_processed_root.exists()}"
+        )
         print(f"[dry-run] datasets={selected_datasets}")
         print(f"[dry-run] seeds={selected_seeds}")
         print(f"[dry-run] models={selected_models}")
@@ -559,6 +567,15 @@ def run_model_competence(
                 f"stage2_candidates={len(grid.get('stage2', []))}"
             )
         return out_root
+
+    if not resolved_processed_root.exists():
+        raise FileNotFoundError(
+            "Prepared Protocol-A root not found: "
+            f"{resolved_processed_root}. "
+            "The public repository intentionally excludes prepared benchmark rows. "
+            "Point this run at your existing processed_V5 directory with "
+            "--processed-root <path>, or recreate the prepared data before running."
+        )
 
     all_rows: list[dict[str, Any]] = collect_primary_vera_rows(
         cfg,

@@ -6,12 +6,16 @@ from ids_eval_framework.src.paths import load_config
 from ids_eval_framework.src.reference_framework_eval import build_model as build_reference_model
 
 
-def test_model_competence_config_and_dry_run() -> None:
+def test_model_competence_config_and_dry_run(tmp_path) -> None:
     config = load_config("config/model_competence.yml")
     cfg = config["model_competence"]
     assert cfg["model_families"] == ["extra_trees", "lgbm", "catboost"]
     assert cfg["seeds"] == [123, 124, 125, 126, 127]
-    out = run_model_competence(config, dry_run=True)
+    out = run_model_competence(
+        config,
+        dry_run=True,
+        processed_root=tmp_path / "prepared",
+    )
     assert out.name == "12_model_competence"
 
 

@@ -3,6 +3,7 @@ model_competence:
     Staged Protocol-A competence audit for strong conventional alternatives.
     This is a sanity check on primary RF/XGB model competence, not a SOTA leaderboard.
   out_root: outputs/12_model_competence
+  primary_seed_reliability_root: outputs/10_seed_reliability/protocol_a_two_stage
   processed_root: outputs/02_prepared_data/processed_V5
   protocol: A_stratified
   datasets:

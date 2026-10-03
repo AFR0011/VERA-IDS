@@ -38,6 +38,9 @@ def _prepare_seed_config(
     seed: int,
     profiles: Sequence[str],
     smoke: bool,
+    protocol_a_processed_root: str | Path | None = None,
+    protocol_b_audit_roots: Sequence[str | Path] | None = None,
+    protocol_b_processed_overrides: Mapping[str, str | Path] | None = None,
 ) -> dict[str, Any]:
     cfg = deepcopy(dict(base_config))
     ref = cfg.setdefault("reference_framework_eval", {})
@@ -45,9 +48,24 @@ def _prepare_seed_config(
     ref["enabled_profiles"] = list(profiles)
     proto_a = ref.setdefault("protocol_a", {})
     proto_a["seed"] = int(seed)
+    if protocol_a_processed_root is not None:
+        proto_a["processed_root"] = str(protocol_a_processed_root)
+
     proto_b = ref.setdefault("protocol_b", {})
     legacy = proto_b.setdefault("legacy_overrides", {})
     legacy["random_seed"] = int(seed)
+    if protocol_b_audit_roots:
+        roots = [str(x) for x in protocol_b_audit_roots]
+        legacy["audit_roots"] = roots
+        legacy["audit_root"] = roots[0]
+        legacy["manifest_glob"] = [
+            str(Path(root) / "*" / "manifests" / "*.json")
+            for root in roots
+        ]
+    if protocol_b_processed_overrides:
+        legacy["processed_dir_overrides"] = {
+            str(k): str(v) for k, v in protocol_b_processed_overrides.items()
+        }
 
     if smoke:
         smoke_cfg = ref.setdefault("smoke", {})
@@ -241,6 +259,9 @@ def run_external_profile_robustness(
     seeds: Sequence[int] | None = None,
     skip_protocol_a: bool = False,
     skip_protocol_b: bool = False,
+    protocol_a_processed_root: str | Path | None = None,
+    protocol_b_audit_roots: Sequence[str | Path] | None = None,
+    protocol_b_processed_overrides: Mapping[str, str | Path] | None = None,
 ) -> Path:
     cfg = robustness_cfg(config)
     if not cfg:
@@ -271,6 +292,17 @@ def run_external_profile_robustness(
         print(f"[dry-run] profiles={selected_profiles}")
         print(f"[dry-run] seeds={selected_seeds}")
         print(f"[dry-run] protocol_a={run_a} protocol_b={run_b}")
+        if protocol_a_processed_root is not None:
+            pa_root = resolve_path(protocol_a_processed_root)
+            print(f"[dry-run] protocol_a_processed_root={pa_root} exists={pa_root.exists()}")
+        if protocol_b_audit_roots:
+            for root in protocol_b_audit_roots:
+                p = resolve_path(root)
+                print(f"[dry-run] protocol_b_audit_root={p} exists={p.exists()}")
+        if protocol_b_processed_overrides:
+            for dataset, root in protocol_b_processed_overrides.items():
+                p = resolve_path(root)
+                print(f"[dry-run] protocol_b_processed[{dataset}]={p} exists={p.exists()}")
         print("[dry-run] open_set_replay=False sink_aware=False")
         return out_root
 
@@ -282,6 +314,9 @@ def run_external_profile_robustness(
             seed=seed,
             profiles=selected_profiles,
             smoke=smoke,
+            protocol_a_processed_root=protocol_a_processed_root,
+            protocol_b_audit_roots=protocol_b_audit_roots,
+            protocol_b_processed_overrides=protocol_b_processed_overrides,
         )
         if run_a:
             run_protocol_a_reference_profiles(

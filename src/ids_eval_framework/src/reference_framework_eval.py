@@ -18,6 +18,16 @@ try:
 except Exception:  # pragma: no cover
     XGBClassifier = None
 
+try:
+    from lightgbm import LGBMClassifier
+except Exception:  # pragma: no cover
+    LGBMClassifier = None
+
+try:
+    from catboost import CatBoostClassifier
+except Exception:  # pragma: no cover
+    CatBoostClassifier = None
+
 from ids_eval_framework.src import two_stage_engine as engine
 from ids_eval_framework.src.native_runtime import run_native_main
 from ids_eval_framework.src.paths import resolve_repo_path
@@ -25,6 +35,9 @@ from ids_eval_framework.src.paths import resolve_repo_path
 
 PROFILE_TO_PAPER = {
     "adewole2025_xgb_profile": "adewole2025_xgb",
+    "keskin2026_lgbm_profile": "keskin2026_lgbm",
+    "hung2026_xgb_profile": "hung2026_xgb",
+    "christy2025_rf_profile": "christy2025_rf",
     "neto2023_rf_profile": "neto2023_rf",
 }
 
@@ -194,7 +207,7 @@ def build_model(profile_name: str, profile: Mapping[str, Any], stage: str, n_cla
     params = dict(profile.get(f"{stage}_params", {}) or {})
     if family == "xgb":
         if XGBClassifier is None:
-            raise RuntimeError("xgboost is required for adewole2025_xgb_profile.")
+            raise RuntimeError(f"xgboost is required for {profile_name}.")
         base = {
             "random_state": int(seed),
             "n_jobs": int(n_jobs),
@@ -216,6 +229,33 @@ def build_model(profile_name: str, profile: Mapping[str, Any], stage: str, n_cla
         }
         base.update(params)
         return RandomForestClassifier(**base)
+    if family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError(f"lightgbm is required for {profile_name}.")
+        base = {
+            "random_state": int(seed),
+            "n_jobs": int(n_jobs),
+            "verbosity": -1,
+        }
+        base.update(params)
+        if stage == "stage1":
+            base.setdefault("objective", "binary")
+        else:
+            base.setdefault("objective", "multiclass")
+            base.setdefault("num_class", int(n_classes))
+        return LGBMClassifier(**{k: v for k, v in base.items() if v is not None})
+    if family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError(f"catboost is required for {profile_name}.")
+        base = {
+            "random_seed": int(seed),
+            "thread_count": int(n_jobs),
+            "verbose": False,
+            "allow_writing_files": False,
+            "loss_function": "Logloss" if stage == "stage1" else "MultiClass",
+        }
+        base.update(params)
+        return CatBoostClassifier(**{k: v for k, v in base.items() if v is not None})
     raise ValueError(f"Unsupported model_family for {profile_name}: {family}")
 
 

@@ -1,0 +1,171 @@
+model_competence:
+  description: >-
+    Staged Protocol-A competence audit for strong conventional alternatives.
+    This is a sanity check on primary RF/XGB model competence, not a SOTA leaderboard.
+  out_root: outputs/12_model_competence
+  processed_root: outputs/02_prepared_data/processed_V5
+  protocol: A_stratified
+  datasets:
+    - CICIDS2017
+    - CICIoT2023
+  seeds:
+    - 123
+    - 124
+    - 125
+    - 126
+    - 127
+  model_families:
+    - extra_trees
+    - lgbm
+    - catboost
+  n_jobs: 24
+  chunksize_rows: 200000
+  max_train_rows:
+    CICIDS2017: 900000
+    CICIoT2023: 1500000
+  max_val_rows:
+    CICIDS2017: 500000
+    CICIoT2023: 650000
+
+  stage1_threshold:
+    policy: target_fpr_family_aware
+    target_fpr: 0.015
+    min_family_support: 50
+    sweep_points: 60
+    objective_mode: min_family_recall
+    p10_quantile: 0.10
+
+  cascade_gate:
+    enabled: true
+    grid_points: 30
+    max_val_rows_for_sweep: 700000
+
+  abstain:
+    enabled: true
+    policy: abstain
+    label: Unknown
+    max_benign_family_fp_rate: 0.02
+    max_benign_reject_rate: 0.10
+    max_overall_reject_rate: 0.01
+    sweep_enabled: true
+    max_benign_family_fp_rate_list:
+      - 0.01
+      - 0.02
+      - 0.03
+    max_overall_reject_rate_list:
+      - 0.01
+    grid:
+      - 0.0
+      - 0.2
+      - 0.3
+      - 0.4
+      - 0.5
+      - 0.6
+      - 0.7
+      - 0.8
+      - 0.9
+    also_try_quantiles: true
+    quantiles:
+      - 0.05
+      - 0.10
+      - 0.20
+      - 0.30
+    max_val_rows_for_sweep: 700000
+
+  calibration_reporting:
+    enabled: true
+    ece_bins: 15
+    plot_dpi: 160
+
+  grids:
+    extra_trees:
+      stage1:
+        - n_estimators: 300
+          max_depth: null
+          min_samples_leaf: 1
+          max_features: sqrt
+          class_weight: balanced
+        - n_estimators: 600
+          max_depth: 30
+          min_samples_leaf: 2
+          max_features: 0.5
+          class_weight: balanced
+      stage2:
+        - n_estimators: 300
+          max_depth: null
+          min_samples_leaf: 1
+          max_features: sqrt
+          class_weight: balanced
+        - n_estimators: 600
+          max_depth: 25
+          min_samples_leaf: 2
+          max_features: 0.5
+          class_weight: balanced
+
+    lgbm:
+      stage1:
+        - n_estimators: 450
+          learning_rate: 0.05
+          num_leaves: 127
+          max_depth: -1
+          subsample: 0.85
+          colsample_bytree: 0.85
+          reg_lambda: 1.0
+          class_weight: balanced
+        - n_estimators: 800
+          learning_rate: 0.03
+          num_leaves: 127
+          max_depth: -1
+          subsample: 0.85
+          colsample_bytree: 0.85
+          reg_lambda: 1.2
+          class_weight: balanced
+      stage2:
+        - n_estimators: 450
+          learning_rate: 0.05
+          num_leaves: 127
+          max_depth: -1
+          subsample: 0.85
+          colsample_bytree: 0.85
+          reg_lambda: 1.0
+          class_weight: balanced
+        - n_estimators: 800
+          learning_rate: 0.03
+          num_leaves: 127
+          max_depth: -1
+          subsample: 0.85
+          colsample_bytree: 0.85
+          reg_lambda: 1.2
+          class_weight: balanced
+
+    catboost:
+      stage1:
+        - iterations: 450
+          depth: 8
+          learning_rate: 0.06
+          l2_leaf_reg: 4.0
+          auto_class_weights: Balanced
+        - iterations: 800
+          depth: 10
+          learning_rate: 0.04
+          l2_leaf_reg: 5.0
+          auto_class_weights: Balanced
+      stage2:
+        - iterations: 450
+          depth: 8
+          learning_rate: 0.06
+          l2_leaf_reg: 4.0
+          auto_class_weights: Balanced
+        - iterations: 800
+          depth: 10
+          learning_rate: 0.04
+          l2_leaf_reg: 5.0
+          auto_class_weights: Balanced
+
+  smoke:
+    seeds:
+      - 123
+    datasets:
+      - CICIoT2023
+    max_train_rows: 30000
+    max_val_rows: 20000

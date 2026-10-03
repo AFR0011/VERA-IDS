@@ -272,7 +272,8 @@ def summarize_run(run_dir: Path, family: str, dataset: str, seed: int) -> dict[s
     s1 = read_json(run_dir / "metrics_stage1_test.json")
     s2 = read_json(run_dir / "metrics_stage2_test.json")
     system = read_json(run_dir / "system_compare_test.json")
-    strict = dict(system.get("strict_tau", {}) or {})
+    strict = dict(system.get("strict", {}) or {})
+    strict_tau = dict(system.get("strict_tau", {}) or {})
     return {
         "surface": "model_competence_staged_protocol_a",
         "claim_status": "competence_sanity_check_not_sota_ranking",
@@ -286,12 +287,18 @@ def summarize_run(run_dir: Path, family: str, dataset: str, seed: int) -> dict[s
         "stage2_macro_f1_fixedK": s2.get("macro_f1_fixedK"),
         "stage2_macro_f1_present": s2.get("macro_f1_present"),
         "stage2_accuracy": s2.get("accuracy"),
-        "system_accuracy": strict.get("accuracy"),
         "system_macro_f1_supported_labels": strict.get(
             "system_macro_f1_supported_labels", strict.get("macro_f1")
         ),
+        "system_accuracy": strict.get("accuracy"),
         "system_benign_family_fp_rate": strict.get("benign_family_fp_rate"),
         "system_overall_reject_rate": strict.get("overall_reject_rate"),
+        "strict_tau_macro_f1_supported_labels": strict_tau.get(
+            "system_macro_f1_supported_labels", strict_tau.get("macro_f1")
+        ),
+        "strict_tau_accuracy": strict_tau.get("accuracy"),
+        "strict_tau_benign_family_fp_rate": strict_tau.get("benign_family_fp_rate"),
+        "strict_tau_overall_reject_rate": strict_tau.get("overall_reject_rate"),
     }
 
 
@@ -446,6 +453,9 @@ def build_summary(rows: Sequence[Mapping[str, Any]]) -> pd.DataFrame:
         "system_macro_f1_supported_labels",
         "system_accuracy",
         "system_benign_family_fp_rate",
+        "strict_tau_macro_f1_supported_labels",
+        "strict_tau_accuracy",
+        "strict_tau_benign_family_fp_rate",
     ]
     out_rows: list[dict[str, Any]] = []
     for (dataset, family), group in frame.groupby(["dataset", "model_family"], dropna=False):

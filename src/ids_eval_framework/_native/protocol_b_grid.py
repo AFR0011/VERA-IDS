@@ -76,6 +76,16 @@ try:
 except Exception:
     XGBClassifier = None
 
+try:
+    from lightgbm import LGBMClassifier
+except Exception:
+    LGBMClassifier = None
+
+try:
+    from catboost import CatBoostClassifier
+except Exception:
+    CatBoostClassifier = None
+
 
 # =============================================================================
 # CONFIGURATION
@@ -84,6 +94,11 @@ CFG: Dict[str, object] = {
     # Root folder where 4.ProtocolB_SupportAudit.py wrote dataset folders + manifests.
     "audit_root": "protocolB_support_audit_out_cicids17_recovery",
     "audit_roots": [],
+
+    # Optional dataset -> processed Protocol-B directory overrides.
+    # Useful when support-audit manifests were created on another machine and
+    # therefore contain stale absolute processed_dir paths.
+    "processed_dir_overrides": {},
 
     # Pattern used to discover scenario manifests.
     "manifest_glob": os.path.join("protocolB_support_audit_out_cicids17_recovery", "*", "manifests", "*.json"),
@@ -572,6 +587,31 @@ def build_stage1_model(model_family: str, params: Dict[str, object], weight_mode
             p["class_weight"] = "balanced_subsample"
         return RandomForestClassifier(**p)
 
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "binary")
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["class_weight"] = "balanced"
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "Logloss")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["auto_class_weights"] = "Balanced"
+        return CatBoostClassifier(**p)
+
     raise ValueError(f"Unsupported model_family for stage1: {model_family}")
 
 
@@ -591,6 +631,28 @@ def build_stage2_model(model_family: str, params: Dict[str, object], n_classes: 
         p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
         p["random_state"] = int(seed)
         return RandomForestClassifier(**p)
+
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "multiclass")
+        p.setdefault("num_class", int(n_classes))
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "MultiClass")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        return CatBoostClassifier(**p)
 
     raise ValueError(f"Unsupported model_family for stage2: {model_family}")
 
@@ -866,7 +928,14 @@ def run_one_combo(helper, manifest: Dict[str, object], run_dir: str, combo: Dict
     write_json(os.path.join(run_dir, "combo.json"), combo)
 
     dataset = str(manifest["dataset"])
-    dataset_dir = str(manifest["processed_dir"])
+    processed_overrides = dict(CFG.get("processed_dir_overrides") or {})
+    dataset_dir = str(processed_overrides.get(dataset, manifest["processed_dir"]))
+    if not os.path.isdir(dataset_dir):
+        raise FileNotFoundError(
+            "Protocol-B processed dataset directory not found: "
+            f"{dataset_dir}. The support-audit manifest may contain a stale path; "
+            "supply processed_dir_overrides for this dataset."
+        )
     y1_col = canonical_col(str(manifest["y_stage1_col"]))
     y2_col = canonical_col(str(manifest["y_stage2_col"]))
     benign_label = str(manifest["benign_label"])

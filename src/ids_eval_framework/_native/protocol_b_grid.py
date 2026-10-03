@@ -95,6 +95,11 @@ CFG: Dict[str, object] = {
     "audit_root": "protocolB_support_audit_out_cicids17_recovery",
     "audit_roots": [],
 
+    # Optional dataset -> processed Protocol-B directory overrides.
+    # Useful when support-audit manifests were created on another machine and
+    # therefore contain stale absolute processed_dir paths.
+    "processed_dir_overrides": {},
+
     # Pattern used to discover scenario manifests.
     "manifest_glob": os.path.join("protocolB_support_audit_out_cicids17_recovery", "*", "manifests", "*.json"),
 
@@ -923,7 +928,14 @@ def run_one_combo(helper, manifest: Dict[str, object], run_dir: str, combo: Dict
     write_json(os.path.join(run_dir, "combo.json"), combo)
 
     dataset = str(manifest["dataset"])
-    dataset_dir = str(manifest["processed_dir"])
+    processed_overrides = dict(CFG.get("processed_dir_overrides") or {})
+    dataset_dir = str(processed_overrides.get(dataset, manifest["processed_dir"]))
+    if not os.path.isdir(dataset_dir):
+        raise FileNotFoundError(
+            "Protocol-B processed dataset directory not found: "
+            f"{dataset_dir}. The support-audit manifest may contain a stale path; "
+            "supply processed_dir_overrides for this dataset."
+        )
     y1_col = canonical_col(str(manifest["y_stage1_col"]))
     y2_col = canonical_col(str(manifest["y_stage2_col"]))
     benign_label = str(manifest["benign_label"])

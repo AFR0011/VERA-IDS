@@ -76,6 +76,16 @@ try:
 except Exception:
     XGBClassifier = None
 
+try:
+    from lightgbm import LGBMClassifier
+except Exception:
+    LGBMClassifier = None
+
+try:
+    from catboost import CatBoostClassifier
+except Exception:
+    CatBoostClassifier = None
+
 
 # =============================================================================
 # CONFIGURATION
@@ -572,6 +582,31 @@ def build_stage1_model(model_family: str, params: Dict[str, object], weight_mode
             p["class_weight"] = "balanced_subsample"
         return RandomForestClassifier(**p)
 
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "binary")
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["class_weight"] = "balanced"
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "Logloss")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["auto_class_weights"] = "Balanced"
+        return CatBoostClassifier(**p)
+
     raise ValueError(f"Unsupported model_family for stage1: {model_family}")
 
 
@@ -591,6 +626,28 @@ def build_stage2_model(model_family: str, params: Dict[str, object], n_classes: 
         p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
         p["random_state"] = int(seed)
         return RandomForestClassifier(**p)
+
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "multiclass")
+        p.setdefault("num_class", int(n_classes))
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "MultiClass")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        return CatBoostClassifier(**p)
 
     raise ValueError(f"Unsupported model_family for stage2: {model_family}")
 

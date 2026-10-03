@@ -442,6 +442,56 @@ def run_dataset_seed(
     return results
 
 
+def collect_primary_vera_rows(
+    cfg: Mapping[str, Any],
+    *,
+    datasets: Sequence[str],
+    seeds: Sequence[int],
+) -> list[dict[str, Any]]:
+    """Load existing repeated RF/XGB Protocol-A evidence for matched comparison."""
+    root_value = cfg.get("primary_seed_reliability_root")
+    if not root_value:
+        return []
+    root = resolve_path(str(root_value))
+    wanted_datasets = set(str(x) for x in datasets)
+    rows: list[dict[str, Any]] = []
+    for seed in seeds:
+        source = root / f"seed_{int(seed)}" / "runs" / "summary" / "protocol_a_core_summary.csv"
+        if not source.exists():
+            continue
+        frame = pd.read_csv(source)
+        if "policy_variant" in frame.columns:
+            frame = frame[frame["policy_variant"].astype(str) == "strict"].copy()
+        if "model_family" in frame.columns:
+            frame = frame[frame["model_family"].astype(str).isin(["rf", "xgb"])].copy()
+        if "dataset" in frame.columns:
+            frame = frame[frame["dataset"].astype(str).isin(wanted_datasets)].copy()
+        for _, row in frame.iterrows():
+            rows.append({
+                "surface": "primary_vera_protocol_a",
+                "claim_status": "existing_primary_reference",
+                "dataset": str(row.get("dataset", "")),
+                "seed": int(seed),
+                "model_family": str(row.get("model_family", "")),
+                "run_dir": str(row.get("run_dir", "")),
+                "stage1_auc": row.get("stage1_roc_auc"),
+                "stage1_fpr": row.get("stage1_fpr"),
+                "stage1_tpr": row.get("stage1_tpr"),
+                "stage2_macro_f1_fixedK": row.get("stage2_macro_f1_fixedK"),
+                "stage2_macro_f1_present": row.get("stage2_macro_f1_present"),
+                "stage2_accuracy": row.get("stage2_accuracy"),
+                "system_macro_f1_supported_labels": row.get("system_macro_f1_supported_labels"),
+                "system_accuracy": row.get("system_accuracy"),
+                "system_benign_family_fp_rate": row.get("benign_family_fp_rate"),
+                "system_overall_reject_rate": row.get("overall_reject_rate"),
+                "strict_tau_macro_f1_supported_labels": None,
+                "strict_tau_accuracy": None,
+                "strict_tau_benign_family_fp_rate": None,
+                "strict_tau_overall_reject_rate": None,
+            })
+    return rows
+
+
 def build_summary(rows: Sequence[Mapping[str, Any]]) -> pd.DataFrame:
     frame = pd.DataFrame(rows)
     if frame.empty:
@@ -510,7 +560,11 @@ def run_model_competence(
             )
         return out_root
 
-    all_rows: list[dict[str, Any]] = []
+    all_rows: list[dict[str, Any]] = collect_primary_vera_rows(
+        cfg,
+        datasets=selected_datasets,
+        seeds=selected_seeds,
+    )
     for dataset in selected_datasets:
         for seed in selected_seeds:
             all_rows.extend(

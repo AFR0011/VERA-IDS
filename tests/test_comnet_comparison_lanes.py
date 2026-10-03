@@ -60,7 +60,7 @@ def test_reference_profile_factory_supports_lightgbm() -> None:
     assert model.get_params()["num_class"] == 4
 
 
-def test_external_profile_robustness_config_and_dry_run() -> None:
+def test_external_profile_robustness_config_and_dry_run(tmp_path) -> None:
     config = load_config("config/external_profile_robustness.yml")
     cfg = config["external_profile_robustness"]
     assert cfg["profiles"] == [
@@ -69,5 +69,14 @@ def test_external_profile_robustness_config_and_dry_run() -> None:
         "hung2026_xgb_profile",
         "christy2025_rf_profile",
     ]
-    out = run_external_profile_robustness(config, dry_run=True)
+    out = run_external_profile_robustness(
+        config,
+        dry_run=True,
+        protocol_a_processed_root=tmp_path / "processed_V5",
+        protocol_b_audit_roots=[tmp_path / "audit_a", tmp_path / "audit_b"],
+        protocol_b_processed_overrides={
+            "CICIDS2017": tmp_path / "b_cicids",
+            "CICIoT2023": tmp_path / "b_iot",
+        },
+    )
     assert out.name == "13_external_profile_robustness"

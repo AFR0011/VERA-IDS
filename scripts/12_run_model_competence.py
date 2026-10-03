@@ -26,6 +26,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dataset", action="append")
     parser.add_argument("--seed", action="append", type=int)
     parser.add_argument("--model", action="append")
+    parser.add_argument(
+        "--processed-root",
+        help="Path to the existing Protocol-A prepared-data root containing A_stratified/.",
+    )
     return parser
 
 
@@ -38,6 +42,7 @@ def main() -> None:
         datasets=args.dataset,
         seeds=args.seed,
         model_families=args.model,
+        processed_root=args.processed_root,
     )
     print(f"Model-competence output root: {out}")
 

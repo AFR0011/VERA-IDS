@@ -20,13 +20,23 @@ def read_csv(path: Path) -> pd.DataFrame:
 
 
 def competence_table(repo: Path, dataset: str, seed: int) -> pd.DataFrame:
-    root = repo / "outputs" / "12_model_competence" / "summary"
-    alternatives = read_csv(root / "model_competence_runs.csv")
-    alternatives = alternatives[
-        (alternatives["dataset"].astype(str) == dataset)
-        & (pd.to_numeric(alternatives["seed"], errors="coerce") == int(seed))
-    ].copy()
-    alternatives["source"] = "new_alternative"
+    competence_root = repo / "outputs" / "12_model_competence"
+    root = competence_root / "summary"
+
+    # Reconstruct alternative rows from per-run summaries rather than trusting
+    # the aggregate CSV, because dataset-scoped pilot invocations may replace
+    # that aggregate. Per-run summaries are the canonical completed artifacts.
+    alternative_rows = []
+    seed_root = competence_root / dataset / f"seed_{int(seed)}"
+    if seed_root.exists():
+        for summary_path in sorted(seed_root.glob("*/summary.json")):
+            try:
+                row = pd.read_json(summary_path, typ="series").to_dict()
+            except ValueError:
+                continue
+            row["source"] = "new_alternative"
+            alternative_rows.append(row)
+    alternatives = pd.DataFrame(alternative_rows)
 
     primary = read_csv(root / "primary_vera_single_run_reference.csv")
     primary = primary[

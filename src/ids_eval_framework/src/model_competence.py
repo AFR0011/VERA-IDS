@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -58,6 +59,10 @@ def read_json(path: Path) -> dict[str, Any]:
         return {}
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def progress(message: str) -> None:
+    print(f"[competence] {message}", flush=True)
 
 
 def system_truth(y1: np.ndarray, y2: np.ndarray) -> np.ndarray:
@@ -184,8 +189,17 @@ def select_stage1(
     rows: list[dict[str, Any]] = []
     best: tuple[tuple[float, float], Any, dict[str, float], dict[str, Any]] | None = None
     for idx, params in enumerate(candidates):
+        started = time.perf_counter()
+        progress(
+            f"{family} stage1 candidate {idx + 1}/{len(candidates)} "
+            f"fit start rows={len(y_train):,}"
+        )
         model = build_model(family, params, stage="stage1", n_classes=2, seed=seed, n_jobs=n_jobs)
         model.fit(X_train, y_train)
+        progress(
+            f"{family} stage1 candidate {idx + 1}/{len(candidates)} "
+            f"fit done elapsed={(time.perf_counter() - started) / 60:.1f} min"
+        )
         metrics, platt = _stage1_candidate_result(model, X_val, y1_val, y2_val, threshold_cfg)
         row = {
             "candidate_index": idx,
@@ -222,6 +236,11 @@ def select_stage2(
     rows: list[dict[str, Any]] = []
     best: tuple[tuple[float, float], Any, float, dict[str, Any]] | None = None
     for idx, params in enumerate(candidates):
+        started = time.perf_counter()
+        progress(
+            f"{family} stage2 candidate {idx + 1}/{len(candidates)} "
+            f"fit start rows={len(y_train):,} classes={n_classes}"
+        )
         model = build_model(
             family,
             params,
@@ -231,6 +250,10 @@ def select_stage2(
             n_jobs=n_jobs,
         )
         model.fit(X_train, y_train)
+        progress(
+            f"{family} stage2 candidate {idx + 1}/{len(candidates)} "
+            f"fit done elapsed={(time.perf_counter() - started) / 60:.1f} min"
+        )
         raw = predict_multi_proba(model, X_val, n_classes)
         temperature = float(engine.fit_temperature_on_probs(raw, y_val, n_classes))
         calibrated = engine.apply_temperature(raw, temperature)
@@ -311,6 +334,7 @@ def run_dataset_seed(
     smoke: bool,
 ) -> list[dict[str, Any]]:
     configure_engine(cfg, dataset, seed)
+    progress(f"dataset={dataset} seed={seed} run start smoke={smoke}")
     out_root = resolve_path(cfg.get("out_root", "outputs/12_model_competence"))
     seed_root = out_root / dataset / f"seed_{seed}"
     shared = seed_root / "shared"
@@ -330,10 +354,13 @@ def run_dataset_seed(
 
     prep_path = shared / "preprocessor.joblib"
     if prep_path.exists():
+        progress(f"dataset={dataset} seed={seed} loading cached preprocessor")
         prep = engine.safe_joblib_load(str(prep_path))
     else:
+        progress(f"dataset={dataset} seed={seed} fitting preprocessor")
         prep = engine.fit_preprocessor(str(ds_dir), str(shared))
         engine.safe_joblib_dump(prep, str(prep_path))
+        progress(f"dataset={dataset} seed={seed} preprocessor ready")
 
     train_parts = engine.list_parts(str(ds_dir), "train")
     val_parts = engine.list_parts(str(ds_dir), "val")
@@ -363,10 +390,20 @@ def run_dataset_seed(
     X2_val = X2_val[valid]
     y2_val_idx = np.array([fam_to_idx[str(x)] for x in y2_val_attack[valid]], dtype=int)
 
+    progress(
+        f"dataset={dataset} seed={seed} data ready "
+        f"stage1_train={len(y1_train):,} stage1_val={len(y1_val):,} "
+        f"stage2_train={len(y2_train_idx):,} stage2_val={len(y2_val_idx):,}"
+    )
     results: list[dict[str, Any]] = []
     grids = dict(cfg.get("grids", {}) or {})
     n_jobs = int(cfg.get("n_jobs", 8))
-    for family in model_families:
+    for family_index, family in enumerate(model_families, start=1):
+        family_started = time.perf_counter()
+        progress(
+            f"model {family_index}/{len(model_families)} {family} start "
+            f"dataset={dataset} seed={seed}"
+        )
         run_dir = seed_root / family
         summary_path = run_dir / "summary.json"
         metadata_path = run_dir / "run_metadata.json"
@@ -384,6 +421,7 @@ def run_dataset_seed(
             and existing_metadata
             and all(existing_metadata.get(k) == v for k, v in expected_metadata.items())
         ):
+            progress(f"{family} reusing matching completed run")
             results.append(read_json(summary_path))
             continue
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -454,6 +492,11 @@ def run_dataset_seed(
         safe_json(summary_path, summary)
         safe_json(metadata_path, expected_metadata)
         results.append(summary)
+        progress(
+            f"model {family} complete elapsed="
+            f"{(time.perf_counter() - family_started) / 60:.1f} min"
+        )
+    progress(f"dataset={dataset} seed={seed} run complete")
     return results
 
 

@@ -507,6 +507,42 @@ def collect_primary_vera_rows(
     return rows
 
 
+def write_primary_reference_summaries(
+    cfg: Mapping[str, Any],
+    *,
+    datasets: Sequence[str],
+    summary_dir: Path,
+) -> None:
+    wanted = set(str(x) for x in datasets)
+
+    single_path = cfg.get("primary_single_run_summary")
+    if single_path:
+        source = resolve_path(str(single_path))
+        if source.exists():
+            frame = pd.read_csv(source)
+            if "dataset" in frame.columns:
+                frame = frame[frame["dataset"].astype(str).isin(wanted)].copy()
+            if "model_family" in frame.columns:
+                frame = frame[frame["model_family"].astype(str).isin(["rf", "xgb"])].copy()
+            if "policy_variant" in frame.columns:
+                frame = frame[frame["policy_variant"].astype(str).isin(["strict", "strict_tau"])].copy()
+            frame.to_csv(summary_dir / "primary_vera_single_run_reference.csv", index=False)
+
+    seed_path = cfg.get("primary_seed_reliability_summary")
+    if seed_path:
+        source = resolve_path(str(seed_path))
+        if source.exists():
+            frame = pd.read_csv(source)
+            if "lane" in frame.columns:
+                frame = frame[frame["lane"].astype(str) == "protocol_a_two_stage"].copy()
+            if "dataset" in frame.columns:
+                frame = frame[frame["dataset"].astype(str).isin(wanted)].copy()
+            if "comparison_key" in frame.columns:
+                mask = frame["comparison_key"].astype(str).str.contains("::rf::|::xgb::", regex=True)
+                frame = frame[mask].copy()
+            frame.to_csv(summary_dir / "primary_vera_five_seed_reference.csv", index=False)
+
+
 def build_summary(rows: Sequence[Mapping[str, Any]]) -> pd.DataFrame:
     frame = pd.DataFrame(rows)
     if frame.empty:
@@ -594,11 +630,7 @@ def run_model_competence(
             "--processed-root <path>, or recreate the prepared data before running."
         )
 
-    all_rows: list[dict[str, Any]] = collect_primary_vera_rows(
-        cfg,
-        datasets=selected_datasets,
-        seeds=selected_seeds,
-    )
+    all_rows: list[dict[str, Any]] = []
     for dataset in selected_datasets:
         for seed in selected_seeds:
             all_rows.extend(
@@ -615,4 +647,9 @@ def run_model_competence(
     summary_dir.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(all_rows).to_csv(summary_dir / "model_competence_runs.csv", index=False)
     build_summary(all_rows).to_csv(summary_dir / "model_competence_summary.csv", index=False)
+    write_primary_reference_summaries(
+        cfg,
+        datasets=selected_datasets,
+        summary_dir=summary_dir,
+    )
     return out_root

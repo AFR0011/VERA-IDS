@@ -369,7 +369,21 @@ def run_dataset_seed(
     for family in model_families:
         run_dir = seed_root / family
         summary_path = run_dir / "summary.json"
-        if summary_path.exists():
+        metadata_path = run_dir / "run_metadata.json"
+        expected_metadata = {
+            "smoke": bool(smoke),
+            "max_train_rows": int(max_train),
+            "max_val_rows": int(max_val),
+            "dataset": str(dataset),
+            "seed": int(seed),
+            "model_family": str(family),
+        }
+        existing_metadata = read_json(metadata_path)
+        if (
+            summary_path.exists()
+            and existing_metadata
+            and all(existing_metadata.get(k) == v for k, v in expected_metadata.items())
+        ):
             results.append(read_json(summary_path))
             continue
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -438,6 +452,7 @@ def run_dataset_seed(
         )
         summary = summarize_run(run_dir, family, dataset, seed)
         safe_json(summary_path, summary)
+        safe_json(metadata_path, expected_metadata)
         results.append(summary)
     return results
 
@@ -549,7 +564,9 @@ def run_model_competence(
         selected_datasets = list(smoke_cfg.get("datasets", selected_datasets))
         selected_seeds = [int(x) for x in smoke_cfg.get("seeds", selected_seeds)]
 
-    out_root = resolve_path(cfg.get("out_root", "outputs/12_model_competence"))
+    smoke_cfg = dict(cfg.get("smoke", {}) or {})
+    out_root_value = smoke_cfg.get("out_root") if smoke else None
+    out_root = resolve_path(out_root_value or cfg.get("out_root", "outputs/12_model_competence"))
     resolved_processed_root = resolve_path(cfg["processed_root"])
     if dry_run:
         print(f"[dry-run] out_root={out_root}")

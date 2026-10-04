@@ -331,8 +331,19 @@ def fit_protocol_a_reference_profile(
     if y2_train is None or y2_val is None:
         raise RuntimeError("Stage labels were not loaded for Protocol A reference profile.")
 
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage1 fit start "
+        f"rows={len(y1_train):,}",
+        flush=True,
+    )
+    stage1_started = time.perf_counter()
     stage1 = build_model(profile_name, profile, "stage1", 2, seed, n_jobs)
     stage1.fit(X1_train, y1_train)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage1 fit done "
+        f"elapsed={(time.perf_counter() - stage1_started) / 60:.1f} min",
+        flush=True,
+    )
     p_val_raw = stage1.predict_proba(X_val)[:, 1].astype(np.float64)
     platt = engine.fit_platt_on_probs(p_val_raw, y1_val)
     engine.safe_joblib_dump(stage1, str(run_dir / "stage1_best.joblib"))
@@ -362,8 +373,19 @@ def fit_protocol_a_reference_profile(
     families = sorted({str(x) for x in y2_attack_train if str(x) and str(x).lower() != "nan"})
     fam_to_idx = {fam: i for i, fam in enumerate(families)}
     y2_idx = np.array([fam_to_idx[str(x)] for x in y2_attack_train], dtype=int)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage2 fit start "
+        f"rows={len(y2_idx):,} classes={len(families)}",
+        flush=True,
+    )
+    stage2_started = time.perf_counter()
     stage2 = build_model(profile_name, profile, "stage2", len(families), seed + 10, n_jobs)
     stage2.fit(X2_train, y2_idx)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage2 fit done "
+        f"elapsed={(time.perf_counter() - stage2_started) / 60:.1f} min",
+        flush=True,
+    )
 
     mask_val = np.array([str(x) in fam_to_idx for x in y2_attack_val], dtype=bool)
     X2_val_ok = X2_val[mask_val]
@@ -544,7 +566,17 @@ def run_protocol_a_reference_profiles(
                         print(f"[resume] protocol_a skip completed -> {profile_name} / {dataset}: {completed['run_dir']}")
                         rows.append(completed)
                         continue
+                print(
+                    f"[reference-a] start -> {profile_name} / {dataset} smoke={smoke}",
+                    flush=True,
+                )
+                run_started = time.perf_counter()
                 rows.append(fit_protocol_a_reference_profile(profile_name, profile, dataset, config or {}, smoke=smoke))
+                print(
+                    f"[reference-a] complete -> {profile_name} / {dataset} "
+                    f"elapsed={(time.perf_counter() - run_started) / 60:.1f} min",
+                    flush=True,
+                )
     df = pd.DataFrame(rows)
     summary_dir = safe_mkdir(out_root(config, smoke=smoke) / "protocol_a" / "summary")
     df.to_csv(summary_dir / "protocol_a_reference_profile_summary.csv", index=False)

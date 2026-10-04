@@ -982,6 +982,29 @@ def run_one_combo(helper, manifest: Dict[str, object], run_dir: str, combo: Dict
     y1_train = s1_train_df[y1_col].astype(int).to_numpy()
     y2_train = s1_train_df[y2_col].astype(str).fillna("").to_numpy(dtype=object)
 
+    unique_y1, unique_y1_counts = np.unique(y1_train, return_counts=True)
+    stage1_class_counts = {
+        str(int(label)): int(count)
+        for label, count in zip(unique_y1, unique_y1_counts)
+    }
+    write_json(
+        os.path.join(run_dir, "stage1_train_class_counts.json"),
+        {
+            "dataset": dataset,
+            "holdout_family": holdout_family,
+            "apply_loao_stage1": bool(combo["apply_loao_stage1"]),
+            "n_rows": int(len(y1_train)),
+            "class_counts": stage1_class_counts,
+        },
+    )
+    if unique_y1.size < 2:
+        raise RuntimeError(
+            "Stage-1 training data contains only one class after Protocol-B "
+            f"sampling/LOAO filtering: counts={stage1_class_counts}. "
+            "This run is scientifically invalid; increase or rework the bounded "
+            "sample, or inspect the underlying split support before retrying."
+        )
+
     stage1_model = build_stage1_model(
         str(combo["model_family"]),
         dict(combo["stage1_params"]),

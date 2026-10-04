@@ -282,7 +282,11 @@ def run_external_profile_robustness(
     if unknown:
         raise ValueError(f"Unknown external profiles: {unknown}")
 
-    out_root = resolve_path(cfg.get("out_root", "outputs/13_external_profile_robustness"))
+    smoke_cfg = dict(cfg.get("smoke", {}) or {})
+    out_root_value = smoke_cfg.get("out_root") if smoke else None
+    out_root = resolve_path(
+        out_root_value or cfg.get("out_root", "outputs/13_external_profile_robustness")
+    )
     run_a = bool(cfg.get("run_protocol_a", True)) and not skip_protocol_a
     run_b = bool(cfg.get("run_protocol_b", True)) and not skip_protocol_b
 

@@ -50,7 +50,9 @@ def competence_table(repo: Path, dataset: str, seed: int) -> pd.DataFrame:
         "seed",
         "stage1_auc",
         "stage1_fpr",
+        "stage1_tpr",
         "stage2_macro_f1_present",
+        "stage2_accuracy",
         "system_macro_f1_supported_labels",
         "system_accuracy",
         "system_benign_family_fp_rate",
@@ -125,12 +127,21 @@ def external_protocol_a_table(repo: Path, seed: int) -> pd.DataFrame:
         "dataset",
         "stage1_auc",
         "stage1_fpr",
+        "stage1_tpr",
+        "stage1_threshold",
         "stage2_macro_f1_present",
+        "stage2_accuracy",
         "system_macro_f1_supported_labels",
         "system_accuracy",
         "system_benign_family_fp_rate",
+        "system_overall_reject_rate",
     ]
-    return frame.reindex(columns=cols).sort_values(
+    out = frame.reindex(columns=cols).copy()
+    out["component_to_system_f1_delta"] = (
+        pd.to_numeric(out["system_macro_f1_supported_labels"], errors="coerce")
+        - pd.to_numeric(out["stage2_macro_f1_present"], errors="coerce")
+    )
+    return out.sort_values(
         ["dataset", "model_profile"]
     ).reset_index(drop=True)
 

@@ -23,6 +23,7 @@ external_profile_robustness:
   run_sink_aware: false
 
   smoke:
+    out_root: outputs/13_external_profile_robustness_smoke
     seeds:
       - 123
     profiles:

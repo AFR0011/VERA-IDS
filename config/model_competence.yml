@@ -164,6 +164,7 @@ model_competence:
           auto_class_weights: Balanced
 
   smoke:
+    out_root: outputs/12_model_competence_smoke
     seeds:
       - 123
     datasets:

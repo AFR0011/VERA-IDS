@@ -229,10 +229,30 @@ def collect_seed_outputs(out_root: Path, seeds: Sequence[int]) -> tuple[pd.DataF
     )
 
 
+def discover_seed_ids(out_root: Path, requested: Sequence[int]) -> list[int]:
+    """Return requested seeds plus any already-materialized seed directories.
+
+    This prevents a later one-seed pilot (for example Protocol B seed 123)
+    from truncating global aggregate CSVs that were previously built from a
+    completed five-seed Protocol-A campaign.
+    """
+    seeds = {int(x) for x in requested}
+    if out_root.exists():
+        for path in out_root.glob("seed_*"):
+            if not path.is_dir():
+                continue
+            try:
+                seeds.add(int(path.name.split("_", 1)[1]))
+            except (IndexError, ValueError):
+                continue
+    return sorted(seeds)
+
+
 def write_aggregate_outputs(out_root: Path, seeds: Sequence[int]) -> None:
     summary_dir = out_root / "summary"
     summary_dir.mkdir(parents=True, exist_ok=True)
-    pa, pb = collect_seed_outputs(out_root, seeds)
+    aggregate_seeds = discover_seed_ids(out_root, seeds)
+    pa, pb = collect_seed_outputs(out_root, aggregate_seeds)
     pa.to_csv(summary_dir / "protocol_a_external_profile_runs.csv", index=False)
     pb.to_csv(summary_dir / "protocol_b_external_profile_runs.csv", index=False)
     aggregate_protocol_a(pa).to_csv(

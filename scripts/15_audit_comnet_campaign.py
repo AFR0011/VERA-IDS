@@ -43,6 +43,9 @@ def competence(repo: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
             "system_macro_f1_supported_labels",
             "system_accuracy",
             "system_benign_family_fp_rate",
+            "strict_tau_macro_f1_supported_labels",
+            "strict_tau_accuracy",
+            "strict_tau_benign_family_fp_rate",
         }
         alt = alt[alt["metric"].astype(str).isin(keep_metrics)].copy()
         alt = alt[
@@ -159,6 +162,9 @@ def main() -> None:
     print(f"- competence repeated summary present: {not alt.empty}")
     print(f"- primary five-seed reference present: {not primary.empty}")
     print(f"- external Protocol A repeated summary present: {not pa.empty}")
+    if not pa.empty:
+        n = pd.to_numeric(pa["n_seeds"], errors="coerce").dropna()
+        print(f"- external Protocol A seed count range: {int(n.min()) if len(n) else 0}..{int(n.max()) if len(n) else 0}")
     print(f"- external Protocol B summary present: {not pb.empty}")
     if not pb.empty:
         n = pd.to_numeric(pb["n_seeds"], errors="coerce").dropna()

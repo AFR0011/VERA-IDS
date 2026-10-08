@@ -11,14 +11,14 @@ Thesis PDF: <https://github.com/AFR0011/VERA-IDS/releases/download/v2026.08/VERA
 Protocol A correction: [PROTOCOL_A_CORRECTION.md](PROTOCOL_A_CORRECTION.md)
 Asset hashes and page counts: [release/ASSET_MANIFEST.json](release/ASSET_MANIFEST.json)
 
-## Computer Communications reproducibility snapshot
+## Computer Networks reproducibility snapshot
 
-The manuscript-specific `v2026.10` evidence snapshot is available at
-[release/v2026.10/README.md](release/v2026.10/README.md). It adds the frozen
-post-thesis aggregate evidence used by the Computer Communications manuscript,
-including the direct/staged comparison, validation-blind and validation-visible
-rejector surfaces, residual routing, partition sensitivity, and literature-profile
-provenance.
+The submission-specific `v2026.10-comnet` evidence snapshot is available at
+[release/v2026.10-comnet/README.md](release/v2026.10-comnet/README.md). It extends the earlier
+`v2026.10` core manuscript snapshot with the final five-seed model-competence
+and external-profile comparison campaigns used by the Computer Networks
+manuscript. The associated provenance map identifies the evidence underlying
+the main figures, Tables 3-6, and Supporting Information Tables S7-S12.
 
 ## Scientific scope
 
@@ -83,6 +83,12 @@ python scripts/09_build_paper_pack.py --dry-run
 python scripts/10_run_seed_reliability.py --dry-run
 python scripts/11_run_reference_framework_eval.py --dry-run
 python scripts/11b_build_reference_framework_comparison.py --dry-run
+python scripts/12_run_model_competence.py --dry-run
+python scripts/13_run_external_profile_robustness.py --dry-run
+python scripts/13a_preflight_protocol_b_sampling.py --help
+python scripts/14_audit_comnet_pilots.py --help
+python scripts/15_audit_comnet_campaign.py --help
+python scripts/15a_refresh_external_profile_aggregates.py --help
 ```
 
 Run every advertised command in both modes with:

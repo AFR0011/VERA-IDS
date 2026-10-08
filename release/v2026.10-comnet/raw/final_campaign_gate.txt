@@ -1,0 +1,48 @@
+VERA-IDS Computer Networks final comparison gate
+================================================
+
+Final audit date: 2026-10-08
+Planned release tag: v2026.10-comnet
+
+Completion gates
+- model-competence repeated summary: present
+- primary RF/XGB five-seed reference: present
+- external Protocol-A repeated summary: present; seed count 5..5
+- external Protocol-B summary: present; seed count 5..5
+
+Interpretation frozen for the manuscript
+- The competence lane is a same-task sanity check, not a SOTA leaderboard.
+- On CICIoT2023, primary RF/XGB remain stronger than the tested Extra Trees,
+  LightGBM, and CatBoost alternatives in Stage-2 and end-to-end macro-F1.
+- On CICIDS2017, Extra Trees is competitive and exceeds primary RF in strict
+  system macro-F1, while primary RF has the lower benign-family false-positive
+  rate. Universal RF/XGB dominance is not claimed.
+- External Protocol A is a configuration-transfer diagnostic. It uses the
+  predeclared fixed transfer caps and is not an apples-to-apples competition
+  with the model-competence lane.
+- External Protocol B reproduces substantial held-out-family dependence across
+  Adewole-derived XGB, Hung-derived XGB, and Keskin-derived LightGBM over five
+  seeds. This supports configuration generality of that specific effect.
+- No claim is made that architecture-order reversals, validation-information
+  sensitivity, residual-destination stability, or partition sensitivity were
+  independently replicated across additional model classes or datasets.
+
+Five-seed CICIoT2023 external Protocol-B heterogeneity
+Adewole XGB:
+  macro-F1 holdout mean 0.705669 (SD 0.003997)
+  macro-F1 family range 0.198114 (SD 0.007709)
+  UDR holdout mean 0.047512 (SD 0.003998)
+  UDR family range 0.169886 (SD 0.008289)
+Hung XGB:
+  macro-F1 holdout mean 0.714931 (SD 0.002509)
+  macro-F1 family range 0.195862 (SD 0.007514)
+  UDR holdout mean 0.037468 (SD 0.001677)
+  UDR family range 0.115370 (SD 0.005036)
+Keskin LightGBM:
+  macro-F1 holdout mean 0.696699 (SD 0.016513)
+  macro-F1 family range 0.218791 (SD 0.055216)
+  UDR holdout mean 0.043797 (SD 0.003592)
+  UDR family range 0.158942 (SD 0.005460)
+
+Experiment gate: FROZEN. No additional comparator/model/seed campaign is
+required for the current Computer Networks submission.

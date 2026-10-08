@@ -1400,10 +1400,25 @@ def main() -> None:
         summary_path = os.path.join(run_dir, "summary.json")
         error_path = os.path.join(run_dir, "error.json")
 
-        # Skip only successfully completed runs
-        if os.path.isfile(summary_path):
+        # Reuse only completed runs that also carry the Stage-1 class-support
+        # metadata introduced by the Protocol-B sampling safeguard. Older smoke
+        # artifacts may contain summary.json without a scientifically valid
+        # two-class Stage-1 training sample and must not be silently reused.
+        class_counts_path = os.path.join(run_dir, "stage1_train_class_counts.json")
+        reusable_summary = False
+        if os.path.isfile(summary_path) and os.path.isfile(class_counts_path):
+            try:
+                class_meta = load_json(class_counts_path)
+                counts = dict(class_meta.get("class_counts") or {})
+                reusable_summary = sum(int(v) > 0 for v in counts.values()) >= 2
+            except Exception:
+                reusable_summary = False
+
+        if reusable_summary:
             progress_print(f"[{idx}/{len(plan)}] skip completed -> {run_name}")
             continue
+        if os.path.isfile(summary_path):
+            progress_print(f"[{idx}/{len(plan)}] rerunning stale/unsafe summary -> {run_name}")
 
         # Optional: also skip failed runs
         # if os.path.isfile(error_path):
@@ -1427,6 +1442,13 @@ def main() -> None:
             summary = run_one_combo(helper, manifest, run_dir, combo)
             summary["run_name"] = run_name
             summary["run_dir"] = run_dir
+            # A forced rerun of an older unsafe summary must replace, not
+            # duplicate, the deterministic run row in the aggregate CSV.
+            results_rows = [
+                existing
+                for existing in results_rows
+                if str(existing.get("run_name", "")) != str(run_name)
+            ]
             results_rows.append(summary)
             pd.DataFrame(results_rows).to_csv(aggregate_path, index=False)
 

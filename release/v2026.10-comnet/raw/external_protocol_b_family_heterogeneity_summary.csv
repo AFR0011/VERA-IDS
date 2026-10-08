@@ -1,0 +1,13 @@
+model_profile,paper,dataset,metric,summary,n_seeds,mean,sd,min,max
+adewole2025_xgb_profile,NaN,CICIoT2023,macro_f1,holdout_mean,5,0.705669,0.003997,0.701680,0.710020
+adewole2025_xgb_profile,NaN,CICIoT2023,macro_f1,holdout_range,5,0.198114,0.007709,0.186828,0.205241
+adewole2025_xgb_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_mean,5,0.047512,0.003998,0.044904,0.054527
+adewole2025_xgb_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_range,5,0.169886,0.008289,0.157766,0.180028
+hung2026_xgb_profile,NaN,CICIoT2023,macro_f1,holdout_mean,5,0.714931,0.002509,0.711610,0.718340
+hung2026_xgb_profile,NaN,CICIoT2023,macro_f1,holdout_range,5,0.195862,0.007514,0.187688,0.203932
+hung2026_xgb_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_mean,5,0.037468,0.001677,0.034546,0.038532
+hung2026_xgb_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_range,5,0.115370,0.005036,0.109701,0.120195
+keskin2026_lgbm_profile,NaN,CICIoT2023,macro_f1,holdout_mean,5,0.696699,0.016513,0.668916,0.710428
+keskin2026_lgbm_profile,NaN,CICIoT2023,macro_f1,holdout_range,5,0.218791,0.055216,0.177846,0.313354
+keskin2026_lgbm_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_mean,5,0.043797,0.003592,0.039092,0.048509
+keskin2026_lgbm_profile,NaN,CICIoT2023,unknown_detection_rate,holdout_range,5,0.158942,0.005460,0.152593,0.166154

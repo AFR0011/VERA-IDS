@@ -49,6 +49,4 @@ All final comparison surfaces use seeds 123-127. The final campaign audit
 reports five-seed coverage for the competence reference, external Protocol A,
 and external Protocol B.
 
-Before creating the GitHub release, merge the comparison branch and create tag
-`v2026.10-comnet` from the merged submission commit. The manuscript and Supporting
-Information refer to that tag.
+Before creating the GitHub release, run:\n\n```bash\npython scripts/16_verify_comnet_release.py\n```\n\nThen merge the comparison branch and create tag `v2026.10-comnet` from the merged\nsubmission commit. The manuscript and Supporting Information refer to that tag. See\n[RELEASE_NOTES.md](RELEASE_NOTES.md) for the frozen scope and verification checklist.\n

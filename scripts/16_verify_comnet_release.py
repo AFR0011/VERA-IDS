@@ -95,13 +95,16 @@ def main() -> int:
             )
 
     gate_text = (RAW / "final_campaign_gate.txt").read_text(encoding="utf-8", errors="replace")
+    # The frozen gate is a human-readable release record, not a raw dump of
+    # scripts/15_audit_comnet_campaign.py. Seed completeness is verified above
+    # directly from the frozen CSV evidence; here we only require the semantic
+    # completion markers recorded in final_campaign_gate.txt.
     required_gate_phrases = [
-        "competence repeated summary present: True",
-        "primary five-seed reference present: True",
-        "external Protocol A repeated summary present: True",
-        "external Protocol A seed count range: 5..5",
-        "external Protocol B summary present: True",
-        "external Protocol B seed count range: 5..5",
+        "model-competence repeated summary: present",
+        "primary RF/XGB five-seed reference: present",
+        "external Protocol-A repeated summary: present; seed count 5..5",
+        "external Protocol-B summary: present; seed count 5..5",
+        "Experiment gate: FROZEN",
     ]
     absent = [x for x in required_gate_phrases if x not in gate_text]
     if absent:

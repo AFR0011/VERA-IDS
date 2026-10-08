@@ -89,6 +89,7 @@ python scripts/13a_preflight_protocol_b_sampling.py --help
 python scripts/14_audit_comnet_pilots.py --help
 python scripts/15_audit_comnet_campaign.py --help
 python scripts/15a_refresh_external_profile_aggregates.py --help
+python scripts/16_verify_comnet_release.py
 ```
 
 Run every advertised command in both modes with:
@@ -112,6 +113,7 @@ uv run python scripts/verify_manifests.py
 uv run python scripts/check_links.py
 uv run python scripts/smoke_test.py
 uv run python scripts/release_audit.py scan .
+uv run python scripts/16_verify_comnet_release.py
 ```
 
 GitHub Actions repeats locked installation, heavy imports, compilation, tests,

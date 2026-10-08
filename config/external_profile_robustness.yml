@@ -1,0 +1,31 @@
+external_profile_robustness:
+  description: >-
+    Repeated evaluation of independently specified classifier configurations
+    inside common VERA Protocol-A and Protocol-B conditions.
+  base_reference_config: config/reference_framework_eval.yml
+  out_root: outputs/13_external_profile_robustness
+  seeds:
+    - 123
+    - 124
+    - 125
+    - 126
+    - 127
+  profiles:
+    - adewole2025_xgb_profile
+    - keskin2026_lgbm_profile
+    - hung2026_xgb_profile
+    - christy2025_rf_profile
+  run_protocol_a: true
+  run_protocol_b: true
+  # Protocol B already uses validation-selected maximum-confidence tau.
+  # Extra rejector replay and sink-aware lanes are intentionally excluded.
+  run_open_set_replay: false
+  run_sink_aware: false
+
+  smoke:
+    out_root: outputs/13_external_profile_robustness_smoke
+    seeds:
+      - 123
+    profiles:
+      - adewole2025_xgb_profile
+      - keskin2026_lgbm_profile

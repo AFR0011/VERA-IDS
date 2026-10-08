@@ -16,18 +16,22 @@ reference_framework_eval:
       task: family
       accuracy: 0.97974
       macro_f1: 0.904974505109935
+
+  # High-fidelity classifier-configuration transfers selected before VERA results.
+  # Neto remains configured below for historical provenance but is not enabled.
   enabled_profiles:
     - adewole2025_xgb_profile
-    - neto2023_rf_profile
+    - keskin2026_lgbm_profile
+    - hung2026_xgb_profile
+    - christy2025_rf_profile
 
   profiles:
     adewole2025_xgb_profile:
       paper: adewole2025_xgb
+      source_role: classifier_configuration_transfer
       model_family: xgb
-      stage1_weight_modes:
-        - none
-      stage2_weight_modes:
-        - none
+      stage1_weight_modes: [none]
+      stage2_weight_modes: [none]
       stage1_params:
         n_estimators: 100
         max_depth: 6
@@ -38,13 +42,82 @@ reference_framework_eval:
         max_depth: 6
         learning_rate: 0.3
         subsample: 0.5
+
+    keskin2026_lgbm_profile:
+      paper: keskin2026_lgbm
+      source_role: classifier_configuration_transfer
+      model_family: lgbm
+      stage1_weight_modes: [none]
+      stage2_weight_modes: [none]
+      stage1_params:
+        n_estimators: 300
+        learning_rate: 0.05
+        subsample: 0.9
+        colsample_bytree: 0.9
+        verbosity: -1
+      stage2_params:
+        n_estimators: 300
+        learning_rate: 0.05
+        subsample: 0.9
+        colsample_bytree: 0.9
+        verbosity: -1
+
+    hung2026_xgb_profile:
+      paper: hung2026_xgb
+      source_role: classifier_configuration_transfer
+      model_family: xgb
+      stage1_weight_modes: [none]
+      stage2_weight_modes: [none]
+      stage1_params:
+        n_estimators: 354
+        max_depth: 10
+        learning_rate: 0.170176
+        subsample: 0.799013
+        colsample_bytree: 0.808141
+        min_child_weight: 1
+        gamma: 0
+        reg_lambda: 1
+        reg_alpha: 0
+      stage2_params:
+        n_estimators: 354
+        max_depth: 10
+        learning_rate: 0.170176
+        subsample: 0.799013
+        colsample_bytree: 0.808141
+        min_child_weight: 1
+        gamma: 0
+        reg_lambda: 1
+        reg_alpha: 0
+
+    christy2025_rf_profile:
+      paper: christy2025_rf
+      source_role: classifier_configuration_transfer
+      model_family: rf
+      stage1_weight_modes: [none]
+      stage2_weight_modes: [none]
+      stage1_params:
+        n_estimators: 150
+        max_depth: 30
+        min_samples_leaf: 2
+        min_samples_split: 4
+        criterion: gini
+        max_features: sqrt
+      stage2_params:
+        n_estimators: 150
+        max_depth: 30
+        min_samples_leaf: 2
+        min_samples_split: 4
+        criterion: gini
+        max_features: sqrt
+
+    # Historical source-motivated profile. Retained for provenance only until
+    # exact source RF hyperparameters are recovered.
     neto2023_rf_profile:
       paper: neto2023_rf
+      source_role: historical_source_motivated_profile
       model_family: rf
-      stage1_weight_modes:
-        - none
-      stage2_weight_modes:
-        - none
+      stage1_weight_modes: [none]
+      stage2_weight_modes: [none]
       stage1_params:
         n_estimators: 100
       stage2_params:
@@ -57,6 +130,12 @@ reference_framework_eval:
       adewole2025_xgb_profile:
         - CICIDS2017
         - CICIoT2023
+      keskin2026_lgbm_profile:
+        - CICIoT2023
+      hung2026_xgb_profile:
+        - CICIoT2023
+      christy2025_rf_profile:
+        - CICIDS2017
       neto2023_rf_profile:
         - CICIoT2023
     seed: 123
@@ -84,28 +163,11 @@ reference_framework_eval:
       max_benign_reject_rate: 0.10
       max_overall_reject_rate: 0.01
       sweep_enabled: true
-      max_benign_family_fp_rate_list:
-        - 0.01
-        - 0.02
-        - 0.03
-      max_overall_reject_rate_list:
-        - 0.01
-      grid:
-        - 0.0
-        - 0.2
-        - 0.3
-        - 0.4
-        - 0.5
-        - 0.6
-        - 0.7
-        - 0.8
-        - 0.9
+      max_benign_family_fp_rate_list: [0.01, 0.02, 0.03]
+      max_overall_reject_rate_list: [0.01]
+      grid: [0.0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
       also_try_quantiles: true
-      quantiles:
-        - 0.05
-        - 0.10
-        - 0.20
-        - 0.30
+      quantiles: [0.05, 0.10, 0.20, 0.30]
       max_val_rows_for_sweep: 700000
     calibration_reporting:
       enabled: true
@@ -117,6 +179,12 @@ reference_framework_eval:
       adewole2025_xgb_profile:
         - CICIDS2017
         - CICIoT2023
+      keskin2026_lgbm_profile:
+        - CICIoT2023
+      hung2026_xgb_profile:
+        - CICIoT2023
+      christy2025_rf_profile:
+        - CICIDS2017
       neto2023_rf_profile:
         - CICIoT2023
     legacy_overrides:
@@ -128,8 +196,7 @@ reference_framework_eval:
         - outputs/04_protocol_b_support_audit/protocolB_support_audit_out/*/manifests/*.json
         - outputs/04_protocol_b_support_audit/protocolB_support_audit_out_cicids17_recovery/*/manifests/*.json
       base_helper_script: ids_eval_framework/src/two_stage_engine.py
-      apply_loao_stage1_values:
-        - true
+      apply_loao_stage1_values: [true]
       random_seed: 123
       n_jobs: 8
       max_train_rows:
@@ -142,32 +209,21 @@ reference_framework_eval:
         CICIDS2017:
         CICIoT2023:
       stage1_threshold_search:
-        target_fpr_list:
-          - 0.01
-          - 0.02
-        min_family_support_list:
-          - 100
-        objective_mode_list:
-          - min_family_recall
-          - p10_family_recall
-        p10_quantile_list:
-          - 0.10
+        target_fpr_list: [0.01, 0.02]
+        min_family_support_list: [100]
+        objective_mode_list: [min_family_recall, p10_family_recall]
+        p10_quantile_list: [0.10]
         sweep_points: 40
         selection_tiebreak: objective_then_tpr
+      # Base Protocol-B tau is maximum-confidence rejection. The external
+      # robustness branch intentionally does not invoke extra rejector replays.
       tau_search:
-        grid:
-          - 0.3
-          - 0.5
-          - 0.7
+        grid: [0.3, 0.5, 0.7]
         also_try_quantiles: false
-        quantiles:
-          - 0.10
-        max_benign_family_fp_rate_list:
-          - 0.02
-        max_benign_reject_rate_list:
-          - 0.10
-        max_overall_reject_rate_list:
-          - 0.03
+        quantiles: [0.10]
+        max_benign_family_fp_rate_list: [0.02]
+        max_benign_reject_rate_list: [0.10]
+        max_overall_reject_rate_list: [0.03]
         max_false_unknown_rate_all_known: 0.05
         max_false_unknown_rate_known_attacks: 0.10
 

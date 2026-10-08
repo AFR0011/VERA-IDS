@@ -76,6 +76,16 @@ try:
 except Exception:
     XGBClassifier = None
 
+try:
+    from lightgbm import LGBMClassifier
+except Exception:
+    LGBMClassifier = None
+
+try:
+    from catboost import CatBoostClassifier
+except Exception:
+    CatBoostClassifier = None
+
 
 # =============================================================================
 # CONFIGURATION
@@ -84,6 +94,11 @@ CFG: Dict[str, object] = {
     # Root folder where 4.ProtocolB_SupportAudit.py wrote dataset folders + manifests.
     "audit_root": "protocolB_support_audit_out_cicids17_recovery",
     "audit_roots": [],
+
+    # Optional dataset -> processed Protocol-B directory overrides.
+    # Useful when support-audit manifests were created on another machine and
+    # therefore contain stale absolute processed_dir paths.
+    "processed_dir_overrides": {},
 
     # Pattern used to discover scenario manifests.
     "manifest_glob": os.path.join("protocolB_support_audit_out_cicids17_recovery", "*", "manifests", "*.json"),
@@ -572,6 +587,31 @@ def build_stage1_model(model_family: str, params: Dict[str, object], weight_mode
             p["class_weight"] = "balanced_subsample"
         return RandomForestClassifier(**p)
 
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "binary")
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["class_weight"] = "balanced"
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "Logloss")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        if weight_mode == "class_weight_balanced":
+            p["auto_class_weights"] = "Balanced"
+        return CatBoostClassifier(**p)
+
     raise ValueError(f"Unsupported model_family for stage1: {model_family}")
 
 
@@ -591,6 +631,28 @@ def build_stage2_model(model_family: str, params: Dict[str, object], n_classes: 
         p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
         p["random_state"] = int(seed)
         return RandomForestClassifier(**p)
+
+    if model_family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError("lightgbm is not installed but model_family='lgbm' was requested.")
+        p = dict(params)
+        p.setdefault("objective", "multiclass")
+        p.setdefault("num_class", int(n_classes))
+        p.setdefault("n_jobs", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbosity", -1)
+        p["random_state"] = int(seed)
+        return LGBMClassifier(**p)
+
+    if model_family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError("catboost is not installed but model_family='catboost' was requested.")
+        p = dict(params)
+        p.setdefault("loss_function", "MultiClass")
+        p.setdefault("thread_count", int(CFG.get("n_jobs", 8)))
+        p.setdefault("verbose", False)
+        p.setdefault("allow_writing_files", False)
+        p["random_seed"] = int(seed)
+        return CatBoostClassifier(**p)
 
     raise ValueError(f"Unsupported model_family for stage2: {model_family}")
 
@@ -866,7 +928,14 @@ def run_one_combo(helper, manifest: Dict[str, object], run_dir: str, combo: Dict
     write_json(os.path.join(run_dir, "combo.json"), combo)
 
     dataset = str(manifest["dataset"])
-    dataset_dir = str(manifest["processed_dir"])
+    processed_overrides = dict(CFG.get("processed_dir_overrides") or {})
+    dataset_dir = str(processed_overrides.get(dataset, manifest["processed_dir"]))
+    if not os.path.isdir(dataset_dir):
+        raise FileNotFoundError(
+            "Protocol-B processed dataset directory not found: "
+            f"{dataset_dir}. The support-audit manifest may contain a stale path; "
+            "supply processed_dir_overrides for this dataset."
+        )
     y1_col = canonical_col(str(manifest["y_stage1_col"]))
     y2_col = canonical_col(str(manifest["y_stage2_col"]))
     benign_label = str(manifest["benign_label"])
@@ -912,6 +981,29 @@ def run_one_combo(helper, manifest: Dict[str, object], run_dir: str, combo: Dict
     X1_train = prep.transform(s1_train_df.drop(columns=[y1_col, y2_col], errors="ignore"))
     y1_train = s1_train_df[y1_col].astype(int).to_numpy()
     y2_train = s1_train_df[y2_col].astype(str).fillna("").to_numpy(dtype=object)
+
+    unique_y1, unique_y1_counts = np.unique(y1_train, return_counts=True)
+    stage1_class_counts = {
+        str(int(label)): int(count)
+        for label, count in zip(unique_y1, unique_y1_counts)
+    }
+    write_json(
+        os.path.join(run_dir, "stage1_train_class_counts.json"),
+        {
+            "dataset": dataset,
+            "holdout_family": holdout_family,
+            "apply_loao_stage1": bool(combo["apply_loao_stage1"]),
+            "n_rows": int(len(y1_train)),
+            "class_counts": stage1_class_counts,
+        },
+    )
+    if unique_y1.size < 2:
+        raise RuntimeError(
+            "Stage-1 training data contains only one class after Protocol-B "
+            f"sampling/LOAO filtering: counts={stage1_class_counts}. "
+            "This run is scientifically invalid; increase or rework the bounded "
+            "sample, or inspect the underlying split support before retrying."
+        )
 
     stage1_model = build_stage1_model(
         str(combo["model_family"]),
@@ -1308,10 +1400,25 @@ def main() -> None:
         summary_path = os.path.join(run_dir, "summary.json")
         error_path = os.path.join(run_dir, "error.json")
 
-        # Skip only successfully completed runs
-        if os.path.isfile(summary_path):
+        # Reuse only completed runs that also carry the Stage-1 class-support
+        # metadata introduced by the Protocol-B sampling safeguard. Older smoke
+        # artifacts may contain summary.json without a scientifically valid
+        # two-class Stage-1 training sample and must not be silently reused.
+        class_counts_path = os.path.join(run_dir, "stage1_train_class_counts.json")
+        reusable_summary = False
+        if os.path.isfile(summary_path) and os.path.isfile(class_counts_path):
+            try:
+                class_meta = load_json(class_counts_path)
+                counts = dict(class_meta.get("class_counts") or {})
+                reusable_summary = sum(int(v) > 0 for v in counts.values()) >= 2
+            except Exception:
+                reusable_summary = False
+
+        if reusable_summary:
             progress_print(f"[{idx}/{len(plan)}] skip completed -> {run_name}")
             continue
+        if os.path.isfile(summary_path):
+            progress_print(f"[{idx}/{len(plan)}] rerunning stale/unsafe summary -> {run_name}")
 
         # Optional: also skip failed runs
         # if os.path.isfile(error_path):
@@ -1335,6 +1442,13 @@ def main() -> None:
             summary = run_one_combo(helper, manifest, run_dir, combo)
             summary["run_name"] = run_name
             summary["run_dir"] = run_dir
+            # A forced rerun of an older unsafe summary must replace, not
+            # duplicate, the deterministic run row in the aggregate CSV.
+            results_rows = [
+                existing
+                for existing in results_rows
+                if str(existing.get("run_name", "")) != str(run_name)
+            ]
             results_rows.append(summary)
             pd.DataFrame(results_rows).to_csv(aggregate_path, index=False)
 

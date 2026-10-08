@@ -18,6 +18,16 @@ try:
 except Exception:  # pragma: no cover
     XGBClassifier = None
 
+try:
+    from lightgbm import LGBMClassifier
+except Exception:  # pragma: no cover
+    LGBMClassifier = None
+
+try:
+    from catboost import CatBoostClassifier
+except Exception:  # pragma: no cover
+    CatBoostClassifier = None
+
 from ids_eval_framework.src import two_stage_engine as engine
 from ids_eval_framework.src.native_runtime import run_native_main
 from ids_eval_framework.src.paths import resolve_repo_path
@@ -25,6 +35,9 @@ from ids_eval_framework.src.paths import resolve_repo_path
 
 PROFILE_TO_PAPER = {
     "adewole2025_xgb_profile": "adewole2025_xgb",
+    "keskin2026_lgbm_profile": "keskin2026_lgbm",
+    "hung2026_xgb_profile": "hung2026_xgb",
+    "christy2025_rf_profile": "christy2025_rf",
     "neto2023_rf_profile": "neto2023_rf",
 }
 
@@ -194,7 +207,7 @@ def build_model(profile_name: str, profile: Mapping[str, Any], stage: str, n_cla
     params = dict(profile.get(f"{stage}_params", {}) or {})
     if family == "xgb":
         if XGBClassifier is None:
-            raise RuntimeError("xgboost is required for adewole2025_xgb_profile.")
+            raise RuntimeError(f"xgboost is required for {profile_name}.")
         base = {
             "random_state": int(seed),
             "n_jobs": int(n_jobs),
@@ -216,6 +229,33 @@ def build_model(profile_name: str, profile: Mapping[str, Any], stage: str, n_cla
         }
         base.update(params)
         return RandomForestClassifier(**base)
+    if family == "lgbm":
+        if LGBMClassifier is None:
+            raise RuntimeError(f"lightgbm is required for {profile_name}.")
+        base = {
+            "random_state": int(seed),
+            "n_jobs": int(n_jobs),
+            "verbosity": -1,
+        }
+        base.update(params)
+        if stage == "stage1":
+            base.setdefault("objective", "binary")
+        else:
+            base.setdefault("objective", "multiclass")
+            base.setdefault("num_class", int(n_classes))
+        return LGBMClassifier(**{k: v for k, v in base.items() if v is not None})
+    if family == "catboost":
+        if CatBoostClassifier is None:
+            raise RuntimeError(f"catboost is required for {profile_name}.")
+        base = {
+            "random_seed": int(seed),
+            "thread_count": int(n_jobs),
+            "verbose": False,
+            "allow_writing_files": False,
+            "loss_function": "Logloss" if stage == "stage1" else "MultiClass",
+        }
+        base.update(params)
+        return CatBoostClassifier(**{k: v for k, v in base.items() if v is not None})
     raise ValueError(f"Unsupported model_family for {profile_name}: {family}")
 
 
@@ -291,8 +331,19 @@ def fit_protocol_a_reference_profile(
     if y2_train is None or y2_val is None:
         raise RuntimeError("Stage labels were not loaded for Protocol A reference profile.")
 
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage1 fit start "
+        f"rows={len(y1_train):,}",
+        flush=True,
+    )
+    stage1_started = time.perf_counter()
     stage1 = build_model(profile_name, profile, "stage1", 2, seed, n_jobs)
     stage1.fit(X1_train, y1_train)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage1 fit done "
+        f"elapsed={(time.perf_counter() - stage1_started) / 60:.1f} min",
+        flush=True,
+    )
     p_val_raw = stage1.predict_proba(X_val)[:, 1].astype(np.float64)
     platt = engine.fit_platt_on_probs(p_val_raw, y1_val)
     engine.safe_joblib_dump(stage1, str(run_dir / "stage1_best.joblib"))
@@ -322,8 +373,19 @@ def fit_protocol_a_reference_profile(
     families = sorted({str(x) for x in y2_attack_train if str(x) and str(x).lower() != "nan"})
     fam_to_idx = {fam: i for i, fam in enumerate(families)}
     y2_idx = np.array([fam_to_idx[str(x)] for x in y2_attack_train], dtype=int)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage2 fit start "
+        f"rows={len(y2_idx):,} classes={len(families)}",
+        flush=True,
+    )
+    stage2_started = time.perf_counter()
     stage2 = build_model(profile_name, profile, "stage2", len(families), seed + 10, n_jobs)
     stage2.fit(X2_train, y2_idx)
+    print(
+        f"[reference-a] {profile_name} / {dataset} stage2 fit done "
+        f"elapsed={(time.perf_counter() - stage2_started) / 60:.1f} min",
+        flush=True,
+    )
 
     mask_val = np.array([str(x) in fam_to_idx for x in y2_attack_val], dtype=bool)
     X2_val_ok = X2_val[mask_val]
@@ -504,7 +566,17 @@ def run_protocol_a_reference_profiles(
                         print(f"[resume] protocol_a skip completed -> {profile_name} / {dataset}: {completed['run_dir']}")
                         rows.append(completed)
                         continue
+                print(
+                    f"[reference-a] start -> {profile_name} / {dataset} smoke={smoke}",
+                    flush=True,
+                )
+                run_started = time.perf_counter()
                 rows.append(fit_protocol_a_reference_profile(profile_name, profile, dataset, config or {}, smoke=smoke))
+                print(
+                    f"[reference-a] complete -> {profile_name} / {dataset} "
+                    f"elapsed={(time.perf_counter() - run_started) / 60:.1f} min",
+                    flush=True,
+                )
     df = pd.DataFrame(rows)
     summary_dir = safe_mkdir(out_root(config, smoke=smoke) / "protocol_a" / "summary")
     df.to_csv(summary_dir / "protocol_a_reference_profile_summary.csv", index=False)

@@ -47,6 +47,9 @@ data/raw/
 data/processed/
 datasets/
 Datasets/
+# Historical local prepared-data roots at repository top level.
+# These are experimental data, not candidate public release files.
+/processed_V5*/
 outputs/**
 processed_V5/*
 !outputs/summaries/

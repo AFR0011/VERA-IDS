@@ -48,6 +48,7 @@ data/processed/
 datasets/
 Datasets/
 outputs/**
+processed_V5/*
 !outputs/summaries/
 !outputs/summaries/**
 !outputs/evidence/

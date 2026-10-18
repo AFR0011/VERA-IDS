@@ -23,6 +23,24 @@ MAGICS = {
 }
 PCAPNG_MAGIC = bytes.fromhex('0a0d0d0a')
 
+# Exact author-distribution filenames observed in the local source manifest.
+# A name alias is NOT evidence of packet-to-CSV row mapping or independent runs.
+ATTACK_PCAP_TO_CSV_STEM = {
+    'ddos http flood attacks': 'ddos_http_flood_attack',
+    'ddos icmp flood attacks': 'ddos_icmp_flood_attack',
+    'ddos tcp syn flood attacks': 'ddos_tcp_syn_flood_attack',
+    'ddos udp flood attacks': 'ddos_udp_flood_attack',
+    'mitm (arp spoofing + dns) attack': 'mitm_attack',
+    'os fingerprinting attack': 'os_fingerprinting_attack',
+    'password attacks': 'password_attack',
+    'port scanning attack': 'port_scanning_attack',
+    'ransomware attack': 'ransomware_attack',
+    'sql injection attack': 'sql_injection_attack',
+    'uploading attack': 'uploading_attack',
+    'vulnerability scanner attack': 'vulnerability_scanner_attack',
+    'xss attacks': 'xss_attack',
+}
+
 
 def originals(root: Path, extension: str) -> dict[tuple[str, str], Path]:
     if not root.is_dir():
@@ -40,7 +58,10 @@ def originals(root: Path, extension: str) -> dict[tuple[str, str], Path]:
             kind = 'normal'
         else:
             continue
-        key = (kind, p.stem.casefold())
+        stem = p.stem.casefold()
+        if extension == '.pcap' and kind == 'attack':
+            stem = ATTACK_PCAP_TO_CSV_STEM.get(stem, stem)
+        key = (kind, stem)
         if key in found:
             raise ValueError(f'Duplicate original file stem in {kind}: {p.stem}')
         found[key] = p
@@ -137,13 +158,22 @@ def main(argv: list[str] | None = None) -> int:
         if not pcaps:
             raise ValueError('No original PCAP files found')
         if set(pcaps) != set(csvs):
-            raise ValueError('Original CSV/PCAP filename correspondences are incomplete')
+            missing_csv = sorted(set(pcaps) - set(csvs))
+            missing_pcap = sorted(set(csvs) - set(pcaps))
+            raise ValueError(
+                f'Unmatched named source files: PCAP without CSV={missing_csv}; '
+                f'CSV without PCAP={missing_pcap}'
+            )
         per_file = []
         for i, key in enumerate(sorted(pcaps), 1):
             p = pcaps[key]
             print(f'[{i}/{len(pcaps)}] PCAP timestamp header: {p.name}', flush=True)
             observation = probe_pcap(p, args.sample_packets_per_file)
+            csv_path = csvs[key]
+            alias_used = (key[0] == 'attack' and p.stem.casefold() in ATTACK_PCAP_TO_CSV_STEM)
             per_file.append({'original_file': p.relative_to(args.input_root).as_posix(),
+                             'paired_csv_filename': csv_path.relative_to(args.input_root).as_posix(),
+                             'pairing_basis': 'documented_filename_alias' if alias_used else 'same_stem',
                              'source_kind': key[0], 'matching_csv_present': True, **observation})
         stats = Counter(row['status'] for row in per_file)
         payload = {
@@ -158,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
                 'Only initial packet headers are inspected. Full packet time ranges, ordering and capture repetitions are NOT established.',
                 'Packet payloads, network identifiers and raw packet data are never read or exported.',
                 'PCAP timestamp epoch UTC is interpreted for presentation; source time-zone / host clock accuracy is unverified.',
-                'A same-stem CSV/PCAP pair does NOT prove record-level correspondence or identical labels.',
+                'CSV/PCAP filenames are paired by exact stems or source-inventory documented attack-name aliases; neither proves record-level correspondence or identical labels.',
                 'PCAPNG is recognized but timestamp blocks are intentionally not parsed by this bounded script.',
                 'No events, independent sessions, label verification, leakage-free feature set, model or split are constructed.',
             ],

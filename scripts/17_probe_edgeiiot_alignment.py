@@ -19,7 +19,7 @@ import sys
 
 KNOWN_TYPES = {
     "Backdoor", "DDoS_HTTP", "DDoS_ICMP", "DDoS_TCP", "DDoS_UDP",
-    "Fingerprinting", "MITM", "Password", "Port_Scanning", "Ransomware",
+    "Fingerprinting", "OS_Fingerprinting", "MITM", "Password", "Port_Scanning", "Ransomware",
     "SQL_injection", "Uploading", "Vulnerability_scanner", "XSS", "Normal",
 }
 MONTH = r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"

@@ -73,3 +73,10 @@ A separately defined **qualified external stress/closed-set lane** might be scie
 ## Repository and handoff controls
 
 Revision-only GitHub branch: `post-comnet-archival-value`, draft PR #3 **unmerged**. Historical COMNET release immutable. Phase C10 is a documentation/evidence checkpoint, **not a source-code change**. Preserve uploaded aggregate report in user-local ignored outputs and this distilled description in versioned docs. Canonical Drive execution, implementation and scientific decision logs must agree.
+
+
+## Decision supersession — 2026-10-18 (ADOPTED)
+
+After this report, the user explicitly selected **Option A** ("A it is then..."). **Edge-IIoTset's candidacy as a third primary Protocol B LOAO dataset is now CLOSED / NO-GO under the current source-provenance requirement.** Previous text describing this as "recommended" or "awaiting approval" is historical and is superseded. Retain all Phase C3–C10 data and diagnostic code as archived evidence; do not perform additional Edge auditing or training as a consequence of the closeout. Possible future external stress use remains **conditional and unapproved**, requiring a new explicit user decision and leakage-safe protocol. Separate TON_IoT status and the existing CICIDS2017/CICIoT2023 campaign are unchanged.
+
+**Canonical adopted decision:** `docs/RECKONING_EDGEIIOT_PRIMARY_CANDIDACY_CLOSEOUT.md` (ID `EDGE-PRIMARY-2026-10-18`). No source bytes, tests, algorithms, experiments, split rules or historical release files changed at adoption.

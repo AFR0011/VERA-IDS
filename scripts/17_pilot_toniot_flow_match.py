@@ -59,7 +59,10 @@ def accumulate_reservoir(root: Path, cap: int) -> tuple[dict, int]:
                     raise ValueError(f"Malformed GT row in {path.name}")
                 processed_rows += 1
                 typ = str(row.get("type") or "").strip()
-                bucket = buckets.setdefault((path.name, typ), make_reservoir())
+                bucket = buckets.get((path.name, typ))
+                if bucket is None:
+                    bucket = make_reservoir()
+                    buckets[(path.name, typ)] = bucket
                 bucket["seen"] += 1
                 key = identity(row)
                 chosen = bucket["keys"]

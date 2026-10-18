@@ -100,3 +100,18 @@ def test_sampling_limit(tmp_path: Path) -> None:
     rec = json.loads(out.read_text(encoding="utf-8"))["source_records"][0]
     assert rec["rows_sampled_from_start"] == 3
     assert rec["first_column_shape_counts"]["0:frame.time"] == {"number": 3}
+
+
+def test_native_os_fingerprinting_label_is_not_other(tmp_path: Path) -> None:
+    root = tmp_path / "source" / "Attack traffic"
+    root.mkdir(parents=True)
+    (root / "OS_Fingerprinting_attack.csv").write_text(
+        "frame.time,Attack_label,Attack_type\\n"
+        "2021 17:58:23.123,1,OS_Fingerprinting\\n",
+        encoding="utf-8",
+    )
+    out = tmp_path / "out.json"
+    process = invoke(root.parent, out)
+    assert process.returncode == 0, process.stderr
+    record = json.loads(out.read_text(encoding="utf-8"))["source_records"][0]
+    assert record["attack_type_field_counts"] == {"OS_Fingerprinting": 1}

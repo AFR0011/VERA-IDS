@@ -222,9 +222,13 @@ def run(argv=None) -> int:
         temporary = a.out.with_name(a.out.name + '.partial')
         temporary.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
         temporary.replace(a.out)
-        print(f'[PASS] Saved metadata for {len(outputs)} PCAPs, {report["total_packet_headers_scanned"]:,} headers -> {a.out}')
         if not report['all_files_scanned_to_eof']:
-            print('[WARNING] Some files incomplete or deliberately capped; inspect status_counts.', file=sys.stderr)
+            print(f'[PARTIAL] Saved incomplete PCAP metadata for {len(outputs)} files, '
+                  f'{report["total_packet_headers_scanned"]:,} headers -> {a.out}', file=sys.stderr)
+            print('[WARNING] Scan incomplete or deliberately capped; inspect status_counts.', file=sys.stderr)
+            return 2
+        print(f'[PASS] All {len(outputs)} PCAP scans reached EOF, '
+              f'{report["total_packet_headers_scanned"]:,} headers -> {a.out}')
         return 0
     except (OSError, ValueError, TypeError, KeyError, struct.error, OverflowError) as e:
         print(f'[FAIL] PCAP whole-timeline audit: {e}', file=sys.stderr)

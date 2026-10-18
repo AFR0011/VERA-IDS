@@ -91,3 +91,10 @@ User has **already downloaded** the original distribution. Their read-only local
 **Next bounded read-only audit:** initial `frame.time` format/sample inspection in each of the 24 **original** CSVs, not the curated two. The goal is to verify timestamp syntax and usable provenance before a full raw-CSV temporal/label census. Author paper reports repeated attacks at different times, but sample time records alone cannot prove execution-level independence. Original 24 paired PCAPs are already on user's local disk if later packet-level corroboration becomes necessary.
 
 **Dataset role remains OPEN.** A complete inventory is encouraging, while a perfectly predicting text artifact is a severe obstacle for the curated versions. No automatic Protocol B approval, raw file modifications, feature policy or split plan.
+
+
+## Final status supersession — 2026-10-18
+
+**CLOSED / NO-GO as a third primary Protocol B dataset, by explicit user decision (Option A).** Early sections of this document were written before the C3–C10 local source, leakage, PCAP chronology and integrity audits and remain as historical progress notes. Do **not** interpret earlier "role open" or "next audit" text as an active task. No further Edge experiments or source investigation have been authorized. Retain only a *potential*, not approved, separate external-stress role.
+
+Authoritative closeout and evidence chain: `docs/RECKONING_EDGEIIOT_PRIMARY_CANDIDACY_CLOSEOUT.md`. The CICIDS2017/CICIoT2023 revision plan and separate TON_IoT decision are not automatically changed.

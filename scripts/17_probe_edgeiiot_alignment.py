@@ -28,8 +28,8 @@ FULL_MONTH_DATE = re.compile(
 )
 MONTH_DAY_ONLY = re.compile(rf"^{MONTH}\s+\d{{1,2}},?$", re.I)
 YEAR_TIME_FRAGMENT = re.compile(r"^\d{4}\s+\d{1,2}:\d{2}:\d{2}(?:\.\d+)?(?:\s+\S+)?$")
-ISO_DATE = re.compile(r"^\d{4}-\d\d-\d\d[T ]\d\d:\d\d:\d\d")
-CLOCK_ONLY = re.compile(r"^\d{1,2}:\d\d:\d\d(?:\.\d+)?$")
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}")
+CLOCK_ONLY = re.compile(r"^\d{1,2}:\d{2}:\d{2}(?:\.\d+)?$")
 NUMBER = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?$")
 
 

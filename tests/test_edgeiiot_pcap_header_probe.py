@@ -85,3 +85,68 @@ def test_missing_csv_pair_refuses_report(tmp_path):
     proc = run(root.parent, out)
     assert proc.returncode != 0
     assert not out.exists()
+
+
+def test_author_distribution_aliases_14_attacks_10_normal(tmp_path):
+    """Enforce all 24 source-manifest pairs, not fuzzy string matching."""
+    attack_aliases = {
+        "Backdoor_attack": "Backdoor_attack",
+        "DDoS HTTP Flood Attacks": "DDoS_HTTP_Flood_attack",
+        "DDoS ICMP Flood Attacks": "DDoS_ICMP_Flood_attack",
+        "DDoS TCP SYN Flood Attacks": "DDoS_TCP_SYN_Flood_attack",
+        "DDoS UDP Flood Attacks": "DDoS_UDP_Flood_attack",
+        "MITM (ARP spoofing + DNS) Attack": "MITM_attack",
+        "OS Fingerprinting attack": "OS_Fingerprinting_attack",
+        "Password attacks": "Password_attack",
+        "Port Scanning attack": "Port_Scanning_attack",
+        "Ransomware attack": "Ransomware_attack",
+        "SQL injection attack": "SQL_injection_attack",
+        "Uploading attack": "Uploading_attack",
+        "Vulnerability scanner attack": "Vulnerability_scanner_attack",
+        "XSS attacks": "XSS_attack",
+    }
+    normal_stems = [
+        "Distance", "Flame_Sensor", "Heart_Rate", "IR_Receiver", "Modbus",
+        "phValue", "Soil_Moisture", "Sound_Sensor",
+        "Temperature_and_Humidity", "Water_Level",
+    ]
+    root = tmp_path / "data"
+    attack = root / "Attack traffic"
+    attack.mkdir(parents=True)
+    for pcap_stem, csv_stem in attack_aliases.items():
+        build_pcap(attack / (pcap_stem + ".pcap"))
+        (attack / (csv_stem + ".csv")).write_text(
+            "frame.time,Attack_label,Attack_type\n", encoding="utf-8"
+        )
+    for stem in normal_stems:
+        normal = root / "Normal traffic" / stem
+        normal.mkdir(parents=True)
+        build_pcap(normal / (stem + ".pcap"))
+        (normal / (stem + ".csv")).write_text(
+            "frame.time,Attack_label,Attack_type\n", encoding="utf-8"
+        )
+    out = tmp_path / "report.json"
+    proc = subprocess.run([
+        sys.executable, str(SCRIPT), "--input-root", str(root),
+        "--out", str(out),
+    ], capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["original_pcap_files"] == 24
+    assert data["corresponding_original_csv_files"] == 24
+    assert sum(f["pairing_basis"] == "documented_filename_alias" for f in data["files"]) == 13
+    assert sum(f["pairing_basis"] == "same_stem" for f in data["files"]) == 11
+    assert all(f["matching_csv_present"] for f in data["files"])
+    assert data["first_packet_plausible_epoch_files"] == 24
+
+
+def test_unknown_capture_name_not_fuzzy_matched(tmp_path):
+    root = tmp_path / "data" / "Attack traffic"
+    root.mkdir(parents=True)
+    build_pcap(root / "Some Unknown Attack.pcap")
+    (root / "XSS_attack.csv").write_text("frame.time\n", encoding="utf-8")
+    out = tmp_path / "out.json"
+    proc = run(root.parent, out)
+    assert proc.returncode != 0
+    assert "Unmatched named source files" in proc.stderr
+    assert not out.exists()

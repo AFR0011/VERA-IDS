@@ -79,7 +79,7 @@ def test_packet_limit_disqualifies_full_census(tmp_path):
     root, manifest = fixture(tmp_path)
     out = tmp_path / "report.json"
     p = command(root, manifest, out, extra=("--max-packets-per-file", "2"))
-    assert p.returncode == 0, p.stderr
+    assert p.returncode == 2, p.stderr
     report = json.loads(out.read_text(encoding="utf-8"))
     assert not report["all_files_scanned_to_eof"]
     assert report["total_packet_headers_scanned"] == 4
@@ -94,7 +94,7 @@ def test_bad_record_size_reports_incomplete(tmp_path):
     path.write_bytes(blob)
     out = tmp_path / "report.json"
     p = command(root, manifest, out)
-    assert p.returncode == 0, p.stderr
+    assert p.returncode == 2, p.stderr
     data = json.loads(out.read_text(encoding="utf-8"))
     assert not data["all_files_scanned_to_eof"]
     assert data["status_counts"]["invalid_record_size_or_truncation"] == 1

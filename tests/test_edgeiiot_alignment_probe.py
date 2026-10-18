@@ -106,8 +106,8 @@ def test_native_os_fingerprinting_label_is_not_other(tmp_path: Path) -> None:
     root = tmp_path / "source" / "Attack traffic"
     root.mkdir(parents=True)
     (root / "OS_Fingerprinting_attack.csv").write_text(
-        "frame.time,Attack_label,Attack_type\\n"
-        "2021 17:58:23.123,1,OS_Fingerprinting\\n",
+        "frame.time,Attack_label,Attack_type\n"
+        "2021 17:58:23.123,1,OS_Fingerprinting\n",
         encoding="utf-8",
     )
     out = tmp_path / "out.json"

@@ -1,0 +1,125 @@
+"""Read-only IoT-23 source support audit synthetic regression tests."""
+from __future__ import annotations
+
+import gzip
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "17_audit_iot23_capture_support.py"
+FIELDS = ("ts uid id.orig_h id.resp_h label detailed-label").split()
+
+
+def make_capture(root: Path, name: str, rows: list[tuple[str, str]],
+                 *, compressed: bool = False, broken: bool = False) -> None:
+    folder = root / "opt" / "Malware-Project" / "BigDataset" / "IoTScenarios" / name / "bro"
+    folder.mkdir(parents=True)
+    (folder.parent / "README.md").write_text("# scenario\n", encoding="utf-8")
+    # Match native Zeek quirk: earlier columns tab-separated; final label
+    # columns can be whitespace-joined in the final tab field.
+    content = "#separator \\x09\n#fields\t" + "\t".join(FIELDS[:-2]) + "\tlabel   detailed-label\n"
+    for index, (main, detail) in enumerate(rows):
+        line = (
+            f"1540000000.{index:06d}\tuid{index}\t192.0.2.1\t192.0.2.2\t"
+            f"{main}   {detail}\n"
+        )
+        content += line
+    if broken:
+        content += "1540000001.000000\tuid999\t192.0.2.1\n"
+    filename = folder / ("conn.log.labeled.gz" if compressed else "conn.log.labeled")
+    if compressed:
+        with gzip.open(filename, "wt", encoding="utf-8") as out:
+            out.write(content)
+    else:
+        filename.write_text(content, encoding="utf-8")
+
+
+def invoke(root, out, *extra):
+    return subprocess.run(
+        [sys.executable, str(SCRIPT), "--input-root", str(root),
+         "--out", str(out), *extra],
+        capture_output=True, text=True,
+    )
+
+
+def test_native_mixed_delimiter_preflight_and_privacy(tmp_path):
+    root = tmp_path / "source"
+    for i in range(20):
+        make_capture(root, f"CTU-IoT-Malware-Capture-{i}-1", [
+            ("Malicious", "DDoS"), ("Malicious", "C&C"), ("Benign", "-")
+        ])
+    for i in range(3):
+        make_capture(root, f"CTU-Honeypot-Capture-{i}-1", [("Benign", "-")])
+    out = tmp_path / "preflight.json"
+    proc = invoke(root, out, "--phase", "preflight", "--sample-rows-per-capture", "2")
+    assert proc.returncode == 0, proc.stderr
+    result = json.loads(out.read_text(encoding="utf-8"))
+    assert result["capture_scenarios_found"] == 23
+    assert result["source_kinds"] == {"benign_device": 3, "malware": 20}
+    assert result["total_rows_inspected"] == 43
+    assert not result["complete_source_row_census"]
+    ddos = next(item for item in result["native_exact_detailed_label_support"]
+                if item["native_exact_detailed_label"] == "DDoS")
+    assert ddos["captures_with_observed_rows"] == 20
+    assert len(result["schema_variants"]) == 1
+    assert "192.0.2." not in out.read_text()
+    assert "uid999" not in out.read_text()
+
+
+def test_complete_census_exact_native_labels_and_gzip(tmp_path):
+    root = tmp_path / "dataset"
+    make_capture(root, "CTU-IoT-Malware-Capture-34-1",
+                 [("Malicious", "C&C"), ("Benign", "-"), ("Malicious", "DDoS")],
+                 compressed=True)
+    make_capture(root, "CTU-Honeypot-Capture-4-1",
+                 [("Benign", "-"), ("Benign", "-")])
+    out = tmp_path / "census.json"
+    proc = invoke(root, out, "--phase", "census", "--expected-captures", "0")
+    assert proc.returncode == 0, proc.stderr
+    info = json.loads(out.read_text())
+    assert info["complete_source_row_census"]
+    assert info["total_rows_inspected"] == 5
+    assert {v["native_exact_detailed_label"]: v["captures_with_observed_rows"]
+            for v in info["native_exact_detailed_label_support"]} == {
+                "-": 2, "C&C": 1, "DDoS": 1
+            }
+    assert sum(len(x["utc_day_counts"]) for x in info["capture_records"]) == 2
+
+
+def test_partial_when_malformed_row(tmp_path):
+    root = tmp_path / "source"
+    make_capture(root, "CTU-IoT-Malware-Capture-1-1",
+                 [("Malicious", "DDoS")], broken=True)
+    out = tmp_path / "partial.json"
+    proc = invoke(root, out, "--expected-captures", "0")
+    assert proc.returncode == 2, proc.stderr
+    report = json.loads(out.read_text())
+    assert report["problems"] == ["Malformed source rows or invalid timestamps observed"]
+    assert report["capture_records"][0]["rows_malformed_width"] == 1
+    assert len(report["capture_records"][0]["first_malformed_line_descriptors"]) == 1
+
+
+def test_unrecognized_directory_refused(tmp_path):
+    root = tmp_path / "source"
+    make_capture(root, "CTU-IoT-Malware-Capture-1-1", [("Malicious", "DDoS")])
+    old = root / "opt" / "Malware-Project" / "BigDataset" / "IoTScenarios" / "CTU-IoT-Malware-Capture-1-1"
+    old.rename(old.with_name("not-a-certified-capture"))
+    out = tmp_path / "should_not_exist.json"
+    proc = invoke(root, out, "--expected-captures", "0")
+    assert proc.returncode != 0
+    assert not out.exists()
+
+
+def test_fail_closed_without_native_detailed_label(tmp_path):
+    root = tmp_path / "source"
+    folder = root / "CTU-IoT-Malware-Capture-1-1" / "bro"
+    folder.mkdir(parents=True)
+    (folder.parent / "README.md").write_text("fixture", encoding="utf-8")
+    (folder / "conn.log.labeled").write_text(
+        "#fields\tts\tuid\tid.orig_h\tid.resp_h\tlabel\n"
+        "1540000000.0\tuid0\t192.0.2.1\t192.0.2.2\tMalicious\n", encoding="utf-8")
+    out = tmp_path / "should_not_exist.json"
+    proc = invoke(root, out, "--expected-captures", "0")
+    assert proc.returncode != 0
+    assert not out.exists()

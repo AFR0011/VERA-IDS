@@ -78,7 +78,7 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
     positions = None
     metadata_head = []
     time_min = time_max = None
-    with opener(path, "rt", encoding="utf-8", errors="replace", newline="") as stream:
+    with opener(path, "rt", encoding="utf-8", errors="strict", newline="") as stream:
         for line_number, line in enumerate(stream, 1):
             if not line.strip():
                 continue
@@ -193,6 +193,10 @@ def run(argv=None) -> int:
         schemas = defaultdict(list)
         for row in results:
             schemas[",".join(row["declared_columns"])].append(row["capture_id"])
+        if len(schemas) > 1:
+            problems.append("Native Zeek feature/label schema differs across source captures")
+        if any(row["rows_inspected"] == 0 for row in results):
+            problems.append("At least one native Zeek capture contains no flow records")
         distinct_labels = sorted({k for row in results
                                   for k in row["native_detailed_label_counts"]})
         support = []

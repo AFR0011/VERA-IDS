@@ -75,6 +75,7 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
     rows = malformed = missing_timestamps = invalid_timestamps = 0
     first_errors = []
     fields = None
+    positions = None
     metadata_head = []
     time_min = time_max = None
     with opener(path, "rt", encoding="utf-8", errors="replace", newline="") as stream:
@@ -86,7 +87,9 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
                     new_fields = line.split()[1:]
                     if fields is not None and fields != new_fields:
                         raise ValueError("Conflicting #fields declarations in " + path.name)
-                    fields = new_fields
+                    if not REQUIRED.issubset(fields):
+                        raise ValueError("Missing required native label/identity metadata fields")
+                    positions = {name: fields.index(name) for name in ("ts", "label", "detailed-label")}
                 elif line.startswith("#separator") or line.startswith("#set_separator") or line.startswith("#empty_field"):
                     if len(metadata_head) < 6:
                         metadata_head.append(line.split(maxsplit=1)[0])
@@ -106,9 +109,6 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
                         "observed_fields": len(parts),
                     })
                 continue
-            if not REQUIRED.issubset(fields):
-                raise ValueError("Missing required native label/identity metadata fields")
-            positions = {name: fields.index(name) for name in ("ts", "label", "detailed-label")}
             a = parts[positions["label"]]
             b = parts[positions["detailed-label"]]
             counts[a] += 1

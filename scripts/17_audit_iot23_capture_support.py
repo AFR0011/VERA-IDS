@@ -87,6 +87,7 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
                     new_fields = line.split()[1:]
                     if fields is not None and fields != new_fields:
                         raise ValueError("Conflicting #fields declarations in " + path.name)
+                    fields = new_fields
                     if not REQUIRED.issubset(fields):
                         raise ValueError("Missing required native label/identity metadata fields")
                     positions = {name: fields.index(name) for name in ("ts", "label", "detailed-label")}

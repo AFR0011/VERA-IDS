@@ -87,3 +87,14 @@ Review exact **malicious behavior label** semantics (e.g. DDoS, `PartOfAHorizont
 **Fail:** close the final third-primary search and resume the main manuscript strengthening campaign (five-seed paired visible/blind, repeated CICIDS2017 partitions, at least two genuine literature comparators and machine-readable stability evidence). No fourth candidate search. Any relaxation of the originally mandatory third primary dataset requirement needs its own explicit user decision.
 
 **Historical COMNET release:** `release/v2026.10-comnet/` stays untouched; PR #3 remains DRAFT, unmerged. Local raw data and JSON reports remain under ignored source/output trees. No upload of original full source logs, PCAPs or malware artifacts.
+
+
+## Actual preflight outcome and Somfy exception — 2026-10-23
+
+The user has **completed** the first preflight and uploaded `native_capture_preflight.json`; do NOT rerun the same scan merely to reproduce the result. Full actual findings are archived in `docs/RECKONING_IOT23_NATIVE_PREFLIGHT_RESULTS.md`.
+
+Source: 23/23 capture scenarios (20 malware + 3 benign device), 11,059 first rows inspected, consistent native 23-column Zeek schema, no malformed sampled rows or timestamp violations. One old-script `[PARTIAL]` warning reflected a source-root README absent in the publisher's original `CTU-Honeypot-Capture-7-1`, not a missing flow file. The official source root has six `Somfy-01` to `Somfy-06` child folders; only `Somfy-01` exposes a native labeled Zeek file. Other Somfy subfolders list PCAP-only inputs. The audit now records the provenance caveat in `source_metadata_warnings` and counts nested PCAPs without reading them, distinct from Zeek data parse failures.
+
+The user's original report remains valid for its examined rows; no source data moved or modified. The new regression test and full repository suite remain pending user-local execution; any subsequent full census requires **explicit approval** because the native labeled-flow files total about 47.06 GB and source names/observed labels alone cannot certify capture independence.
+
+This appendix supersedes earlier generic expectations of 23 root-level README files. **Do not automatically run the earlier "Section 4" full census command.**

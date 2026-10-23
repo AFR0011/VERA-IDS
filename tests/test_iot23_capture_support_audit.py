@@ -185,3 +185,23 @@ def test_nested_somfy_pcap_only_folders_reported_without_failing_labels(tmp_path
     assert "README.md absent" in doc["source_metadata_warnings"][0]
     assert "Somfy-02" in doc["source_metadata_warnings"][1]
     assert "PCAP_ONLY_METADATA" not in out.read_text(encoding="utf-8")
+
+
+def test_one_selected_capture_root_allows_full_source_count(tmp_path):
+    """Full census of one *selected capture*, not the 23-scenario corpus."""
+    root = tmp_path / "IoT23"
+    selected = "CTU-IoT-Malware-Capture-34-1"
+    make_capture(root, selected, [
+        ("Benign", "-"), ("Malicious", "C&C"), ("Malicious", "DDoS")
+    ])
+    source = (root / "opt" / "Malware-Project" / "BigDataset"
+              / "IoTScenarios" / selected)
+    out = tmp_path / "one_capture.json"
+    result = invoke(source, out, "--expected-captures", "1", "--phase", "census")
+    assert result.returncode == 0, result.stderr
+    report = json.loads(out.read_text(encoding="utf-8"))
+    assert report["complete_source_row_census"] is True
+    assert report["capture_scenarios_found"] == 1
+    assert report["total_rows_inspected"] == 3
+    assert report["capture_records"][0]["log_relative"] == "bro/conn.log.labeled"
+    assert report["native_exact_detailed_label_support"][1]["native_exact_detailed_label"] == "C&C"

@@ -123,3 +123,27 @@ def test_fail_closed_without_native_detailed_label(tmp_path):
     proc = invoke(root, out, "--expected-captures", "0")
     assert proc.returncode != 0
     assert not out.exists()
+
+
+def test_directly_extracted_capture_folders(tmp_path):
+    """Recognize data/raw/IoT23/CTU-* layout without re-extracting archive."""
+    root = tmp_path / "IoT23"
+    malware = "CTU-IoT-Malware-Capture-34-1"
+    normal = "CTU-Honeypot-Capture-4-1"
+    make_capture(root, malware, [("Malicious", "DDoS"), ("Benign", "-")])
+    make_capture(root, normal, [("Benign", "-")])
+    scenarios = root / "opt" / "Malware-Project" / "BigDataset" / "IoTScenarios"
+    for name in (malware, normal):
+        (scenarios / name).rename(root / name)
+    output = tmp_path / "direct_root.json"
+    proc = invoke(root, output, "--expected-captures", "0", "--phase", "preflight")
+    assert proc.returncode == 0, proc.stderr
+    report = json.loads(output.read_text(encoding="utf-8"))
+    assert report["capture_scenarios_found"] == 2
+    assert report["source_kinds"] == {"benign_device": 1, "malware": 1}
+    assert report["total_rows_inspected"] == 3
+    assert {row["capture_id"] for row in report["capture_records"]} == {malware, normal}
+    assert {row["log_relative"] for row in report["capture_records"]} == {
+        f"{malware}/bro/conn.log.labeled", f"{normal}/bro/conn.log.labeled"
+    }
+    assert all(row["readme_present"] for row in report["capture_records"])

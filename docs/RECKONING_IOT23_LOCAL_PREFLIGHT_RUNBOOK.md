@@ -35,34 +35,27 @@ uv run python -m pytest -p no:cacheprovider
 
 If `git status --short` shows unexpected local modifications, or git cannot fast-forward, STOP and resolve safely rather than forcing checkout/reset. If pytest fails, STOP and share the traceback. Prior GitHub file readback checks succeeded, but a successful updated full user-local pytest has not yet been observed.
 
-## 1. Locate the archive and inspect disk requirements
+## 1. Already extracted: user-confirmed direct CTU folders (2026-10-23 update)
 
-Assumes the official complete archive is downloaded into the user's Windows Downloads folder. Edit **only this PowerShell variable** to point to its real location.
+The user has **already extracted** the complete original archive. Captures are **direct children** of the repository-relative directory \`data/raw/IoT23/\`, for example \`data/raw/IoT23/CTU-Honeypot-Capture-4-1/\`. This is **natively supported** by the recursive preflight scanner, just as deeper \`opt/Malware-Project/BigDataset/IoTScenarios/\` trees are supported. No move, flattening, copying, archive extraction, or code changes to the scanner's discovery behavior are needed.
 
-```powershell
-$archive = Join-Path $HOME "Downloads/iot_23_datasets_full.tar.gz"
-$sourceRoot = "data/raw/IoT_23"
+From the VERA-IDS repository root, use:
+
+\`\`\`powershell
+$sourceRoot = "data/raw/IoT23"
 $reportRoot = "outputs/17_revision_campaign/iot23"
-Get-Item "$archive" | Select-Object Name,Length,LastWriteTime
-Get-FileHash "$archive" -Algorithm MD5
-New-Item -ItemType Directory -Force "$reportRoot" | Out-Null
-```
+(Get-ChildItem "$sourceRoot" -Directory | Where-Object { $_.Name -match '^CTU-(IoT-Malware|Honeypot)-Capture-' } | Measure-Object).Count
+(Get-ChildItem "$sourceRoot" -Recurse -File | Where-Object { $_.Name -in @("conn.log.labeled", "conn.log.labeled.gz") } | Measure-Object).Count
+Get-ChildItem "$sourceRoot/CTU-Honeypot-Capture-4-1" -Name
+\`\`\`
 
-**Checksum note:** Zenodo v1.0.0 currently lists MD5 `7132e603f9750b8580b6cebdbcd43e9c` for its full tarball. If the user fetched the CTU mirror and its bytes differ, record that difference instead of assuming the file is altered, malicious or automatically acceptable. The archive may be ~21 GB; hash computation reads the whole compressed file and can take time.
+Expect **23 directly named capture folders** and **23 native labeled Zeek connection logs**, each under its capture's \`bro/\` subdirectory, plus the per-scenario \`README.md\`. If the counts do not match, do not rename files or falsify the expected count: report the actual directory listing and any preflight error. This is a metadata inventory check only, not full label verification.
 
-If the archive is still downloading or insufficient disk space is available, do not start extraction. Verify that the dataset is v1 and fully downloaded before this step.
+## 2. Archive selective extraction is NOT needed for this source layout
 
-## 2. Extract ONLY the native labeled logs and README files
+**Skip** \`scripts/17_extract_iot23_flow_sources.py\`. That helper was only for users whose source was still in the compressed \`.tar.gz\`. Running it against an already extracted root is unnecessary and may refuse to overwrite source files. The extracted original sources remain intact.
 
-**Recommended for full archive users who have not already extracted the source files.** This avoids extracting malware binaries and PCAPs. It still must decompress/traverse the complete archive and write the large Zeek flow logs.
-
-```powershell
-uv run python scripts/17_extract_iot23_flow_sources.py --archive "$archive" --output-root "$sourceRoot" --out "$reportRoot/flow_source_extraction_manifest.json"
-```
-
-Expect exactly **23 original capture scenarios**, **23 native flow logs** and **23 capture READMEs**, i.e. 46 selected files. Output path `flow_source_extraction_manifest.json`. The script intentionally fails rather than overwrites selected files on a second run. Do NOT retry on an already partially extracted tree; first inspect the error and output locations.
-
-**If the dataset has already been fully extracted elsewhere:** skip step 2, point `$sourceRoot` to that extracted directory instead. The scanner supports the native archive's deeply nested `opt/Malware-Project/BigDataset/IoTScenarios/` structure and does NOT need relocated source files. Do not copy or flatten individual captures.
+If the original archive is still available, its publisher checksum can be recorded separately for reproducibility; do not rerun extraction to collect it.
 
 ## 3. First native Zeek preflight: 512 records × 23 captures
 
@@ -72,9 +65,7 @@ uv run python scripts/17_audit_iot23_capture_support.py --input-root "$sourceRoo
 
 Expected maximum of **11,776 first-flow rows sampled** (512 × 23) if every file has at least 512. Report gives source capture inventory, exact native label combinations, schema consistency, record-width anomalies and coarse timestamp ranges of the sampled prefixes. It excludes all raw IP addresses, flow IDs and packet payloads.
 
-**Upload exactly these aggregate reports** for review:
-- `flow_source_extraction_manifest.json` (if step 2 was used).
-- `native_capture_preflight.json`.
+**Upload only the aggregate** `native_capture_preflight.json` for this already-extracted layout. There will be **no** `flow_source_extraction_manifest.json` because selective extraction was skipped.
 
 Also paste the final console summary and `pytest` totals. **STOP HERE for the initial day**. The prefix samples cannot decide Protocol B eligibility; inspect them and agree on the next specific gate before running any heavy analysis.
 

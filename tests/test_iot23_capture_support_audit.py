@@ -147,3 +147,40 @@ def test_directly_extracted_capture_folders(tmp_path):
         f"{malware}/bro/conn.log.labeled", f"{normal}/bro/conn.log.labeled"
     }
     assert all(row["readme_present"] for row in report["capture_records"])
+
+
+def test_nested_somfy_pcap_only_folders_reported_without_failing_labels(tmp_path):
+    """Native Somfy-01 has Zeek labels; Somfy-02..06 have source PCAPs only."""
+    root = tmp_path / "IoT23"
+    capture = root / "CTU-Honeypot-Capture-7-1"
+    labeled = capture / "Somfy-01" / "bro"
+    labeled.mkdir(parents=True)
+    (labeled / "conn.log.labeled").write_text(
+        "#fields\tts\tuid\tid.orig_h\tid.resp_h\tlabel   detailed-label\n"
+        "1540000000.0\tu0\t192.0.2.1\t192.0.2.2\tbenign -\n",
+        encoding="utf-8",
+    )
+    (capture / "Somfy-01" / "capture.pcap").write_bytes(b"PCAP_ONLY_METADATA")
+    for index in range(2, 7):
+        child = capture / f"Somfy-{index:02d}"
+        child.mkdir()
+        (child / f"capture-{index}.pcap").write_bytes(b"PCAP_ONLY_METADATA")
+    out = tmp_path / "somfy_report.json"
+    proc = invoke(root, out, "--expected-captures", "0")
+    assert proc.returncode == 0, proc.stderr
+    doc = json.loads(out.read_text(encoding="utf-8"))
+    assert doc["problems"] == []
+    assert doc["capture_scenarios_found"] == 1
+    item = doc["capture_records"][0]
+    assert item["capture_id"] == "CTU-Honeypot-Capture-7-1"
+    assert item["rows_inspected"] == 1
+    assert item["native_binary_label_counts"] == {"benign": 1}
+    assert item["readme_present"] is False
+    assert item["root_pcap_file_count"] == 0
+    assert item["nested_pcap_only_directories"] == [
+        "Somfy-02", "Somfy-03", "Somfy-04", "Somfy-05", "Somfy-06"
+    ]
+    assert len(doc["source_metadata_warnings"]) == 2
+    assert "README.md absent" in doc["source_metadata_warnings"][0]
+    assert "Somfy-02" in doc["source_metadata_warnings"][1]
+    assert "PCAP_ONLY_METADATA" not in out.read_text(encoding="utf-8")

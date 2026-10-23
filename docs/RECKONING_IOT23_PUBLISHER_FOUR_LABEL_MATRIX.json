@@ -1,0 +1,219 @@
+{
+  "schema_version": "iot23-original-publisher-four-label-screen-v1",
+  "source_publisher": "Stratosphere Laboratory",
+  "source_version": "IoT-23 v1.0.0 (2020)",
+  "source_url": "https://www.stratosphereips.org/datasets-iot23",
+  "method": "Manually transcribed EXACT per-capture source distribution entries for 20 malicious scenarios; zeros only where the native exact label is absent, except CTU-IoT-Malware-Capture-42-1 explicitly lists C&C 0.",
+  "scope_note": "Publisher-reported exact counts of four selected labels only. NOT an exhaustive native label matrix; excludes other labels/compounds and the 3 standalone benign scenarios. Counts have not been fully reconciled to downloaded per-flow files and should not be used for final scientific admission.",
+  "capture_records": [
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-34-1",
+      "published_exact_label_counts": {
+        "Benign": 1923,
+        "C&C": 6706,
+        "DDoS": 14394,
+        "PartOfAHorizontalPortScan": 122
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-43-1",
+      "published_exact_label_counts": {
+        "Benign": 20574934,
+        "C&C": 3498,
+        "DDoS": 65803,
+        "PartOfAHorizontalPortScan": 37911674
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-44-1",
+      "published_exact_label_counts": {
+        "Benign": 211,
+        "C&C": 14,
+        "DDoS": 1,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-49-1",
+      "published_exact_label_counts": {
+        "Benign": 3665,
+        "C&C": 1922,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 5404959
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-52-1",
+      "published_exact_label_counts": {
+        "Benign": 1794,
+        "C&C": 6,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 19779564
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-20-1",
+      "published_exact_label_counts": {
+        "Benign": 3193,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-21-1",
+      "published_exact_label_counts": {
+        "Benign": 3272,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-42-1",
+      "published_exact_label_counts": {
+        "Benign": 4420,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-60-1",
+      "published_exact_label_counts": {
+        "Benign": 2476,
+        "C&C": 0,
+        "DDoS": 3578457,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-17-1",
+      "published_exact_label_counts": {
+        "Benign": 31438,
+        "C&C": 0,
+        "DDoS": 13655172,
+        "PartOfAHorizontalPortScan": 27311187
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-36-1",
+      "published_exact_label_counts": {
+        "Benign": 2663,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-33-1",
+      "published_exact_label_counts": {
+        "Benign": 1380791,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 39459055
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-8-1",
+      "published_exact_label_counts": {
+        "Benign": 2181,
+        "C&C": 8222,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-35-1",
+      "published_exact_label_counts": {
+        "Benign": 8262389,
+        "C&C": 81,
+        "DDoS": 2185302,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-48-1",
+      "published_exact_label_counts": {
+        "Benign": 3734,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 3386119
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-39-1",
+      "published_exact_label_counts": {
+        "Benign": 7337,
+        "C&C": 1530,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 73559437
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-7-1",
+      "published_exact_label_counts": {
+        "Benign": 75955,
+        "C&C": 0,
+        "DDoS": 39584,
+        "PartOfAHorizontalPortScan": 0
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-9-1",
+      "published_exact_label_counts": {
+        "Benign": 22548,
+        "C&C": 0,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 6355745
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-3-1",
+      "published_exact_label_counts": {
+        "Benign": 4536,
+        "C&C": 8,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 145597
+      }
+    },
+    {
+      "capture_id": "CTU-IoT-Malware-Capture-1-1",
+      "published_exact_label_counts": {
+        "Benign": 469275,
+        "C&C": 8,
+        "DDoS": 0,
+        "PartOfAHorizontalPortScan": 539465
+      }
+    }
+  ],
+  "totals": {
+    "Benign": {
+      "published_flows": 30858735,
+      "captures_with_nonzero": 20,
+      "captures_with_at_least_1000": 19
+    },
+    "C&C": {
+      "published_flows": 21995,
+      "captures_with_nonzero": 10,
+      "captures_with_at_least_1000": 5
+    },
+    "DDoS": {
+      "published_flows": 19538713,
+      "captures_with_nonzero": 7,
+      "captures_with_at_least_1000": 6
+    },
+    "PartOfAHorizontalPortScan": {
+      "published_flows": 213852924,
+      "captures_with_nonzero": 11,
+      "captures_with_at_least_1000": 10
+    }
+  },
+  "warnings": [
+    "Publisher source descriptions distinguish separately executed malware scenario captures; not verified that they are statistically independent with matched devices/campaigns.",
+    "No source capture-to-train/validation/test grouping or taxonomy mapping is adopted.",
+    "Publisher counts for CTU-IoT-Malware-Capture-33-1 list Okiru-Attack as a separate high-count label, while user's actual 512-row prefix contains exact native Okiru (160 rows); do not silently reconcile them.",
+    "All benign counts in this matrix are from malware scenarios only; actual standalone benign captures are omitted.",
+    "Publisher uses flow-pattern and source-context rules to label traffic; derived-feature circularity and identity proxy leakage remain unassessed."
+  ]
+}

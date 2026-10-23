@@ -68,6 +68,9 @@ def source_inventory(root: Path) -> list[dict]:
             "log_bytes": candidate.stat().st_size,
             "readme_present": (scenario_dir / "README.md").is_file(),
             "root_pcap_file_count": sum(p.is_file() for p in scenario_dir.glob("*.pcap")),
+            "pcap_file_count_including_nested": sum(
+                p.is_file() and not p.is_symlink() for p in scenario_dir.rglob("*.pcap")
+            ),
             "nested_pcap_only_directories": sorted(nested_unlabeled_pcap_dirs),
         })
     findings.sort(key=lambda a: a["capture_id"])

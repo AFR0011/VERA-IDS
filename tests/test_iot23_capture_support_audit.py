@@ -177,6 +177,7 @@ def test_nested_somfy_pcap_only_folders_reported_without_failing_labels(tmp_path
     assert item["native_binary_label_counts"] == {"benign": 1}
     assert item["readme_present"] is False
     assert item["root_pcap_file_count"] == 0
+    assert item["pcap_file_count_including_nested"] == 6
     assert item["nested_pcap_only_directories"] == [
         "Somfy-02", "Somfy-03", "Somfy-04", "Somfy-05", "Somfy-06"
     ]

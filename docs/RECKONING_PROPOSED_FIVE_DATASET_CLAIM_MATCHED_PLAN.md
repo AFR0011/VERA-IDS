@@ -90,3 +90,73 @@ Important: Define separately the **minimum numerical rows** and **number/indepen
 ## Frozen invariants preserved
 
 Original Computer Networks release `release/v2026.10-comnet/` never modified; branch `post-comnet-archival-value` and PR #3 DRAFT; no new dataset/model/taxonomy/split/feature/threshold protocol adopted by proposal; author data untouched; no unapproved Edge new runs; standalone TON and IoT-23 roles remain recommendations/potential, not promotions; all genuine study decisions remain user-mediated and logged in Google Drive `Thesis 2: Reckoning/06_DECISION_LOG_AND_OPEN_QUESTIONS`. This proposed plan has NO executable approval effect until explicitly adopted.
+
+
+
+# Comprehensive experiment and objective stability specification — proposal addendum (2026-10-23)
+
+This addendum clarifies rather than replaces the original Reckoning plan. No scientific design, model experiment, label/feature mapping, or dataset-role change is approved by adding this document.
+
+## Formal methodological deliverable: define conclusion stability before running the campaign
+
+A versioned evaluation condition e identifies dataset/representation/label taxonomy, source-partition group, held-out family, method, model/partition seeds, validation information, operating policy and fixed test population where appropriate. For each predeclared claim q, define a metric vector m(e), a claim extraction function C_q(e), a claim-specific eligibility gate A_q(e), and comparability gate M_q(e,e'). Only compare conditions that actually support the intended inference.
+
+**Ordinal claim:** d_q(e)=metric_A(e)-metric_B(e). Report direction, signed difference, its confidence interval if justified, predeclared practical-equivalence range when defensible, and whether comparable condition e' preserves, reverses or leaves the relation inconclusive. A point-estimate sign change alone does not imply a confidently supported population reversal.
+
+**Categorical claim:** a status such as validation-feasible/infeasible or dominant residual destination. Report transition between eligible conditions, distribution and empirical preservation frequency, with valid denominators. Losing protocol eligibility is distinguished from a change in predictive method behavior.
+
+**Magnitude claim:** report delta_q=metric(e')-metric(e), effect-size distribution, uncertainty and practical importance; do not force a binary stable/unstable outcome.
+
+**Repeat comparisons:** preservation count divided by number of admissible, relation-identifiable matched comparisons. Repeated partitions on one source are dependent realizations, not independent collections. Track ineligible, missing and statistically inconclusive results separately. No universal scalar score.
+
+**Required claim registry:** claim_id, exact statement, category, metric and denominator, valid conditions/changed factor, fixed anchors, eligibility and comparability requirement, scientific relevance margin (if any), uncertainty/resampling and multiplicity family, evidence source and interpretation boundary. Predeclare before full experiments, after small feasibility pilots. Implement synthetic unit tests for ties, reversed rankings, missing denominators, no residuals and ineligible comparisons.
+
+## Complete experimental workstreams and mandatory status
+
+F0 — **NEW mandatory methodology**: formal claim/eligibility/comparability logic and reusable evidence registry; source/schema tests; consistency of metric semantics across all conditions.
+
+V1 — **NEW mandatory uniform audit**: apply the SAME dataset labels, capture/provenance, duplicate/near-duplicate, shortcut/proxy, feature representation, partition and support checks to CICIDS2017, CICIoT2023, IoT-23, TON_IoT, Edge-IIoTset. Evaluate claims per protocol, not whole-dataset pass/fail. Existing Edge primary LOAO no-go remains user-adopted; no new Edge model lane implied.
+
+A1 — **EXISTING to retain or verify**: Protocol A staged RF/XGB stage-1 binary AUROC/FPR, conditional stage-2 attack-family macro-F1, and composed end-to-end macro-F1/accuracy. Exclude erroneous inference that a good component metric proves the composed IDS is equally good.
+
+A2 — **EXISTING core to verify and possibly selectively replicate**: direct multiclass vs staged architecture. Contrast broad argmax and validation-aligned 1.5%-benign-FPR architecture comparison using the same dataset, test population and reported final label space. Assess ranking reversal, signed macro-F1 changes and realized test benign FPR. Reuse released five-seed runs when protocol exactly matches; do not rerun by default.
+
+B1 — **EXISTING core, new eligibility review**: support-audited Protocol B leave-one-attack-family-out on CICIDS2017/CICIoT2023. Preserve minimum 200 benign in validation/test, 200 known-family rows in train/validation/test, 200 held-out unknown in validation/test, and two surviving known families. True unknown only for valid omitted family; document that native attack families and capture units differ.
+
+B2 — **ORIGINAL mandatory new**: fully paired visible-vs-blind SUPERVISED SELECTION on CICIoT2023 for seeds 123–127 and all eligible holdouts; CICIDS2017 additional if feasible. Hold constant source partitions, model seed, candidate set, transformation state and individual test records; only held-out-family validation information during supervised selection changes. Record paired per-seed/holdout model choice, stage-1 threshold, rejector/tau, UDR, macro-F1, benign FPR, all-known/attack false-unknown rates, rejection and relevant AUCs. Original preprocessing used held-out family before validation-blind supervised selection; do NOT label this full preprocessing blindness or silently change it. At 6 eligible IoT holdouts the minimal paired condition ledger contains 6 x 5 x 2 = 60 condition entries per declared fixed method/profile, subject to eligibility.
+
+B3 — **EXISTING with targeted new cross-method replication**: maximum-confidence, margin, entropy, family-conditional rejection under identical validation constraints, primary 3% overall rejection budget and budget sensitivity 1%, 5%, 10%. Validation feasibility/false-unknown constraints must be tested before frozen test selection. Report common-feasible holdouts, validation-to-test rejection/FUR transfer, and AUROC/AUPR separately from selected threshold outcomes. Protocol B raw model probability treatment retained; calibrated B remains a separately declared study if desired.
+
+P1 — **ORIGINAL mandatory new**: >=5 independently generated *admissible partition seeds* per reproducible CICIDS2017 partition construction family, distinct from model_seed. Candidate constructions: recovered contiguous within raw source/day files, and processed-identity group-safe if deterministically regenerable. No contiguous chunks are independently executed attacks. Fixed RF primary to inspect source-partition variability; per-fold group/source manifest, class support, identity overlap, held-out family eligibility, family UDR/macro-F1/FUR/rejection/residuals. If group-safe regeneration cannot pass audit, record gate failure, do not manufacture 5 partitions.
+
+P2 — **ORIGINAL preferred**: crossed 5 partition seeds x 5 model seeds for RF if pilot runtime permits. Describe within-partition fitting randomness separately from between-partition variation; repeated realizations reuse underlying observations.
+
+M1 — **ORIGINAL mandatory new**: >=2 genuine methodologically distinct published IDS/open-set methods, preferable 3, chosen on reproducibility/fit BEFORE full outcomes. EFC first; evaluate OpenMax, DOC, ODIN, CROSR, OpenNet or other faithfully specified candidates. One holdout smoke, version/license/code and score semantics audit; then compare on eligible CICIDS2017 and CICIoT2023 splits, same metrics and selection information. Preserve previous published hyperparameter-profile transfers separately as configuration generality checks, not genuine method replications.
+
+M2 — **ORIGINAL mandatory cross-method conclusion test**: compare family heterogeneity, rejector preferences and stability profiles across RF/XGB and >=2 genuine algorithms. Do not compare original source-paper scores obtained from different tasks/splits as fair direct baselines.
+
+S1 — **ORIGINAL mandatory new stable-counterexample evidence**: fixed RF dominant unrejected-unknown destination across CICIoT2023 six holdouts and five seeds is already reported as stable. Extend to XGB and any method that yields semantically comparable known-class destinations, and across partitions where valid; report dominant destination, share, entropy, mode/preservation frequency. Also report instability and undefined destination with no residuals.
+
+X1 — **NEW conditional experimental extension**: IoT-23 native label rule audit; optional matched rule-field-versus-rule-excluded predictor sensitivity and simple rule-only baseline, requiring explicit user-approved native taxonomy, group and feature policy. Demonstrates annotation-rule dependence, not proof of real-world attack truth. Not automatically full primary LOAO.
+
+X2 — **NEW conditional**: TON_IoT source/time/identity group and predictor confounding evaluation, optional narrowly justified within-corpus Protocol A after independent approval. Do not infer repeated attack executions from nonoverlapping time windows.
+
+X3 — **NEW conditional, currently NOT authorized**: Edge-IIoTset curated representation literal 0.0 MQTT shortcut experimental ablation, only if separately approved. Existing direct shortcut and raw packet/PCAP limitations are sufficient for a read-only diagnostic case in a scientific audit paper. Closed primary Protocol B no-go is NOT reversed.
+
+G1 — **NEW generalization gate**: at least one core claim-matched result should be sought in a third independently collected dataset via an **admissible comparable protocol**, not merely five different dataset audit narratives. If no such experiment is supportable, do not claim an independent third-environment replication and reassess archival value/venue.
+
+C1 — **ORIGINAL mandatory reusable artifact**: outputs/17_revision_campaign/stability/conclusion_stability_records.csv, conclusion_stability_summary.csv, claim_evidence_manifest.json, plus dataset_protocol_eligibility.csv and claim_registry.json. Per comparison: claim type, eligibility, dataset/version/representation, method, holdout, partition_seed, model_seed, paired ID/test source hashes, baseline and changed conditions, actual values, deltas, signed ordinal relation and preservation, CI bounds and limits, source evidence path, config/model/partition hashes. No artificial zeros for excluded/inadmissible experiments.
+
+Q1 — **ORIGINAL mandatory statistical synthesis**: Wilson proportion CIs, paired resamples (original 1,000 fixed-test prediction-pair bootstrap conditional on fixed model/sample), actual group-aware resampling when enough independent provenance units exist, descriptive source/partition distribution otherwise; predeclare multiplicity families/BH and Bonferroni sensitivity. Distinguish statistical from practical importance; do not use tests on non-identical test rows as if paired. Emphasize explicit stable and unstable counterexamples.
+
+## Experiment processing order / scientific checkpoints
+
+P0 user approves the scientific-role/claim protocol plan, including any departure from old third-primary-mandatory requirement; Edge role unchanged.
+P1 claim registry and uniform incumbent primary source/label/shortcut audit; input-data eligibility matrix for all five and existing evidence recovery.
+P2 one-seed and one-holdout pilots: true supervised-selection visible/blind matched pair, one valid partition per CICIDS construction, EFC + second candidate method, tightly scoped conditional third-source check only if expressly approved.
+P3 freeze config/revision_campaign.yml and outputs/17_revision_campaign/CAMPAIGN_FROZEN.json, including exact seeds 123-127, dataset taxonomies, group algorithm, labels/feature policy, methods, thresholds, costs, comparison denominators, predeclared importance margins when justified, eligible holdouts, tests, outputs.
+P4 complete the preapproved core matrix and only the approved optional external rows; preserve seed/partition/test metadata and independent evidence traces.
+P5 synthesize family/seed/partition/method factors, stable and unstable conclusions, uncertainty, eligibility failures, evidence manifest, audit completeness.
+P6 frozen new release and manuscript rebuild following original sharp technical writing requirements and no artificial RQ lists/unsupported SOTA/zero-day or causal claims. Preserve historical COMNET release immutably.
+
+Important editor gate: dataset validity case reports can increase scope/archival reuse, but by themselves do NOT answer the request for more independently generalized *measured conclusions*. A failed external replication eligibility attempt must remain visible and narrow claims. The primary reasons for revision remain paired information evidence, repeated partitions, genuine method comparisons and objective claim-level stability.

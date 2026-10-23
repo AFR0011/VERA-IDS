@@ -1,3 +1,5 @@
+> **NAVIGATION NOTE (2026-10-23; documentation reconciliation only).** This document is the complete **October 23 proposal**, not an adopted replacement for the original October 13 Reckoning campaign. The reconciled workstream map, actual dataset-role decisions and unresolved scientific conflicts are indexed in [RECKONING_MASTER_CAMPAIGN_PLAN.md](RECKONING_MASTER_CAMPAIGN_PLAN.md) and mirrored in [Google Drive: 10_MASTER_RECONCILED_CAMPAIGN_PLAN](https://docs.google.com/document/d/1PnnSPFa9CMCI1iz7eYiTJmRjYaeMNqR6wit5ThBBpkw/edit). The original full workstreams remain in Drive 02/03. Specifically, **third full primary dataset vs third claim-matched independent environment is not decided**, IoT-23 primary NO-GO remains recommended but not user-adopted, and Edge primary NO-GO remains adopted. This pointer authorizes no training, method changes, or protocol freeze.
+
 # VERA-IDS post-COMNET Reckoning: Proposed five-dataset, claim-matched revision campaign
 
 **Prepared:** 2026-10-23  

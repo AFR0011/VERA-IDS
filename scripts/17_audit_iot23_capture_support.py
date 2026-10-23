@@ -6,7 +6,9 @@ CENSUS (explicit): stream every flow row in every source file.
 
 No payloads, identifiers, flow rows, addresses, binaries or learned features
 are read into a research output. Native labels are not mapped to VERA families.
-Capture names are candidate source units, NOT certified independent runs.
+Supports both directly extracted CTU-* directories beneath the input root and
+nested publisher archive directories. Capture names are candidate source units,
+NOT certified independent runs.
 """
 from __future__ import annotations
 
@@ -158,7 +160,7 @@ def read_labeled(path: Path, limit: int, progress: int) -> dict:
 def run(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--input-root", type=Path, required=True,
-                   help="Extracted v1 archive root; nested opt/Malware-Project layout is supported")
+                   help="Directory containing CTU-* scenario folders directly or at deeper publisher paths")
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--phase", choices=("preflight", "census"), default="preflight")
     p.add_argument("--sample-rows-per-capture", type=int, default=512)

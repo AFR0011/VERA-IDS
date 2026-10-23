@@ -37,23 +37,23 @@ If `git status --short` shows unexpected local modifications, or git cannot fast
 
 ## 1. Already extracted: user-confirmed direct CTU folders (2026-10-23 update)
 
-The user has **already extracted** the complete original archive. Captures are **direct children** of the repository-relative directory \`data/raw/IoT23/\`, for example \`data/raw/IoT23/CTU-Honeypot-Capture-4-1/\`. This is **natively supported** by the recursive preflight scanner, just as deeper \`opt/Malware-Project/BigDataset/IoTScenarios/\` trees are supported. No move, flattening, copying, archive extraction, or code changes to the scanner's discovery behavior are needed.
+The user has **already extracted** the complete original archive. Captures are **direct children** of the repository-relative directory `data/raw/IoT23/`, for example `data/raw/IoT23/CTU-Honeypot-Capture-4-1/`. This is **natively supported** by the recursive preflight scanner, just as deeper `opt/Malware-Project/BigDataset/IoTScenarios/` trees are supported. No move, flattening, copying, archive extraction, or code changes to the scanner's discovery behavior are needed.
 
 From the VERA-IDS repository root, use:
 
-\`\`\`powershell
+```powershell
 $sourceRoot = "data/raw/IoT23"
 $reportRoot = "outputs/17_revision_campaign/iot23"
 (Get-ChildItem "$sourceRoot" -Directory | Where-Object { $_.Name -match '^CTU-(IoT-Malware|Honeypot)-Capture-' } | Measure-Object).Count
 (Get-ChildItem "$sourceRoot" -Recurse -File | Where-Object { $_.Name -in @("conn.log.labeled", "conn.log.labeled.gz") } | Measure-Object).Count
 Get-ChildItem "$sourceRoot/CTU-Honeypot-Capture-4-1" -Name
-\`\`\`
+```
 
-Expect **23 directly named capture folders** and **23 native labeled Zeek connection logs**, each under its capture's \`bro/\` subdirectory, plus the per-scenario \`README.md\`. If the counts do not match, do not rename files or falsify the expected count: report the actual directory listing and any preflight error. This is a metadata inventory check only, not full label verification.
+Expect **23 directly named capture folders** and **23 native labeled Zeek connection logs**, each under its capture's `bro/` subdirectory, plus the per-scenario `README.md`. If the counts do not match, do not rename files or falsify the expected count: report the actual directory listing and any preflight error. This is a metadata inventory check only, not full label verification.
 
 ## 2. Archive selective extraction is NOT needed for this source layout
 
-**Skip** \`scripts/17_extract_iot23_flow_sources.py\`. That helper was only for users whose source was still in the compressed \`.tar.gz\`. Running it against an already extracted root is unnecessary and may refuse to overwrite source files. The extracted original sources remain intact.
+**Skip** `scripts/17_extract_iot23_flow_sources.py`. That helper was only for users whose source was still in the compressed `.tar.gz`. Running it against an already extracted root is unnecessary and may refuse to overwrite source files. The extracted original sources remain intact.
 
 If the original archive is still available, its publisher checksum can be recorded separately for reproducibility; do not rerun extraction to collect it.
 

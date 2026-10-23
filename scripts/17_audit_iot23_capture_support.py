@@ -50,6 +50,16 @@ def source_inventory(root: Path) -> list[dict]:
             raise ValueError("Labeled log is outside an unambiguous CTU scenario")
         scenario_dir = matches[0]
         scenario_type = "malware" if "IoT-Malware" in scenario_dir.name else "benign_device"
+        # Metadata-only inspection: do not open or parse PCAP content.
+        # Some native benign capture directories include multiple child
+        # recordings but only a subset have an author's labeled Zeek log.
+        nested_unlabeled_pcap_dirs = []
+        for child in scenario_dir.iterdir():
+            if not child.is_dir() or child.is_symlink() or not within(root, child):
+                continue
+            child_pcaps = tuple(p for p in child.glob("*.pcap") if p.is_file())
+            if child_pcaps and not any((child / "bro" / name).is_file() for name in LOG_NAMES):
+                nested_unlabeled_pcap_dirs.append(child.name)
         findings.append({
             "capture_id": scenario_dir.name,
             "source_kind": scenario_type,
@@ -58,6 +68,7 @@ def source_inventory(root: Path) -> list[dict]:
             "log_bytes": candidate.stat().st_size,
             "readme_present": (scenario_dir / "README.md").is_file(),
             "root_pcap_file_count": sum(p.is_file() for p in scenario_dir.glob("*.pcap")),
+            "nested_pcap_only_directories": sorted(nested_unlabeled_pcap_dirs),
         })
     findings.sort(key=lambda a: a["capture_id"])
     seen = set()
@@ -187,8 +198,18 @@ def run(argv=None) -> int:
             problems.append("Unexpected number of original capture scenarios")
         if args.expected_captures == 23 and dict(kinds) != EXPECTED:
             problems.append("Original 20-malware / three-benign capture mix not observed")
-        if any(not row["readme_present"] for row in results):
-            problems.append("At least one native capture README.md is missing")
+        metadata_warnings = []
+        for row in results:
+            if not row["readme_present"]:
+                metadata_warnings.append(
+                    f"Publisher capture README.md absent at root: {row['capture_id']}"
+                )
+            if row["nested_pcap_only_directories"]:
+                metadata_warnings.append(
+                    f"Nested PCAP-only folders lack matching native labeled Zeek logs "
+                    f"under {row['capture_id']}: "
+                    + ", ".join(row["nested_pcap_only_directories"])
+                )
         if any(row["rows_malformed_width"] or row["rows_invalid_or_implausible_timestamp"]
                for row in results):
             problems.append("Malformed source rows or invalid timestamps observed")
@@ -227,6 +248,7 @@ def run(argv=None) -> int:
             "capture_records": results,
             "native_exact_detailed_label_support": support,
             "problems": problems,
+            "source_metadata_warnings": metadata_warnings,
             "warnings": [
                 "Preflight native-label counts are PREFIX SAMPLES, NOT population counts or Protocol B support.",
                 "Census labels are publisher rule-based flow labels, not independently verified attack-run identities.",
@@ -242,8 +264,10 @@ def run(argv=None) -> int:
         temporary.replace(args.out)
         status = "[PARTIAL]" if problems else "[PASS]"
         print(f"{status} {len(results)} scenarios, {output['total_rows_inspected']:,} inspected rows -> {args.out}")
+        if metadata_warnings:
+            print("[WARNING] Source metadata: " + "; ".join(metadata_warnings), file=sys.stderr)
         if problems:
-            print("Issues: " + "; ".join(problems), file=sys.stderr)
+            print("Data issues: " + "; ".join(problems), file=sys.stderr)
             return 2
         return 0
     except (OSError, ValueError, TypeError, UnicodeError, gzip.BadGzipFile) as e:

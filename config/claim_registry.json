@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "registry_status": "provisional",
+  "claims": [
+    {
+      "claim_id": "C01",
+      "statement": "Direct-versus-staged IDS ordering across operating policies",
+      "types": [
+        "ordinal"
+      ],
+      "candidate_changed_factors": [
+        "operating_policy"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C02",
+      "statement": "Rejector ordering across held-out families and rejection budgets",
+      "types": [
+        "ordinal"
+      ],
+      "candidate_changed_factors": [
+        "heldout_family",
+        "rejection_budget"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C03",
+      "statement": "Measured performance change between genuinely paired validation-visible and validation-blind supervised selection",
+      "types": [
+        "magnitude"
+      ],
+      "candidate_changed_factors": [
+        "validation_information"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C04",
+      "statement": "Family-level performance and ordering sensitivity to admissible CICIDS2017 partition constructions",
+      "types": [
+        "magnitude",
+        "ordinal"
+      ],
+      "candidate_changed_factors": [
+        "partition_construction",
+        "partition_seed"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C05",
+      "statement": "Dominant represented residual-failure destination across fitting seeds and comparable methods",
+      "types": [
+        "categorical"
+      ],
+      "candidate_changed_factors": [
+        "model_seed",
+        "method"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C06",
+      "statement": "Validation feasibility of rejection methods under different rejection budgets",
+      "types": [
+        "categorical"
+      ],
+      "candidate_changed_factors": [
+        "rejection_budget"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C07",
+      "statement": "Comparative behavior of faithfully reproduced published IDS/open-set methods",
+      "types": [
+        "ordinal",
+        "magnitude"
+      ],
+      "candidate_changed_factors": [
+        "method"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    },
+    {
+      "claim_id": "C08",
+      "statement": "Claim-matched replication in an eligible third independently collected environment",
+      "types": [
+        "ordinal",
+        "categorical",
+        "magnitude"
+      ],
+      "candidate_changed_factors": [
+        "dataset_environment"
+      ],
+      "metric_ids": [],
+      "denominator_id": null,
+      "fixed_anchors": [],
+      "required_eligibility_gates": [],
+      "practical_margin": null,
+      "uncertainty_spec": null,
+      "multiplicity_family": null,
+      "evidence_paths": [],
+      "definition_status": "provisional"
+    }
+  ]
+}

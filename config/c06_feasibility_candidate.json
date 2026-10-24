@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "claim_id": "C06",
+  "definition_status": "provisional_evidence_contract_not_protocol_freeze",
+  "claim_type": "categorical",
+  "statement": "For a fixed dataset, held-out family, rejector, model/candidate configuration, validation information condition and prepared partition, assess whether validation feasibility of that rejector changes as the allowed overall validation rejection budget changes.",
+  "metric_id": "validation_feasibility_category",
+  "categories": ["feasible", "infeasible"],
+  "unit_of_analysis": "one held-out-family method-budget candidate condition",
+  "aggregation_denominator": "six historically count-support-eligible LOAO holdouts per dataset",
+  "changed_factor": "validation_rejection_budget",
+  "budget_values": ["0.01", "0.03", "0.05", "0.10"],
+  "budget_comparisons": "adjacent_in_ascending_order",
+  "fixed_anchors": [
+    "dataset", "protocol", "selection_information", "holdout_family", "method",
+    "prepared_partition", "model_profile", "candidate_grid", "validation_population"
+  ],
+  "historical_source_path": "release/v2026.10/raw/visible_budget_feasibility_coverage.csv",
+  "historical_source_git_blob_sha": "3a6c388a544f8d028b5c1223cae58d0b5ef1dc51",
+  "required_eligibility_gates": [
+    "source_provenance", "label_validity", "feature_proxy_audit",
+    "split_group_overlap_audit", "holdout_support", "selection_test_separation"
+  ],
+  "selection_rule": "Use the historically recorded validation-feasible holdout set at each budget; do not infer test-time cost control or recover unrecorded thresholds.",
+  "historical_categorical_uncertainty": "none; historical categories are exactly transcribed, but statistical/retraining uncertainty and inferential replication are not established",
+  "statistical_multiplicity": "not_applicable_to_descriptive_categorical_derivation",
+  "practical_margin": null,
+  "current_evidence_gate": "not_assessed",
+  "current_claim_relation_gate": "not_assessed",
+  "historical_restrictions": {
+    "CICIDS2017": "original recovered construction: shared source days across splits and nonzero exact processed feature-hash overlap",
+    "CICIoT2023": "source/label/proxy/group audit under current five-dataset instrument not yet completed"
+  },
+  "notes": [
+    "This is an independently versioned candidate C06 contract. It does not set claim_registry.json to frozen.",
+    "The released table contains aggregate validation-feasibility coverage and feasible-family membership, not per-seed predictions, exact selection trajectories or paired evaluation row identifiers.",
+    "An unverified eligibility gate stays not_assessed; a descriptive transition is not an admitted categorical stability claim."
+  ]
+}

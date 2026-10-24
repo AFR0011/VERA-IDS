@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "evidence_source_commit": "4efe48cb1d990000040978d685dae33051b3df43",
+  "audit_date": "2026-10-23",
+  "source_documents": {
+    "manuscript": "https://docs.google.com/document/d/1VEUmVIpl4jpFkfrW7kKTYLprZS3dJRZTp7QJAJmTRp0/edit",
+    "supporting_information": "https://docs.google.com/document/d/1fGslH_tcMogpvAw2IJ9YN8M7hzQBQZbiAIiCq0X2kvk/edit",
+    "comnet_provenance": "release/v2026.10-comnet/PROVENANCE.md",
+    "canonical_reckoning_plan": "docs/RECKONING_MASTER_CAMPAIGN_PLAN.md"
+  },
+  "status": "historical_evidence_index_not_campaign_freeze",
+  "evidence_paths": {
+    "architecture_direct": {
+      "path": "release/v2026.10/raw/controlled_direct_test_seed_summary.csv",
+      "git_blob_sha": "e734f1458ccd66e132039dd2382a3e56fbe70165",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "architecture_staged": {
+      "path": "outputs/summaries/seed_reliability_summary.csv",
+      "git_blob_sha": "9924688b091ba76cf6a205f5005c4632fee8bbbb",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "protocol_a": {
+      "path": "outputs/summaries/protocol_a_core_summary.csv",
+      "git_blob_sha": "2cc8f5d1dd63f74d8d513ffba18f12c655483859",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "direct_competitive": {
+      "path": "outputs/summaries/protocol_a_flat_vs_two_stage.csv",
+      "git_blob_sha": "90f495b073138046470a62ae496c2372091f9236",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "direct_winner": {
+      "path": "release/v2026.10/raw/competitive_winner_test_results.csv",
+      "git_blob_sha": "2b60038ef28c5e4b27fbbcec973735cdcb347814",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "blind": {
+      "path": "release/v2026.10/raw/blind_phase3b_five_seed_summary.csv",
+      "git_blob_sha": "fc8fab892db234f9d0e648d677437258140d19d3",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "blind_delta": {
+      "path": "release/v2026.10/raw/blind_primary_3pct_paired_delta_summary.csv",
+      "git_blob_sha": "f5885828ca6a6ae2cb5d8e6f09a6fde6aa3f6455",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "visible": {
+      "path": "release/v2026.10/raw/visible_primary_3pct_common_case_method_summary.csv",
+      "git_blob_sha": "30c4ac81b51792c72a709807c0d58e70cf7268c8",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "budget": {
+      "path": "release/v2026.10/raw/visible_budget_feasibility_coverage.csv",
+      "git_blob_sha": "3a6c388a544f8d028b5c1223cae58d0b5ef1dc51",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "partition": {
+      "path": "release/v2026.10/raw/cicids_partition_sensitivity_by_holdout.csv",
+      "git_blob_sha": "42eff894cff78995997da77deeaa08301afb9a13",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "residual": {
+      "path": "release/v2026.10/raw/residual_failure_structure_primary_fixed_rf.csv",
+      "git_blob_sha": "421a0adb487acf555caa9a2773bfa93ee77f8748",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "competence": {
+      "path": "release/v2026.10-comnet/raw/model_competence_summary.csv",
+      "git_blob_sha": "982420d1aea0d1c0580ef659f2b565105ad65b68",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "primary_reference": {
+      "path": "release/v2026.10-comnet/raw/primary_vera_five_seed_reference.csv",
+      "git_blob_sha": "ad4cd229fece56a1f83531211d06756c9fb894c2",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "external_a": {
+      "path": "outputs/summaries/external_protocol_a_summary.csv",
+      "git_blob_sha": "91c6d7fd1cd6099f4e07b44be12a448279f51e16",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "external_profile_a": {
+      "path": "release/v2026.10-comnet/raw/external_protocol_a_summary.csv",
+      "git_blob_sha": "18d95000ab0039157b1b0e31af37a4dd08e99d02",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "external_profile_b": {
+      "path": "release/v2026.10-comnet/raw/external_protocol_b_holdout_summary.csv",
+      "git_blob_sha": "08b6bdb558509e29507fdb0e2358f65056651b1c",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "external_profile_hetero": {
+      "path": "release/v2026.10-comnet/raw/external_protocol_b_family_heterogeneity_summary.csv",
+      "git_blob_sha": "ec38600f040353e79fe9b583ec48838014d78e1f",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "legacy_paired_bootstrap": {
+      "path": "outputs/summaries/protocol_b_paired_method_tests_1000.csv",
+      "git_blob_sha": "aa6a6cf887bfcb2de0a1de95c0babd3bc4890b82",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "protocol_b_config": {
+      "path": "config/protocol_b_loao.yml",
+      "git_blob_sha": "6135150043b87aa2f10ce044716b26aa1ebd0403",
+      "verification": "fetched_exact_path_at_source_commit"
+    },
+    "provenance": {
+      "path": "release/v2026.10-comnet/PROVENANCE.md",
+      "git_blob_sha": "9e5a49cb9f71250d5481df0b6cea351610a10a29",
+      "verification": "fetched_exact_path_at_source_commit"
+    }
+  },
+  "known_unresolved_references": [
+    {
+      "path": "outputs/summaries/data_audit_summary.csv",
+      "document_referencing_path": "release/v2026.10-comnet/PROVENANCE.md",
+      "verification": "not_found_at_referenced_remote_path",
+      "interpretation": "provenance_gap; not proof that the historical data audit was never performed"
+    }
+  ],
+  "record_count": 45,
+  "count_by_claim_family": {
+    "C01": 4,
+    "C02": 9,
+    "C03": 7,
+    "C04": 7,
+    "C05": 7,
+    "C06": 3,
+    "C07": 3,
+    "C08": 2,
+    "SUPPORT": 3
+  },
+  "caveats": [
+    "Existence and Git blob identity of a source are not proof of claim eligibility or source independence.",
+    "The row values are reported historical observations; numeric precision may be rounded when transcribed from the manuscript.",
+    "No row in this index is a frozen atomic claim, a new experimental observation, or a statistical significance determination.",
+    "The publicly committed aggregate result CSVs do not universally provide per-observation test identity, matchable prediction pairs or per-seed trajectories.",
+    "The immutable Computer Networks release is not altered."
+  ]
+}

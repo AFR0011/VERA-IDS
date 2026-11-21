@@ -1,0 +1,83 @@
+{
+  "counts": {
+    "stage1": 1270025,
+    "stage2": 1201422
+  },
+  "date": "2026-11-08",
+  "evidence_hashes": {
+    "complete.json": "6a9b486103761c858b7df2e297bcbe100acf175622852e85a6c35308b5670d16",
+    "monitor.jsonl": "ef7e03df4618621a84a729954215d45314878c7906ad49402b96e4c7d203f7fd",
+    "request.json": "59eb20e410c04d7d3e6ea3f8282371caca32146cfebb6f1f52ed4fdaeed6b6b8",
+    "stages.jsonl": "ed5b14a9ed0e9e76984dc0234df819e43f4f684d4987a5d6c9f922c8fa7f0078",
+    "supervisor.json": "c9408fb49dd829153587aee6fb9388410540247cc724f569de9ae5660ef97b07",
+    "worker-result.json": "be5edbf569d0cec539cde0edfd201647d19986cc4a0e6f530275096268cd0d3c",
+    "worker.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "implementation_provenance_sha256": "ea57f76e8730c437bef511bf4984ac7662f1521a1f8ac37f2972a620cef81e43",
+  "interpretation": [
+    "Full approved TRAIN preparation completed inside unchanged resource envelope",
+    "Both final training tensors remained live; historical transform and float64 representation retained",
+    "No validation/test observations or classifier fits",
+    "Not a reusable scientific checkpoint",
+    "Does not establish joint TRAIN/validation footprint, model-fitting resources or full-pilot feasibility"
+  ],
+  "local_review": ".release-audit/c03/preparation-memory-success-review-20261108.json",
+  "local_review_sha256": "5da92b2e4f12aad4c0439fa0ba3a010f127f0c5946770c888d8917becba30279",
+  "run_id": "prep-readiness-20261107T220732281954Z",
+  "sample_rows": 1500000,
+  "schema_version": 1,
+  "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+  "source_record": {
+    "plan_sha256": "185025edbd9a1f154c3bf820fa3e01ef722c1ea2bc04bd6c526c392883dfd70a",
+    "probe_sources": {
+      "experiments/c03/engineering/preparation_probe.py": "990682b551b9dca42ee7fb792c87c7a2e11dddb10fdd50b94bcdfd4845cff91f",
+      "tests/test_c03_preparation_probe.py": "14666536343eb3a6830dd8d50926e8e9cf9d28bd972f50b1f80fb7eb18bbfe9d"
+    }
+  },
+  "source_rows": 3676338,
+  "status": "VERIFIED_TRAIN_PREPARATION_COMPLETE",
+  "summary": {
+    "limits": {
+      "interval": 0.3,
+      "max_artifacts": 5368709120,
+      "max_rss": 4294967296,
+      "min_available": 2147483648,
+      "min_disk": 10737418240,
+      "seconds": 900,
+      "start_available": 6442450944,
+      "start_disk": 21474836480
+    },
+    "max_observed_artifact_bytes": 173784,
+    "minimum_available": 4399824896,
+    "peak_tree_rss": 3098681344,
+    "reason": null,
+    "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+    "status": "COMPLETE",
+    "wall_seconds": 360.89000000001397,
+    "worker_exit": 0
+  },
+  "tensors": {
+    "stage1": {
+      "csr_bytes": 629932896,
+      "dtype": "float64",
+      "labels_sha256": "2084fa245a9fa579b8e968073d8813f0279e51333a82e4224c0d8d7e13188e33",
+      "row_ids_sha256": "7518780812cdb208bfea2753f64cc7a4aa6d16751935f44daef6bdccd566a9b5",
+      "shape": [
+        1270025,
+        46
+      ],
+      "tensor_sha256": "a8880ee96380559b40eebf64ea6b6a0ca1a6255c76a4f830b1c32eea4235ea9d"
+    },
+    "stage2": {
+      "csr_bytes": 595905808,
+      "dtype": "float64",
+      "labels_sha256": "66929e7551536d192d2a4a25539987b86e7d81ee4c3168c409faca7ff28e9714",
+      "row_ids_sha256": "2da6b6420e433f08a0a7bf8178a973644aa8a45001e49a8d51acdd063c2d8f07",
+      "shape": [
+        1201422,
+        46
+      ],
+      "tensor_sha256": "6660d62a44f4cbca0ba342b62ff3078b4d7ef603e1bb405000038600bd93bc0c"
+    }
+  }
+}

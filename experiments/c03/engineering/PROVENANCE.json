@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "purpose": "Separate engineering-only supervisor and bounded memory measurement; not scientific training",
+  "source_commit": "ca13f1097f851ce6693658ccc0c6dd35480fabd6",
+  "files": {
+    "experiments/c03/c03_rf_bounded_memory_probe.py": "c8f2145e6ca1327f33d2ccd5053f1072bd672184a8ef9df164a7dbfd7cb7756a",
+    "experiments/c03/engineering/guarded_memory_probe.py": "50891e865d95f488b8d8c0f2a8ffddf7bc22add3320d9bbe682de89fa2ff79fc",
+    "experiments/c03/engineering/test_guarded_memory_probe.py": "d0eb74ec99e3619678c33a27d3446c34550874389c304338ba17c1744dedc9f7",
+    "src/ids_eval_framework/_native/protocol_b_grid.py": "120936f1715872b0c3883fc443c825b49fb7d0473ec286a6c0d40393e3841255"
+  },
+  "log_sha256": "93e315fc7b5e2c2bb648148225d5d8ae593df743fa04fc0997a0b67d21c0fcc2",
+  "command": ".venv/Scripts/python.exe -B -u experiments/c03/engineering/guarded_memory_probe.py --probe",
+  "exit_code": 0,
+  "sample_rows": [
+    30000,
+    80000
+  ],
+  "trees_each": 8,
+  "fit_seconds": [
+    1.59,
+    6.14
+  ],
+  "tree_storage_MiB": [
+    1.75,
+    3.58
+  ],
+  "sampled_peak_process_tree_RSS_GiB": 0.599,
+  "sampled_minimum_available_physical_GiB": 3.788,
+  "wall_seconds": 14.52,
+  "monitor_limits": {
+    "minimum_start_GiB": 3,
+    "minimum_available_GiB": 1.5,
+    "maximum_process_tree_RSS_GiB": 3,
+    "maximum_seconds": 900
+  },
+  "tests": "5 supervisor unittest cases passed, including real Windows descendant cleanup",
+  "limits": "Summed RSS may double-count shared pages and polling may miss brief peaks; no extrapolation to full fit; no validation/test reads or retained models"
+}

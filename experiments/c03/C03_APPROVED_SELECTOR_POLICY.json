@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "claim_id": "C03",
+  "decision_date": "2026-10-25",
+  "policy_status": "SCIENTIFIC_POLICY_APPROVED__INTEGRATION_AND_EXECUTION_NOT_FROZEN",
+  "approval_scope": "User approved the symmetric selection protocol referenced in C03_PAIRED_PILOT_FREEZE_REVIEW_V3.md. No authorization to train, change repository, inspect new test outcomes, or run full campaign.",
+  "first_pilot": {
+    "dataset": "CICIoT2023",
+    "protocol": "B_day_file",
+    "heldout_family": "Botnet",
+    "model_seed": 123,
+    "training_cap": 1500000,
+    "validation_cap": 700000,
+    "training_sample_seed": 123,
+    "validation_sample_seed": 124,
+    "expected_known_validation_count": 599278,
+    "expected_unknown_validation_count": 100722,
+    "expected_full_test_count": 1190899
+  },
+  "single_changed_factor": "Availability of held-out family validation observations/features/labels/scores to the selector: K in blind versus same K plus U in visible",
+  "common_fit": {
+    "candidate_profiles": ["xgb_inv_family_clipped", "rf_inv_family_clipped", "rf_class_weight_balanced"],
+    "parameter_source": "Exact seed-123 historical candidate aggregate, not handwritten parameter approximations",
+    "preprocessor": "Historical full train-part stream, one shared fit. Unsupervised exposure to held-out family training features is explicitly retained and disclosed.",
+    "stage1_supervised_train": "Training cap filtered to exclude all Botnet attack rows; benign retained",
+    "stage2_supervised_train": "Represented attack families only",
+    "test_population": "Identical ordered complete test partition for both selector arms",
+    "fit_count": "Fit each distinct candidate model exactly once; shared scores; no arm-specific refit"
+  },
+  "labels_in_order": ["Benign", "BruteForce", "DDoS", "DoS", "Other", "Scan/Recon", "Unknown"],
+  "candidate_selection": {
+    "objective_primary": "Stage2 represented-family macroF1 on identical K known-attack validation subset",
+    "tie_epsilon_abs": 1e-12,
+    "tie_secondary": "Stage1 AUROC computed over arm's accessible validation view, with heldout Botnet counted as attack in visible arm",
+    "tie_tertiary": "Ascending canonical candidate identifier",
+    "undefined_auc": "Explicit eligibility failure"
+  },
+  "stage1_threshold": {
+    "algorithm": "Historical family-aware selector, identical code version both arms",
+    "target_benign_fpr_grid": [0.01, 0.02],
+    "min_family_support": 100,
+    "objectives": ["min_family_recall", "p10_family_recall"],
+    "p10_quantile": 0.10,
+    "sweep_points": 40,
+    "tie_breaker": "Objective then attack TPR",
+    "visible_heldout_as_attack": true
+  },
+  "rejector_selection": {
+    "methods": ["max_confidence", "margin", "entropy", "family_conditional"],
+    "budgets": [0.01, 0.03, 0.05, 0.10],
+    "primary_budget": 0.03,
+    "budget_scope": "K-known-only validation rows in BOTH selector arms",
+    "benign_to_family_fp_ceiling": 0.02,
+    "benign_rejection_ceiling": 0.10,
+    "false_unknown_K_ceiling": 0.05,
+    "false_unknown_K_attacks_ceiling": 0.10,
+    "objective": "Maximize fixed 7-class composed-system macroF1 on accessible arm validation rows, counting absent class F1 as 0",
+    "global_method_scores": {
+      "max_confidence": "1 - fam_pmax",
+      "margin": "1 - top2_margin",
+      "entropy": "historically normalized stage2_entropy"
+    },
+    "global_candidates": "All distinct finite uncertainty values on gated accessible validation + no-rejection point. Equal uncertainty ties never split. Reject if score >= threshold.",
+    "family_conditional_alphas": "0..0.10 inclusive at 0.005 increment (21 values)",
+    "family_conditional_reference": "Empirical family conditional true-known-family score quantiles using K represented-family labels in both arms",
+    "family_conditional_rejection_rule": "gate & (fam_pmax < threshold_of_predicted_represented_family)",
+    "ties": ["Highest accessible fixed-label macroF1 within 1e-12", "Lowest FUR on K", "Lowest K rejection", "Canonical parameters: higher global threshold or smaller family alpha"],
+    "none_feasible": "Categorical outcome; never impute fallback or test score"
+  },
+  "inference_boundary": "One pilot holdout/seed establishes software feasibility and fixed-case conditional descriptive pairing only. Not source-independent generalization or causal population treatment effect.",
+  "sealing_and_access": "Seal both arm decisions and hashes before any test scores or outcomes are accessible to selector; new test evaluation follows seal",
+  "remaining_gates": ["Freeze input full-file content hashes and processed feature-schema digest", "Source/group and leakage/proxy validity audit", "Candidate-parameter code binding to historical aggregate", "Historical Stage1 threshold selector integrated and tested both views", "Complete pilot selector K/U isolation and test-blind sealing integration tests", "Pilot resource envelope and separately authorized execution"]
+}

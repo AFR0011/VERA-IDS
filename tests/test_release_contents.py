@@ -96,6 +96,14 @@ def test_relative_markdown_links_resolve() -> None:
 
 
 def test_no_dynamic_legacy_runtime_or_removed_lanes() -> None:
+    # One internal, hash-pinned historical assignment audit is not an advertised
+    # package workflow. Its recovered source is also hash-checked at runtime;
+    # materialization/deletion entrypoints are disabled. No directory-wide waiver.
+    # See docs/RECKONING_CICIDS_PARTITION_PREFLIGHT.md and REPLAY_SUCCESS.json.
+    archival_audits = {
+        "experiments/cicids_partition/replay.py":
+            "d7472e5532f11e57694352f787df5d8c9ab062e91755a7fd35172697374900ab",
+    }
     forbidden = (
         "run_legacy_main",
         "load_legacy_module",
@@ -111,5 +119,8 @@ def test_no_dynamic_legacy_runtime_or_removed_lanes() -> None:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         if any(value in text for value in forbidden):
+            if relative in archival_audits:
+                assert hashlib.sha256(path.read_bytes()).hexdigest() == archival_audits[relative]
+                continue
             failures.append(relative)
     assert failures == []

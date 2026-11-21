@@ -1,0 +1,65 @@
+{
+  "benchmark_data_read": false,
+  "checks": {
+    "cpu": {
+      "exit_code": 0,
+      "log_sha256": "e3563dc5ca5828dc68c34932e3022e8fbf9e26b1d4e8fe996d7b5b0478dc9b45",
+      "peak_gpu_used": 495976448,
+      "peak_tree_rss": 630304768,
+      "reason": null
+    },
+    "cuda": {
+      "exit_code": 0,
+      "log_sha256": "6613ccb6c546e39d774ff8d9f04d7fb2add6af110b8d67ce280e73a4180d69c2",
+      "peak_gpu_used": 751828992,
+      "peak_tree_rss": 1302827008,
+      "reason": null
+    }
+  },
+  "completion_sha256": "fdba61a11c0a833ee86bf23c6883da1a7655436bc60b7b26788bf2c5e53c5cf4",
+  "definition": {
+    "benchmark_data_read": false,
+    "deadline": 1795102768.3372366,
+    "gpu": {
+      "driver": "610.88",
+      "free": 7817134080,
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "total": 8546942976,
+      "used": 466616320
+    },
+    "gpu_limits": {
+      "max_used": 4294967296,
+      "min_free": 2147483648,
+      "start_free": 6442450944
+    },
+    "limits": {
+      "max_artifacts": 5368709120,
+      "max_rss": 4294967296,
+      "min_available": null,
+      "min_disk": 10737418240,
+      "seconds": 900,
+      "start_available": null,
+      "start_disk": 21474836480
+    },
+    "scope": "DOC_SYNTHETIC_ONLY",
+    "sources": {
+      ".release-audit/literature/doc_synthetic_check_20261119.py": "a5afb814f75bb75e16f6f1c99604b81f340bd6f46b13f66ec8e3f2832c516d2a",
+      "experiments/literature/doc_core.py": "523af733d552f9ba57a94afe807d8ba6c5a0cc13f3a22b7bd31fa944a7b2c2c8",
+      "experiments/literature/doc_training.py": "681ae3ffea736f2525e98eb6e61512c473e49637c09c9a4f3853377b67e2bfd3",
+      "tests/test_doc_core.py": "fa601ba705ae49adc847d5125752fa120631f536f94a8924c389e569816008b0",
+      "tests/test_doc_journal_core.py": "422abdb28ed84edaa4780b22f26667c157f106f87281c162d8dd0fafa72e4689",
+      "tests/test_doc_training.py": "88e073181ac893981eb8c03fffa78a7b95b57ed0f2c42d5376f639fc82f65392"
+    },
+    "started": 1795101868.3372366
+  },
+  "elapsed_seconds": 41.914934158325195,
+  "environment_lock_sha256": "39c14eb3b7df815c8afbe0181e1707eeeb4111ceb89142e11e0ef7ea5d90637e",
+  "request_sha256": "f72f1a370e6a379824a4bf9a456d4b249146a5654bd89cce504e1420189f0858",
+  "run_id": "doc-synthetic-98528e215fbc",
+  "scope": "DOC_SYNTHETIC_ONLY",
+  "scope_limit": "Generated arrays only; synthetic epoch/block/checkpoint schedules differ from the approved future benchmark schedule. No benchmark readiness or scientific performance claim.",
+  "status": "COMPLETE",
+  "tests_per_device": 20,
+  "verification": "Request/source/log/completion bindings independently checked; all CPU/CUDA tests passed, including identical resumed states and predictions under the same device/environment."
+}

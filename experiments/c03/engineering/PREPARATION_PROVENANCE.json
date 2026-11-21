@@ -1,0 +1,59 @@
+{
+  "authorization": "User approved bounded local readiness batch; all listed limits retained",
+  "batch": "C03-TRAIN-PREPARATION-READINESS",
+  "boundaries": [
+    "No benchmark observations opened or preprocessing worker launched: start gate refused",
+    "No classifier fitting or scientific result",
+    "No change to previous producer source hashes or provenance",
+    "No automatic retry, budget increase or application closure",
+    "Synthetic fixture preparation and disposable process checks only",
+    "Resource thresholds are sampled, not hard OS limits"
+  ],
+  "date": "2026-11-07",
+  "focused_tests": {
+    "command": ".venv/Scripts/python.exe -B -m pytest tests/test_c03_preparation_probe.py -p no:cacheprovider -q",
+    "duration_seconds": 4.57,
+    "passed": 17
+  },
+  "limits": {
+    "interval": 0.3,
+    "max_artifacts": 5368709120,
+    "max_rss": 4294967296,
+    "min_available": 2147483648,
+    "min_disk": 10737418240,
+    "seconds": 900,
+    "start_available": 6442450944,
+    "start_disk": 21474836480
+  },
+  "next_action": "User frees memory; on continuation rerun approved probe with fresh start gate, without changing limits",
+  "predecessor_provenance_sha256": "5627e675b8cf70275fdaeb8b783df42c335a40800acb44dbba960aa2ed8e19f1",
+  "probe_attempt": {
+    "command": ".venv/Scripts/python.exe -B -u -m experiments.c03.engineering.preparation_probe --probe",
+    "evidence": ".release-audit/c03/preparation-attempt-20261107.txt",
+    "evidence_sha256": "3392d4bf9322e541c8cebcd3799059a61ae0c3a9ea923997f8702ecd6af1d141",
+    "exit_code": 3,
+    "result": {
+      "available": 4414869504,
+      "disk_free": 497926115328,
+      "reason": "Less than 6 GiB available RAM",
+      "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+      "status": "START_REFUSED"
+    }
+  },
+  "required_checks": {
+    "all_nine_passed": true,
+    "evidence": ".release-audit/c03/preparation-checks.json",
+    "full_pytest_passed": 200,
+    "full_pytest_seconds": 39.58
+  },
+  "schema_version": 1,
+  "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+  "source_record": {
+    "plan_sha256": "185025edbd9a1f154c3bf820fa3e01ef722c1ea2bc04bd6c526c392883dfd70a",
+    "probe_sources": {
+      "experiments/c03/engineering/preparation_probe.py": "d948766764eb5a035fed1f1dd175836abd614df0e1849ee803e73cf8692c1931",
+      "tests/test_c03_preparation_probe.py": "3e0ac394962c9f9444cde52d7cff3d3ade13476b3cfba8317ed3bcf001556d56"
+    }
+  },
+  "status": "IMPLEMENTED_START_REFUSED"
+}

@@ -1,0 +1,44 @@
+{
+  "boundaries": [
+    "Display only; resource limits and scientific semantics unchanged",
+    "No real-data rerun or classifier fit",
+    "Partial stage-log writes tolerated; resource monitor remains authoritative",
+    "Prior successful run verified against its original revision before display change"
+  ],
+  "checks": {
+    "all_nine_required_commands_passed": true,
+    "evidence": ".release-audit/c03/progress-checks.json",
+    "focused_passed": 40,
+    "focused_seconds": 7.03,
+    "full_pytest_passed": 224,
+    "full_pytest_seconds": 30.36
+  },
+  "date": "2026-11-08",
+  "display": {
+    "eta_or_percentage": false,
+    "fields": [
+      "elapsed time / time budget",
+      "current observed stage",
+      "worker RSS / limit",
+      "available physical RAM",
+      "artifact bytes / limit"
+    ],
+    "final_json_stream": "stdout",
+    "heartbeat_seconds": 30,
+    "stage_changes": true,
+    "stream": "stderr"
+  },
+  "predecessor_provenance_sha256": "6889a26a90be42548136f2adee3a312a61bdca400cdebeb32e5e08335c7a0e1c",
+  "schema_version": 1,
+  "source_record": {
+    "plan_sha256": "43b178e2ad6c778dd29a0f71f0d6e702249c038dcff51a4123531cbc101f5480",
+    "probe_sources": {
+      "experiments/c03/engineering/combined_preparation_probe.py": "dbf39d4eefb9e5693285de17fd5bec66e223aa68ebf78df1cb221614d45414ee",
+      "experiments/c03/engineering/preparation_probe.py": "5ed03b88e8bce9b8b62bd0dad1ba277fd88a7ace329efa370eade0ddc4b3c4cc",
+      "tests/test_c03_combined_preparation_probe.py": "7c2da05fd5769b4c847856d8d0194d47c4aee2f052e29b33ddc8560a43bc8b8b",
+      "tests/test_c03_preparation_probe.py": "08cf4cd82a4937409b8202c7b27604482150ea0dd209cac1940adf64dd44b97d"
+    }
+  },
+  "status": "VERIFIED_PROGRESS_DISPLAY",
+  "verified_combined_success_sha256": "d92114e6bc8d1c4564300d240364342c1d0f351678f47ef691e0169dbca992d4"
+}

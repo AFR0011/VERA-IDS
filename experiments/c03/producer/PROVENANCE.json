@@ -1,0 +1,30 @@
+{
+  "boundaries": [
+    "No production observation reader or fitting API",
+    "Input hashes supplied by caller; production tensor verification deferred",
+    "Opaque bytes only; no model deserialization",
+    "No persistent selection seal or evaluator in Batch 1"
+  ],
+  "date": "2026-11-06",
+  "focused_tests": {
+    "command": "uv run python -m pytest tests/test_c03_producer_foundation.py -p no:cacheprovider -q",
+    "passed": 36
+  },
+  "original_snapshot_sha256": "13e667a86a6872ff6192d1662085383e2b526752ceb783f8fc372b51487de9f4",
+  "output_namespace": "sibling VERA-IDS-local-runs/c03",
+  "plan_sha256": "6bfc0d9adf98435cfab940979f9b7f8e556ea881b28c32216ffd770fd88b8c55",
+  "policy_sha256": "bf56f938d1fb193d2b383deeeec29f9d84759a4be829f6a0011f1bc20fe5e099",
+  "producer_files": {
+    "experiments/c03/producer/__init__.py": "c8bced903a2b92c1b9cb6fea85577d4b3ee0774ebed0d11d7200d31562607660",
+    "experiments/c03/producer/__main__.py": "530a7f278b33b9e7f93fbf471423849ff301aec476ed3878ff3500b62bfd59bc",
+    "experiments/c03/producer/checkpoints.py": "b011ea359e694070002ed91e79a55df5f9a1d87388b23974b3c6ca3a4b5d1b52",
+    "experiments/c03/producer/plan.py": "b8a5605f4de3b58d2c893efd25b22b54e6128ac0b07aed88bf953d2d36e7408f",
+    "experiments/c03/producer/sampling.py": "192ebf687609236e536df272513bbc99284b99f3d4b3485b02502830647534f5",
+    "tests/test_c03_producer_foundation.py": "9a5795fed23a7d1ebc11b0f5ab2ee806935deb5e25d91ec8413e694fd6722a93"
+  },
+  "relocation_record_sha256": "322c375ebfe518446a99302dbd75e6b760e61c7c63c78f4253dd00e23bac2147",
+  "run_id": "c03-foundation-20261106",
+  "schema_version": 1,
+  "scope": "Approved Batch 1 no-fit producer foundation; not full fit or later batches",
+  "source_revision": "ca13f1097f851ce6693658ccc0c6dd35480fabd6"
+}

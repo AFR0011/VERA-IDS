@@ -1,0 +1,62 @@
+{
+  "allocation_change": {
+    "final_tensor_allocation": "Exact-size CSR; both final training tensors retained",
+    "historical_transform": "Unchanged helper, applied row-wise to blocks",
+    "passes": 2,
+    "rows_per_block": 8192
+  },
+  "batch": "C03-PREPARATION-MEMORY-REVISION",
+  "date": "2026-11-08",
+  "limitations": [
+    "Full-size memory effect remains unmeasured: revised worker did not start",
+    "No scientific parameter, representation dtype, row ordering or resource-limit change",
+    "No classifier fit or scientific checkpoint",
+    "Optimization limited to engineering probe; not integrated into producer",
+    "Earlier failed run and source provenance preserved"
+  ],
+  "limits": {
+    "interval": 0.3,
+    "max_artifacts": 5368709120,
+    "max_rss": 4294967296,
+    "min_available": 2147483648,
+    "min_disk": 10737418240,
+    "seconds": 900,
+    "start_available": 6442450944,
+    "start_disk": 21474836480
+  },
+  "next_action": "Run same approved guarded command after freeing RAM; no budget increase or automatic retry",
+  "predecessor_provenance_sha256": "f6f9e5cea793aeea2995fb6c5e27e88766f69abd44de735373dcdde5ccc377c9",
+  "probe_attempt": {
+    "command": ".venv/Scripts/python.exe -B -u -m experiments.c03.engineering.preparation_probe --probe",
+    "evidence": ".release-audit/c03/preparation-memory-attempt-20261108.txt",
+    "evidence_sha256": "5b6bdb5692e493ef14874394b4dd575d2a7527a9cd707ed5e80b6f7e1c95741c",
+    "exit_code": 3,
+    "result": {
+      "available": 4586942464,
+      "disk_free": 502054797312,
+      "reason": "Less than 6 GiB available RAM",
+      "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+      "status": "START_REFUSED"
+    }
+  },
+  "schema_version": 1,
+  "scope": "ENGINEERING_TRAIN_PREPARATION_ONLY",
+  "source_record": {
+    "plan_sha256": "185025edbd9a1f154c3bf820fa3e01ef722c1ea2bc04bd6c526c392883dfd70a",
+    "probe_sources": {
+      "experiments/c03/engineering/preparation_probe.py": "990682b551b9dca42ee7fb792c87c7a2e11dddb10fdd50b94bcdfd4845cff91f",
+      "tests/test_c03_preparation_probe.py": "14666536343eb3a6830dd8d50926e8e9cf9d28bd972f50b1f80fb7eb18bbfe9d"
+    }
+  },
+  "status": "IMPLEMENTED_START_REFUSED",
+  "verification": {
+    "all_nine_required_checks_passed": true,
+    "equivalence": "Exact CSR data/indices/indptr bytes, sample identity and label hashes; numeric/categorical/nonfinite fixtures",
+    "evidence": ".release-audit/c03/preparation-memory-checks.json",
+    "focused_tests_passed": 26,
+    "full_pytest_passed": 209,
+    "full_pytest_seconds": 27.67,
+    "original_producer_plan_unchanged": true,
+    "predecessor_backup_hashes_verified": true
+  }
+}

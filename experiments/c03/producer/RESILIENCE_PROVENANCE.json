@@ -1,0 +1,70 @@
+{
+  "batch": "C03-RESILIENT-ISOLATED-WORKERS",
+  "checks": {
+    "all_nine_required_commands_passed": true,
+    "evidence": ".release-audit/c03/resilience-checks.json",
+    "focused_passed": 93,
+    "focused_seconds": 37.63,
+    "full_pytest_passed": 235,
+    "full_pytest_seconds": 53.18
+  },
+  "date": "2026-11-08",
+  "extra_sources": {
+    "experiments/c03/engineering/combined_preparation_probe.py": "8cfd179efd8372c13de444ccdf3b0f6871d85ec53e910ced18bb09170ea8b044"
+  },
+  "limits": [
+    "Component/preparation boundary checkpoints, not mid-estimator continuation",
+    "Incomplete preparation without final receipt must restart",
+    "Same-revision reuse only; no silent code/config/environment migration",
+    "No scientific model fit authorized or performed; isolated runner remains tiny synthetic CPU only",
+    "Process-failure testing is not a power-loss/network-filesystem durability guarantee",
+    "Proposed full-row 8-tree RF engineering probe remains unapproved"
+  ],
+  "plan_sha256": "f1c32f29089c69fd2d34b617ac1bc923fadbcd2e651e2505a8d9d3c9f0dd7b16",
+  "prior_producer_provenance_sha256": "75d2fc96eed2399c6987d9b9ff29b2695b990338b957515e2ebf5d877b724396",
+  "prior_progress_provenance_sha256": "0db43acbc2a263e3c1ba8228579ab0bda66f91ad8f3bb7ea47b7782abd1329a4",
+  "schema_version": 1,
+  "source_revision": "ca13f1097f851ce6693658ccc0c6dd35480fabd6",
+  "sources": {
+    "experiments/c03/c03_paired_runner_core.py": "ca718589c04d4749c11e104a62f2b367111588dc4aab574c678e7d73a9a37c6d",
+    "experiments/c03/c03_paths.py": "ac607a45082f0e424dbd70f2226e6a930145795d11b81add00b8f7c0de099fdb",
+    "experiments/c03/c03_selector_reference.py": "3305585362114fd454e509949c2590112facf0fc3ab3a17cec487bb184771524",
+    "experiments/c03/engineering/preparation_probe.py": "5ed03b88e8bce9b8b62bd0dad1ba277fd88a7ace329efa370eade0ddc4b3c4cc",
+    "experiments/c03/producer/__init__.py": "c8bced903a2b92c1b9cb6fea85577d4b3ee0774ebed0d11d7200d31562607660",
+    "experiments/c03/producer/__main__.py": "530a7f278b33b9e7f93fbf471423849ff301aec476ed3878ff3500b62bfd59bc",
+    "experiments/c03/producer/artifacts.py": "177aa6554687a8ba71e0d9da02cb4de6c15762db776b0f87fcb305b25acf5119",
+    "experiments/c03/producer/checkpoints.py": "bb524cbfa7325591e24a29c6cdfafc2fd9b6418bfd2001163e5135b9ea0bb9ad",
+    "experiments/c03/producer/evaluator.py": "4ccb5926498dc720529aae918b1049b0eaeb68683c8567ef2b292d61d506b088",
+    "experiments/c03/producer/isolated.py": "b8cd7a95e374d92d2cc4e013c88799be8c55f9578948894fdc563b730b28ad44",
+    "experiments/c03/producer/locking.py": "c43ff4f32c0f65473e487e0ea4ea86de9ca33ae03375083e0737152c15bd4a42",
+    "experiments/c03/producer/models.py": "780d048be2bc395288c223b8149f9a52f817459b05de5d0c53e845691f91ca7f",
+    "experiments/c03/producer/plan.py": "850b44d8a625e7a089352fc6d1854cc2304c7ad6bf119cc9c7fe95e8eaac842a",
+    "experiments/c03/producer/recovery.py": "295fa9e1533a19720b840a2c0c60ebf86f6b54b126b3c43215a00d72207c9489",
+    "experiments/c03/producer/sampling.py": "192ebf687609236e536df272513bbc99284b99f3d4b3485b02502830647534f5",
+    "experiments/c03/producer/sealing.py": "f6ccf0cdf49a3e288b9b44da044e7e43b21420778c88bd4082150a5fad183da6",
+    "experiments/c03/producer/sources.py": "97eb1f4615d6971cff11c78ea6314d410197ede479fb692005cc296522be0752",
+    "experiments/c03/producer/transforms.py": "9d7941da7d46959cccb4507b952a7babb26f011b808a04795f12f8843cd0b335",
+    "experiments/c03/producer/validation.py": "6a7a3e5a7153284c2c21da7014239536149c3ca878ff7e8aec2621dc63f4ae24",
+    "outputs/12_jisa_finalization/09_ciciot_seed_reliability/protocol_b_loao_ciciot2023/seed_123/runs/aggregate_results.csv": "c123192dcf89a766e1bbd681a11107e96e0d017c84299a5ecf7b374b2d4ad209",
+    "pyproject.toml": "0bfd0206fc952f74db0b1dac569b308535acf5ff7497c2057451ef447a034b42",
+    "src/ids_eval_framework/_native/protocol_b_grid.py": "120936f1715872b0c3883fc443c825b49fb7d0473ec286a6c0d40393e3841255",
+    "src/ids_eval_framework/src/two_stage_engine.py": "ccee9350988401db7b4773e91e11c33cc45b63ee9fc7622445e2d720830b354a",
+    "tests/test_c03_producer_evaluator.py": "c425b2650633438ff2d743246997301c3067d02c371a435d656619fa42bde2b4",
+    "tests/test_c03_producer_foundation.py": "9a5795fed23a7d1ebc11b0f5ab2ee806935deb5e25d91ec8413e694fd6722a93",
+    "tests/test_c03_producer_resilience.py": "ab859c4364cb0ed645ed3b7c1baf9f9e7b6d663b552354f623d31cc114ec74f9",
+    "tests/test_c03_producer_validation.py": "ce6ba0b7af6983bacc06d4c00c1dced60a7d96343bbb3b3e718cd54ea9f7046a",
+    "uv.lock": "bacc857ad43b78ce2448de223ea08aa6d50092cd64802a8ec9512a8ba24318b6"
+  },
+  "status": "IMPLEMENTED_SYNTHETIC_VERIFICATION",
+  "verified_behaviors": [
+    "Five actual isolated tiny synthetic component workers",
+    "Per-component training-stage loading plus shared validation only",
+    "OS lock release after process death; active worker prevents recovery",
+    "Actual component worker killed after fit begins; completed prefix recovered and interrupted component restarted",
+    "No refitting completed components on resume",
+    "Corrupted completed work rejected; failed attempts preserved in explicit recovery forks",
+    "Completed engineering preparation can reload without repeating sampling",
+    "Preparation completion commits after input binding",
+    "Final seal receipt recovery preserves frozen decisions"
+  ]
+}

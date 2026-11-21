@@ -1,0 +1,89 @@
+{
+  "attempt": {
+    "command": ".venv/Scripts/python.exe -B -u -m experiments.c03.engineering.combined_preparation_probe --probe",
+    "evidence": ".release-audit/c03/combined-preparation-attempt-20261108.txt",
+    "evidence_sha256": "12b6a44b99e2a9fcb4919419d1540bebb4a2cb16ecc3decb40e967467a3dcd13",
+    "exit_code": 3,
+    "result": {
+      "available": 4957786112,
+      "disk_free": 501787942912,
+      "reason": "Less than 6 GiB available RAM",
+      "scope": "ENGINEERING_TRAIN_VALIDATION_PREPARATION_ONLY",
+      "status": "START_REFUSED"
+    }
+  },
+  "batch": "C03-COMBINED-PREPARATION-PROBE",
+  "boundaries": [
+    "No benchmark observation reads or worker launch in this attempt",
+    "Real combined preparation/serialization/reload remains unmeasured",
+    "No classifier fitting, selection, test observations or GPU work authorized",
+    "No scientific checkpoint reuse",
+    "No automatic retry, app closure or budget increase"
+  ],
+  "date": "2026-11-08",
+  "limits": {
+    "interval": 0.3,
+    "max_artifacts": 5368709120,
+    "max_rss": 4294967296,
+    "min_available": 2147483648,
+    "min_disk": 10737418240,
+    "seconds": 900,
+    "start_available": 6442450944,
+    "start_disk": 21474836480
+  },
+  "predecessor_provenance_sha256": "75d2fc96eed2399c6987d9b9ff29b2695b990338b957515e2ebf5d877b724396",
+  "producer_sources": {
+    "experiments/c03/c03_paired_runner_core.py": "ca718589c04d4749c11e104a62f2b367111588dc4aab574c678e7d73a9a37c6d",
+    "experiments/c03/c03_paths.py": "ac607a45082f0e424dbd70f2226e6a930145795d11b81add00b8f7c0de099fdb",
+    "experiments/c03/c03_selector_reference.py": "3305585362114fd454e509949c2590112facf0fc3ab3a17cec487bb184771524",
+    "experiments/c03/producer/__init__.py": "c8bced903a2b92c1b9cb6fea85577d4b3ee0774ebed0d11d7200d31562607660",
+    "experiments/c03/producer/__main__.py": "530a7f278b33b9e7f93fbf471423849ff301aec476ed3878ff3500b62bfd59bc",
+    "experiments/c03/producer/artifacts.py": "177aa6554687a8ba71e0d9da02cb4de6c15762db776b0f87fcb305b25acf5119",
+    "experiments/c03/producer/checkpoints.py": "b204dfdac34c7453b1fe5e3f01e28517dfe8e7cf843f3d9581e5b3383b585d18",
+    "experiments/c03/producer/evaluator.py": "4ccb5926498dc720529aae918b1049b0eaeb68683c8567ef2b292d61d506b088",
+    "experiments/c03/producer/models.py": "780d048be2bc395288c223b8149f9a52f817459b05de5d0c53e845691f91ca7f",
+    "experiments/c03/producer/plan.py": "f49e20ac875a03384148b68b61a18d5edac997e174b50dd54a4a277ec5ff63f2",
+    "experiments/c03/producer/sampling.py": "192ebf687609236e536df272513bbc99284b99f3d4b3485b02502830647534f5",
+    "experiments/c03/producer/sealing.py": "d60e4f4561b84ae106f53615389574eaf03eb3ae8979d0c332d0f91bdd976483",
+    "experiments/c03/producer/sources.py": "97eb1f4615d6971cff11c78ea6314d410197ede479fb692005cc296522be0752",
+    "experiments/c03/producer/transforms.py": "9d7941da7d46959cccb4507b952a7babb26f011b808a04795f12f8843cd0b335",
+    "experiments/c03/producer/validation.py": "cc8819c969ce91affbf405601ef46a41685a86d1f32f9f01603ac5cb980f125d",
+    "outputs/12_jisa_finalization/09_ciciot_seed_reliability/protocol_b_loao_ciciot2023/seed_123/runs/aggregate_results.csv": "c123192dcf89a766e1bbd681a11107e96e0d017c84299a5ecf7b374b2d4ad209",
+    "pyproject.toml": "0bfd0206fc952f74db0b1dac569b308535acf5ff7497c2057451ef447a034b42",
+    "src/ids_eval_framework/_native/protocol_b_grid.py": "120936f1715872b0c3883fc443c825b49fb7d0473ec286a6c0d40393e3841255",
+    "src/ids_eval_framework/src/two_stage_engine.py": "ccee9350988401db7b4773e91e11c33cc45b63ee9fc7622445e2d720830b354a",
+    "tests/test_c03_producer_evaluator.py": "c425b2650633438ff2d743246997301c3067d02c371a435d656619fa42bde2b4",
+    "tests/test_c03_producer_foundation.py": "9a5795fed23a7d1ebc11b0f5ab2ee806935deb5e25d91ec8413e694fd6722a93",
+    "tests/test_c03_producer_validation.py": "ce6ba0b7af6983bacc06d4c00c1dced60a7d96343bbb3b3e718cd54ea9f7046a",
+    "uv.lock": "bacc857ad43b78ce2448de223ea08aa6d50092cd64802a8ec9512a8ba24318b6"
+  },
+  "schema_version": 1,
+  "scope": "ENGINEERING_TRAIN_VALIDATION_PREPARATION_ONLY",
+  "source_record": {
+    "plan_sha256": "43b178e2ad6c778dd29a0f71f0d6e702249c038dcff51a4123531cbc101f5480",
+    "probe_sources": {
+      "experiments/c03/engineering/combined_preparation_probe.py": "dbf39d4eefb9e5693285de17fd5bec66e223aa68ebf78df1cb221614d45414ee",
+      "experiments/c03/engineering/preparation_probe.py": "d2d81bfee3abcd025d97501878740b92c396e2afc5b946e4d41a97c18174ac80",
+      "tests/test_c03_combined_preparation_probe.py": "7c2da05fd5769b4c847856d8d0194d47c4aee2f052e29b33ddc8560a43bc8b8b",
+      "tests/test_c03_preparation_probe.py": "14666536343eb3a6830dd8d50926e8e9cf9d28bd972f50b1f80fb7eb18bbfe9d"
+    }
+  },
+  "status": "IMPLEMENTED_START_REFUSED",
+  "verification": {
+    "all_nine_required_commands_passed": true,
+    "coverage": [
+      "Shared preparation and exact reload identities",
+      "Original arrays released before reload",
+      "No classifier/selection/test calls",
+      "Engineering plans rejected by fitting/selection/evaluation gates",
+      "Corrupt arrays/receipts and interrupted writes fail closed",
+      "Combined-scope supervisor receipt and resource gates",
+      "Atomic-publication disk accounting"
+    ],
+    "evidence": ".release-audit/c03/combined-preparation-checks.json",
+    "focused_passed": 108,
+    "focused_seconds": 21.28,
+    "full_pytest_passed": 222,
+    "full_pytest_seconds": 27.77
+  }
+}

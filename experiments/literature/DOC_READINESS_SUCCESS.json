@@ -1,0 +1,545 @@
+{
+  "artifacts": {
+    "fit-result.json": "58f6da432bded86d38e918b87e4057ca9645e77303811572a2e5c7b2e3f1b9af",
+    "prepare/complete.json": "da50dff4cd8b68be856228998494432dadc56e6354805568ed33e41945c004c5"
+  },
+  "attempts": [
+    {
+      "attempt": "a0588d292b834422091a46448408b6559",
+      "batch_elapsed_seconds": 143.58189497562125,
+      "minimum_available": 5487255552,
+      "peak_artifacts": 1052106130,
+      "peak_gpu_used": 0,
+      "peak_tree_rss": 1120641024,
+      "reason": null,
+      "stage": "prepare",
+      "worker_exit": 0
+    },
+    {
+      "attempt": "a434ed2a7621a4a48ba60a5ec9fb5a63f",
+      "batch_elapsed_seconds": 210.55453968048096,
+      "minimum_available": 5033943040,
+      "peak_artifacts": 2240912773,
+      "peak_gpu_used": 281018368,
+      "peak_tree_rss": 1696813056,
+      "reason": null,
+      "stage": "fit",
+      "worker_exit": 0
+    }
+  ],
+  "completion_sha256": "c19f89650ca0e1d8c894d0bef8f7a99dfe2b7c2332890fc3c940c3a4f696c5cb",
+  "cutoffs_fitted": false,
+  "definition": {
+    "approved_scope": "Full known inputs, TRAIN scaler, one epoch, validation BCE and reload only",
+    "columns": [
+      "flow_duration",
+      "header_length",
+      "protocol_type",
+      "duration",
+      "rate",
+      "srate",
+      "drate",
+      "fin_flag_number",
+      "syn_flag_number",
+      "rst_flag_number",
+      "psh_flag_number",
+      "ack_flag_number",
+      "ece_flag_number",
+      "cwr_flag_number",
+      "ack_count",
+      "syn_count",
+      "fin_count",
+      "urg_count",
+      "rst_count",
+      "http",
+      "https",
+      "dns",
+      "telnet",
+      "smtp",
+      "ssh",
+      "irc",
+      "tcp",
+      "udp",
+      "dhcp",
+      "arp",
+      "icmp",
+      "ipv",
+      "llc",
+      "tot_sum",
+      "min",
+      "max",
+      "avg",
+      "std",
+      "tot_size",
+      "iat",
+      "number",
+      "magnitue",
+      "radius",
+      "covariance",
+      "variance",
+      "weight"
+    ],
+    "cutoffs_fitted": false,
+    "deadline": 1795119561.6267066,
+    "fit": {
+      "batch_size": 128,
+      "cpu_threads": 2,
+      "device": "cuda:0",
+      "epochs": 1,
+      "model_seed": 123
+    },
+    "limits": {
+      "gpu_interval": 1.0,
+      "interval": 0.3,
+      "max_artifacts": 5368709120,
+      "max_gpu_used": 4294967296,
+      "max_rss": 4294967296,
+      "min_available": null,
+      "min_disk": 10737418240,
+      "min_gpu_free": 2147483648,
+      "query_timeout": 2.0,
+      "seconds": 900,
+      "start_available": null,
+      "start_disk": 21474836480,
+      "start_gpu_free": 6442450944,
+      "startup_query_timeout": 10.0
+    },
+    "reference_completion_sha256": "f9ea9e2c5c28e9529d5d148c9df5d1680bc91094935bdbc0a0016de1718f854e",
+    "scope": "ENGINEERING_DOC_FULL_ROW_READINESS_ONLY",
+    "sources": {
+      "docs/RECKONING_DOC_TABULAR_CONTRACT_DRAFT.md": "a3ca5985d0bdd0dedbd5d7376ce26d159d0851b2aaef2e2884b941cd1bf26f63",
+      "experiments/c03/engineering/cuda_readiness_probe.py": "99b2b5de2c85d206a2e0e14c649455975e281a6b99b0bf3a634b5e9c7a685917",
+      "experiments/c03/engineering/lifecycle_probe.py": "00d7e290ef6d58e75b5f2f437d1191f4bace5c9dba3d0265cba0712ac4e89529",
+      "experiments/c03/engineering/preparation_probe.py": "5f9a8235be8d19ad3bf66209fcd8681345575a64fe6719e47e839d00a53a1718",
+      "experiments/c03/engineering/resource_policy.py": "c1114c426a28eb860f1ebdf7712f246a6644273fb35b9cd7615c83b741dc33ce",
+      "experiments/c03/producer/artifacts.py": "177aa6554687a8ba71e0d9da02cb4de6c15762db776b0f87fcb305b25acf5119",
+      "experiments/c03/producer/checkpoints.py": "bb524cbfa7325591e24a29c6cdfafc2fd9b6418bfd2001163e5135b9ea0bb9ad",
+      "experiments/c03/producer/locking.py": "c43ff4f32c0f65473e487e0ea4ea86de9ca33ae03375083e0737152c15bd4a42",
+      "experiments/c03/producer/plan.py": "850b44d8a625e7a089352fc6d1854cc2304c7ad6bf119cc9c7fe95e8eaac842a",
+      "experiments/c03/producer/validation.py": "6a7a3e5a7153284c2c21da7014239536149c3ca878ff7e8aec2621dc63f4ae24",
+      "experiments/literature/doc-requirements.txt": "39c14eb3b7df815c8afbe0181e1707eeeb4111ceb89142e11e0ef7ea5d90637e",
+      "experiments/literature/doc_core.py": "523af733d552f9ba57a94afe807d8ba6c5a0cc13f3a22b7bd31fa944a7b2c2c8",
+      "experiments/literature/doc_preparation.py": "aba945ebf7bf1d491bbc9db0af8631378360ddab9729dab4e7bf789e02bfb502",
+      "experiments/literature/doc_readiness.py": "eec398779a7b73bf1a8aaf7aa252a084ca0bfd9cbee3df0e9d49d454612189aa",
+      "experiments/literature/doc_readiness_fit.py": "7365fa44bd8e054e082d244b9b6f43fd2ed1dae5ff1de088c1439f5fb537dfe6",
+      "experiments/literature/doc_runtime.py": "c220d8bcd4dcbdcbc03629ee2c7288f6a2a2921de98081d205945b1c03af7581",
+      "experiments/literature/doc_training.py": "681ae3ffea736f2525e98eb6e61512c473e49637c09c9a4f3853377b67e2bfd3",
+      "experiments/literature/efc_input_probe.py": "167e0582bda39f2443bf15c4c25680a26ce25e43d4f9df5d04bf1df3b1582208",
+      "pyproject.toml": "0bfd0206fc952f74db0b1dac569b308535acf5ff7497c2057451ef447a034b42",
+      "tests/test_doc_readiness.py": "0cec3b9c404325c6e71831f45bb71b0a5f7f114b3b622a5c99b3741aaf04b1d4",
+      "tests/test_doc_readiness_fit.py": "b5f810edf9a0fb3904c02212c8c8e715ef3061c9dc9a56b871cb2bf4f4e8007a",
+      "uv.lock": "bacc857ad43b78ce2448de223ea08aa6d50092cd64802a8ec9512a8ba24318b6"
+    },
+    "started": 1795118661.6267066,
+    "test_read": false,
+    "train": {
+      "class_support": [
+        68603,
+        5275,
+        666284,
+        180290,
+        204628,
+        144945
+      ],
+      "completion_sha256": "e550f5cd89b0bc16eb3dafcb8611e79a845ff5b253bc1ff36a60f410da27e8a3",
+      "identity_sha256": "7518780812cdb208bfea2753f64cc7a4aa6d16751935f44daef6bdccd566a9b5",
+      "run_id": "efc-train-inputs-20261118t170122755261z"
+    },
+    "validation": {
+      "array_sha256": "92ac5c6ae88393578287be855aeff46b77efa637dc490b45e9d18e7ccfbf7390",
+      "expected_known": 599278,
+      "identity_sha256": "35c545192b54e09d46c470e5272391c7c8492bc30cef6d01a1224e8304dd289e",
+      "inventory": [
+        {
+          "path": "val/part_00000.parquet",
+          "sha256": "76a297b134d3b4d1f244b2f9a81ad0aceeac67817b38df6670604b765eb5094f"
+        },
+        {
+          "path": "val/part_00001.parquet",
+          "sha256": "6216a3cdb2bc392d413db21b759b5081a0a57b05c1148fd12c08eb24331a196f"
+        },
+        {
+          "path": "val/part_00002.parquet",
+          "sha256": "711c6d63033cee931c67792cb07463aebf1a2b2ca9e6d5fe357e6649c162025c"
+        },
+        {
+          "path": "val/part_00003.parquet",
+          "sha256": "b2280c5b95fdce90f9d43b83f123514b9ba3d4e742bdd5e24b4c7b1cf1534941"
+        },
+        {
+          "path": "val/part_00004.parquet",
+          "sha256": "bc3bdee7c98890c7e103807e3682c2323e6eb169184a90613fb82c14bec4d415"
+        },
+        {
+          "path": "val/part_00005.parquet",
+          "sha256": "654dd8a7612303b5d0c0414ae49768607016a949bf1ca1b58f9858434d0604e3"
+        },
+        {
+          "path": "val/part_00006.parquet",
+          "sha256": "ecc0caf67a3c128cd2d78959176b4246b76d4532b5161fc74830b81d469a0520"
+        },
+        {
+          "path": "val/part_00007.parquet",
+          "sha256": "85cecbdec14a5f9254126dd6e401b09ba116442a2f7d9550a7f3df99d076bb4f"
+        },
+        {
+          "path": "val/part_00008.parquet",
+          "sha256": "4c0efe89a66da558b43c6cf8d08755940b3f423eeec8f49b4631b65755197d0d"
+        },
+        {
+          "path": "val/part_00009.parquet",
+          "sha256": "f0025d9ff80f998e6ca999a197c1bcb9792096483430d5a999c11e3ad1e347f5"
+        },
+        {
+          "path": "val/part_00010.parquet",
+          "sha256": "bf45e6b9696d4af4c92963d2c594d31f98200c4374b306ee30dd44522506a19a"
+        },
+        {
+          "path": "val/part_00011.parquet",
+          "sha256": "59b63ed094179ccfdf0f29339a8a88900013d6b56364796caecf8b1fe353acb1"
+        },
+        {
+          "path": "val/part_00012.parquet",
+          "sha256": "0dfb522eebaf8fa3dec457a03cc8ac99268af6b1b17b8b2aba20e4431522caf4"
+        },
+        {
+          "path": "val/part_00013.parquet",
+          "sha256": "09cdeb01ba840f001a55d2aeb6655a191cec6eb98db3a98511bb332c88b8f15b"
+        },
+        {
+          "path": "val/part_00014.parquet",
+          "sha256": "c78a2d4fdeb39801b9ecc2c8609d791e82e20204945236c870ef41bc25b0bdfe"
+        },
+        {
+          "path": "val/part_00015.parquet",
+          "sha256": "882c2b57df1bf7baf136122da9296a3cacc4f7863883fc5e685fc65a82e27362"
+        },
+        {
+          "path": "val/part_00016.parquet",
+          "sha256": "a43da6a3eab60252a7d9d14fb1b2730a4778fc4f97800a037294b7c4f469eb69"
+        },
+        {
+          "path": "val/part_00017.parquet",
+          "sha256": "c3e7860130fa9b12ca451e74e95cb3a45de90c833bbdfa494bc69b87c3dc22f1"
+        },
+        {
+          "path": "val/part_00018.parquet",
+          "sha256": "7ec1fc626d56183e5ee4a7b1ba1f1b09abdf0a59c59ed6e348b5ac222e40b223"
+        },
+        {
+          "path": "val/part_00019.parquet",
+          "sha256": "431dd2b516b35f4517d5bd739d75a6151d29be04c308f27ddef9e66a649ac723"
+        },
+        {
+          "path": "val/part_00020.parquet",
+          "sha256": "f29c97ff241ebdac350d7800ab29a55e49022fb1c2f447a05dc704c9c1a446ce"
+        },
+        {
+          "path": "val/part_00021.parquet",
+          "sha256": "d411ff992683ee5aadea885a8e3595ad1a3eeaff36936a5452b2e583085dd740"
+        },
+        {
+          "path": "val/part_00022.parquet",
+          "sha256": "262e7a535f85fad7901a9cd3a68bd6d4f1b841f7049df4f99eba3222fffc8bbf"
+        },
+        {
+          "path": "val/part_00023.parquet",
+          "sha256": "1b2518534c2c20af988173f4b7f3242987bdf6a5dd1b78c0cfe87eec46278bca"
+        },
+        {
+          "path": "val/part_00024.parquet",
+          "sha256": "b4dd876d44c906ac2a814522d41571fd90bcbc17cfe3972e38fe14c400db7ae4"
+        },
+        {
+          "path": "val/part_00025.parquet",
+          "sha256": "4f4893af5b20847c24f98f72da45053d37424d9bdfc188bf2c097c8b35977f0d"
+        },
+        {
+          "path": "val/part_00026.parquet",
+          "sha256": "34f4566b76a32370f83ead60d340e03eaac3a1bbff7fee3ac22154425ac8c727"
+        },
+        {
+          "path": "val/part_00027.parquet",
+          "sha256": "9c572fa9cf18f2a1e366c68e0a5e16c38c52d37e112d96672b16ed5050376064"
+        },
+        {
+          "path": "val/part_00028.parquet",
+          "sha256": "75d72d501b46c6c6a283f62c5fd16af7e9909b4332f03adf1f0fc0c292f4ef7f"
+        },
+        {
+          "path": "val/part_00029.parquet",
+          "sha256": "bf297405a906650c18ef70539b054f57b0061a7b2ff100bfa024ee9935e3bfe5"
+        },
+        {
+          "path": "val/part_00030.parquet",
+          "sha256": "fac2c51a0d122a90e2fcd25bd16fa837c6e33ec91a8c7270ad8fb8b3f691c768"
+        },
+        {
+          "path": "val/part_00031.parquet",
+          "sha256": "523a19a30463399380611ecb49ac6eaa92343fc05a5a8e6caea2a1d28dee19b5"
+        },
+        {
+          "path": "val/part_00032.parquet",
+          "sha256": "b0114b7e954b57ff20cadeccf494abdcfde3ddecca3c97c5c7613717257bfdfc"
+        },
+        {
+          "path": "val/part_00033.parquet",
+          "sha256": "7391e61df414587c5d682d1b916da95f9d445b031c82bf119a8fa81b0e5caef5"
+        },
+        {
+          "path": "val/part_00034.parquet",
+          "sha256": "32f32afe494e82c656e242aca97218f0568ebbe0a0e3ce097632d57ebdafc498"
+        },
+        {
+          "path": "val/part_00035.parquet",
+          "sha256": "cabac339a9dbd5d871c969915db394f12a204233fcec6eb3aa82fce951859b1b"
+        },
+        {
+          "path": "val/part_00036.parquet",
+          "sha256": "264b00ba042c1dc9907c9c503b0592063f15eada819cf8199c35d1fd49421406"
+        },
+        {
+          "path": "val/part_00037.parquet",
+          "sha256": "3aeb309619336c39e7cf3d81bae475c25d44902da1739ea10b5531eb18d2afac"
+        },
+        {
+          "path": "val/part_00038.parquet",
+          "sha256": "b426468d00a1b443346eb3be4f1a53a421699a04903f2a641a0d2383f5f38c81"
+        },
+        {
+          "path": "val/part_00039.parquet",
+          "sha256": "dade8a03f1e0d1804731d5678b16e31e929b97af1434386accc17edf2bbd9395"
+        },
+        {
+          "path": "val/part_00040.parquet",
+          "sha256": "363a7b57cc2aa498c0ebece994cd9296e6b642be2b9f67c0210a0cf352c84b55"
+        },
+        {
+          "path": "val/part_00041.parquet",
+          "sha256": "d06bf9861ff1af2e239005080af85fcf968bf23b64228378e28ea72acae05634"
+        },
+        {
+          "path": "val/part_00042.parquet",
+          "sha256": "6d6dd1b862177f4b7f45c70a1c6e5e4a03e418bddc90fabad6b114fac1f87c73"
+        },
+        {
+          "path": "val/part_00043.parquet",
+          "sha256": "cecf9e83d56e75d6c62f3d9a8db37a056902104a898edd81dc22b72c369870a9"
+        },
+        {
+          "path": "val/part_00044.parquet",
+          "sha256": "4f684231826bf8980d71b9dffd473b8dc41f90adbffd0301bf4e5db0a474deaf"
+        },
+        {
+          "path": "val/part_00045.parquet",
+          "sha256": "cc98fdbb37000019ddfe350d04d4443666e151690c524f8e45485edf918836b1"
+        },
+        {
+          "path": "val/part_00046.parquet",
+          "sha256": "0953bedf69eb5c5095ac665b33872bf54a9672d031522cd2f6c7dcb34ab1d267"
+        },
+        {
+          "path": "val/part_00047.parquet",
+          "sha256": "0ed42aba77589d3a1e5e0a06c297a03510005b8026dee83d6385f9017c16256a"
+        },
+        {
+          "path": "val/part_00048.parquet",
+          "sha256": "2ca60416a8784b303806e3dc9cc3e82dd755330c6f9da99f1c5a229431718be3"
+        },
+        {
+          "path": "val/part_00049.parquet",
+          "sha256": "ecb97c54dab048cbbefcfbcd576650fbe89ddefc26fc4753e6f30d3cf0ce2f70"
+        },
+        {
+          "path": "val/part_00050.parquet",
+          "sha256": "280a116f3158cb6606b55b5a99340d674eb9994b677cc6634f182504335bd664"
+        },
+        {
+          "path": "val/part_00051.parquet",
+          "sha256": "de60aadb7547f946d6a184b22dd50928386569888f47026255e87fefa5cd004d"
+        },
+        {
+          "path": "val/part_00052.parquet",
+          "sha256": "17d307da183bf67569f3e4e6ae6b6a122010804ccb5e906e20bf5aacfffba1a3"
+        },
+        {
+          "path": "val/part_00053.parquet",
+          "sha256": "302519f66a500c0a56d9df1faa9e71ed383670d42bc092a16aac92d592bbf745"
+        },
+        {
+          "path": "val/part_00054.parquet",
+          "sha256": "d7aa6d7d4bc3028fbc9d1018b731ec8984e82c187f8d791c89202ae5c5d8b1b4"
+        },
+        {
+          "path": "val/part_00055.parquet",
+          "sha256": "354e1503bf936f58f388632ecba37afe7b300ef030959f09271e0a0ce96edc55"
+        },
+        {
+          "path": "val/part_00056.parquet",
+          "sha256": "eaf5545734fe42eaedbe024b8a2c730709709df4a9e3c424d229b2308353ed87"
+        },
+        {
+          "path": "val/part_00057.parquet",
+          "sha256": "6721c3865a8ea2a8405d2d452f225d5f1ba4452c02ca12294426acb28c4f5a80"
+        },
+        {
+          "path": "val/part_00058.parquet",
+          "sha256": "62db187b8b2e44da9e164613c3af184bde9c9518880a36fc0af2b5215116970a"
+        },
+        {
+          "path": "val/part_00059.parquet",
+          "sha256": "acd61dba8611a914caf599de828064aec597d957f4644c71e6faaf2762b7d073"
+        },
+        {
+          "path": "val/part_00060.parquet",
+          "sha256": "791c265766aba3d95c9175a5ee2f8696fe2df4697fe71f071ae866958af75140"
+        },
+        {
+          "path": "val/part_00061.parquet",
+          "sha256": "81fe7697964ece4bf532f5004d18e1d733e10ea58cd354f627e6e4262eea01d9"
+        },
+        {
+          "path": "val/part_00062.parquet",
+          "sha256": "6f7a177b3ac9687e167021be28c94739c0e9b20aa9c6cf7525b422bcbac2bfc5"
+        },
+        {
+          "path": "val/part_00063.parquet",
+          "sha256": "83efada1778067cf2f9c37245d7b38d5fdc8a4186c3f4644dc66a042e5128fd0"
+        },
+        {
+          "path": "val/part_00064.parquet",
+          "sha256": "d4f2e088af300a351b634cf4de438e1da14217af1016ee0e6ae5955dec3c36cd"
+        }
+      ],
+      "truth_sha256": "63393c9d9985416069a07290b81fc85a4564e957fba75fdad62dce98b511444e"
+    }
+  },
+  "elapsed_seconds": 215.56757593154907,
+  "fit": {
+    "cutoffs_fitted": false,
+    "device": "cuda:0",
+    "epochs": 1,
+    "interpretation": "Engineering one-epoch sizing only; not a completed DOC scientific fit",
+    "journal_commit": "bfd5597f1ad29d41c47384002347377bd0a683b0f3caba564cadd685bc65b888",
+    "known_validation_bce": 0.7350341406267903,
+    "prepared_sha256": "da50dff4cd8b68be856228998494432dadc56e6354805568ed33e41945c004c5",
+    "reload_prediction_exact": true,
+    "reload_rows": 8192,
+    "request_sha256": "824c2c33e725cc2eefb2740c8325112df436efdc39d333e7cb1ac96d824aa840",
+    "rows": {
+      "train": 1270025,
+      "validation": 599278
+    },
+    "status": "COMPLETE",
+    "test_read": false,
+    "torch": "2.10.0+cu128",
+    "updates": 9923
+  },
+  "hardware": {
+    "driver": "610.88",
+    "index": 0,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "total": 8546942976
+  },
+  "initial_interruption": {
+    "cause": "nvidia-smi live telemetry query exceeded unchanged 2-second timeout during CPU preparation",
+    "recovery": "Same run, sources, data and original deadline; completed import/scaling checkpoints verified and retained",
+    "resource_record_limit": "Initial supervisor raised before publishing an attempt summary; successful recovery stage resource records are reported, not a complete resource trace of the aborted attempt."
+  },
+  "preparation": {
+    "class_support": {
+      "train": [
+        68603,
+        5275,
+        666284,
+        180290,
+        204628,
+        144945
+      ],
+      "validation": [
+        31978,
+        1976,
+        338108,
+        98942,
+        75193,
+        53081
+      ]
+    },
+    "columns": [
+      "flow_duration",
+      "header_length",
+      "protocol_type",
+      "duration",
+      "rate",
+      "srate",
+      "drate",
+      "fin_flag_number",
+      "syn_flag_number",
+      "rst_flag_number",
+      "psh_flag_number",
+      "ack_flag_number",
+      "ece_flag_number",
+      "cwr_flag_number",
+      "ack_count",
+      "syn_count",
+      "fin_count",
+      "urg_count",
+      "rst_count",
+      "http",
+      "https",
+      "dns",
+      "telnet",
+      "smtp",
+      "ssh",
+      "irc",
+      "tcp",
+      "udp",
+      "dhcp",
+      "arp",
+      "icmp",
+      "ipv",
+      "llc",
+      "tot_sum",
+      "min",
+      "max",
+      "avg",
+      "std",
+      "tot_size",
+      "iat",
+      "number",
+      "magnitue",
+      "radius",
+      "covariance",
+      "variance",
+      "weight"
+    ],
+    "cutoffs_fitted": false,
+    "files": {
+      "scaler.json": "48e035e33529e41eeea98ed1a1f46130a582eb97d21eb2b13e38a1f0d075636b",
+      "train-X.npy": "c3fa132b555de2ea59546f4721ab741ec1457f01400ca29f942370f21837b68a",
+      "train-raw.npy": "8f2a59bf7ef5d8a76d7465ebd6f46224e7bce88ed121badda0a9d0115cf108f2",
+      "train-y.npy": "ca45b6b10e6a808364ea34c413c1f7e846985a322192d9080eb2b6807753ede1",
+      "validation-X.npy": "cb916a86edd4060e8cda1fdbf4a852ea1bf946d180e16ee48adb0e6f0c0b87d8",
+      "validation-raw.npy": "9bfe4b52fff08173037b720d0f9fbdf151355967c6ac47be037ec3f4d1826dc8",
+      "validation-sample-positions.npy": "02860d56fc2a5cd33be9533d06cfdbd7644df7d04511fc64fd03fde3b84e4d3e",
+      "validation-y.npy": "e5e2b8e1a8cd44d6c7b4ea39eae8d39b41c115cbd7497a6d7ef10ff06ca2c3be"
+    },
+    "request_sha256": "824c2c33e725cc2eefb2740c8325112df436efdc39d333e7cb1ac96d824aa840",
+    "rows": {
+      "train": 1270025,
+      "validation": 599278
+    },
+    "scaling_fit_population": "TRAIN_ONLY",
+    "test_read": false,
+    "train_identity_sha256": "7518780812cdb208bfea2753f64cc7a4aa6d16751935f44daef6bdccd566a9b5",
+    "validation_identity_sha256": "279d2ecec0a2dac62ae0c5cb7e4686dfb7e279d2de74815d7f62cc9810131a7a",
+    "validation_parent_identity_sha256": "35c545192b54e09d46c470e5272391c7c8492bc30cef6d01a1224e8304dd289e"
+  },
+  "request_sha256": "824c2c33e725cc2eefb2740c8325112df436efdc39d333e7cb1ac96d824aa840",
+  "run_id": "doc-readiness-20261119t200421626706z",
+  "scientific_scope": "Engineering readiness only; one epoch, no DOC cutoffs or test evaluation. Full pilot must restart model initialization.",
+  "scope": "ENGINEERING_DOC_FULL_ROW_READINESS_ONLY",
+  "status": "COMPLETE",
+  "test_read": false,
+  "verification": "Read-only completion verification rehashed sources, prepared arrays, output receipts and all committed model payloads; independent class counts and request bindings checked."
+}

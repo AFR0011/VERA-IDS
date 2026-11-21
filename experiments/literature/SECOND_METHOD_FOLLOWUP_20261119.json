@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-19",
+  "gons_findings": [
+    "Base runner filters TRAIN and calibration to base classes; initial single-model path calls fit_gons. No optional Unknown records are supplied in that fit path.",
+    "Fixed YAML inherits grid_search calibration, 512-score buffers, alpha_false_known=0.05, beta_true_support=0.9 and 64 candidate quantiles from model defaults.",
+    "Positive scores use own-class stable prototypes; impostor scores use other-class stable prototypes. Positive buffers keep the last 512 per class; the impostor buffer keeps the last 512 overall. Balanced positives then use the same count from the tail of each class buffer. Order matters.",
+    "Grid search picks the largest feasible threshold with impostor acceptance <=0.05 and positive coverage >=0.9. If none is feasible, it uses the fixed-config positive-score 0.85 quantile. Therefore 0.85 is a fallback, not the entire calibration policy.",
+    "Fixed-config NCDR refines known-class assignment separately from rejection: when the best/second-best normalized class-distance ratio exceeds0.85, it may prefer the lower-support class. Novelty score/threshold remain tied to the rejection prototype; equality is accepted.",
+    "A frozen base-session use, calibration row order, known-only calibration population, memory strategy and all effective defaults need a reviewed contract. No change to limits or parameters is authorized by this screen."
+  ],
+  "limits": "Static partial source review only. No full-paper numerical equivalence, dependency environment or end-to-end candidate runtime has been verified.",
+  "models_fitted": false,
+  "opennet_batch_coverage_estimate": {
+    "assumptions": "Independent uniform sampling with replacement; six classes; no runtime or performance extrapolation.",
+    "batch_size": 128,
+    "class_counts": [
+      68603,
+      5275,
+      666284,
+      180290,
+      204628,
+      144945
+    ],
+    "expected_draws_for_5000_accepted_batches": 12116.5416238665,
+    "formula": "Sum over class subsets S of (-1)^|S| * (1-sum(p_i for i in S))^128",
+    "kind": "ANALYTICAL_ONLY_NOT_RUNTIME_MEASUREMENT",
+    "population": "Existing EFC known TRAIN support, used only as a prospective tabular example",
+    "probability_all_six_classes": 0.4126590041296333
+  },
+  "opennet_findings": [
+    "Flat encoder uses slim.batch_norm without normalizer_params or is_training. Official TensorFlow1.3 defaults is_training=True and moving updates require explicit dependencies; none occur in inspected OpenNet file. Batch-dependent standalone inference is a source-based inference, not a measured runtime result.",
+    "latent and predict_prob partition input into self.batch_size chunks. Any faithful reproduction must resolve chunk composition/order and final short chunks; enabling running-stat inference would be a distinct corrected adaptation.",
+    "UnitPosNegScale assumes already-unit-scaled input and maps (x-0.5)*2. The separate unit_scale helper computes min/max anew on its input. A TRAIN-fitted tabular scaling contract is not supplied by these helpers.",
+    "Random replacement batches without every class are skipped before i increments. The iterations argument counts accepted batches, not all draws. Stratifying batches would change the reference sampling distribution."
+  ],
+  "repositories": {
+    "gons": {
+      "commit": "b270c7940073d129f048a67c620e4b68f0d5cd49",
+      "url": "https://github.com/troisang1/GONS"
+    },
+    "opennet": {
+      "commit": "3fe1f589926e5507777cdff17228f8c21032434c",
+      "url": "https://github.com/shrtCKT/opennet"
+    }
+  },
+  "scope": "PRIMARY_SOURCE_STATIC_FOLLOWUP_ONLY",
+  "status": "NO_SECOND_METHOD_SELECTED",
+  "tensorflow_support_source": {
+    "sha256": "8738ed95f973020655765f0dd0b340855b955e56f28a852bfc418b8d761ed202",
+    "url": "https://github.com/tensorflow/tensorflow/blob/v1.3.0/tensorflow/contrib/layers/python/layers/layers.py",
+    "verification": "Fetched tag-addressed official source; SHA256 recorded, Git blob not independently checked."
+  },
+  "upstream_code_executed": false,
+  "verified_files": {
+    "gons": {
+      "src/gons/calibration/thresholds.py": {
+        "git_blob_sha1": "49ffb039e8d17adff17ee099a17e161cb8ab8c64",
+        "sha256": "82510a89d872f8721dbca38b9e7f58263e6975a330c7e292ecaeb3755f713f0c"
+      },
+      "src/gons/config/model.py": {
+        "git_blob_sha1": "ee1d38f8f7cf59ebaf4a5e88b3dda19821e797b7",
+        "sha256": "267563b30ad650384ed6613ef4343e9a518928b708d218bd0e34308ed61e30cf"
+      },
+      "src/gons/continual/inference.py": {
+        "git_blob_sha1": "9ade5257f776502962bccf278970d54196ba856e",
+        "sha256": "13cb4fef2c6dbfeebf752461433c7ea63095e5591377ea06e445ce7f25a64aac"
+      },
+      "src/gons/runners/fscil.py": {
+        "git_blob_sha1": "efa020616ba868de1b5b4a3b15ccd794c781f968",
+        "sha256": "e0c5aab56b02a3071a41be59a2dcb6c735adaf52497fb98b2ce825901d4982e4"
+      },
+      "src/gons/runners/tiny_admission.py": {
+        "git_blob_sha1": "dcd1211e0f69eac1f5c37678c0d970e0269ac6bd",
+        "sha256": "d6281f384000345909d8dada58a43e0eb2a1147e3f31b83fa0d2ba4b199f37e3"
+      }
+    },
+    "opennet": {
+      "opennet/opennet.py": {
+        "git_blob_sha1": "2d6de32027edc0306ab2620683f72ec5319bcea1",
+        "sha256": "e765b67a96b8e9f5b57fcab5a900ae4543553d2cda7db172cd3dd58e15e6adc5"
+      },
+      "opennet/simple_dnn/util/format.py": {
+        "git_blob_sha1": "89f80b3bedfd7326f1017d3878b01a6d9551c88f",
+        "sha256": "1c112f5850356057642c74f7b30da76fa244ed4d40bb0365ea66c5011e0709da"
+      }
+    }
+  }
+}

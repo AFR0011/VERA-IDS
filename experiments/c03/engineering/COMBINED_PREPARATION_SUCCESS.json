@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-08",
+  "evidence_hashes": {
+    "complete.json": "c0bb87093870f6f2c87f4182b1b59aa87272c91997a3ba207eab33457c623bb9",
+    "monitor.jsonl": "7d7320001a133f7017b4075dd685f0acebfd7d0f0c6a7eb496f81f953ff86430",
+    "request.json": "dbb9fab9a85a8c881582abc299e0c51e102dc1ee9e37ecdb054b26223db2a5cc",
+    "stages.jsonl": "a6c93502d324a0ee6464a97e9f27df120c7e6b057c10aa0d6f725738ce0e95fb",
+    "supervisor.json": "7efbe881922705ae340c156b87b42515a91346e61df6324ce4b1751843bf99d4",
+    "worker-result.json": "570f0da5e933613069bc6303679c4fd611456b48da10d3fcb426955985919023"
+  },
+  "identities": {
+    "bindings": {
+      "preprocessor": "e9d7e057e9e290a90cc2a05f06949bbbc1e7a0c22812586317a4f37b3faa7371",
+      "stage1": {
+        "labels": "2084fa245a9fa579b8e968073d8813f0279e51333a82e4224c0d8d7e13188e33",
+        "row_ids": "7518780812cdb208bfea2753f64cc7a4aa6d16751935f44daef6bdccd566a9b5",
+        "rows": 1270025,
+        "tensor": "a8880ee96380559b40eebf64ea6b6a0ca1a6255c76a4f830b1c32eea4235ea9d",
+        "weights": {
+          "stage1_rf_class_weight_balanced": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "stage1_rf_inv_family_clipped": "bf118dc3769ba03678ded20d7332cda63abfa9a749920301b8e6dbf30a43f0bb",
+          "stage1_xgb_inv_family_clipped": "bf118dc3769ba03678ded20d7332cda63abfa9a749920301b8e6dbf30a43f0bb"
+        }
+      },
+      "stage2": {
+        "labels": "66929e7551536d192d2a4a25539987b86e7d81ee4c3168c409faca7ff28e9714",
+        "row_ids": "2da6b6420e433f08a0a7bf8178a973644aa8a45001e49a8d51acdd063c2d8f07",
+        "rows": 1201422,
+        "tensor": "6660d62a44f4cbca0ba342b62ff3078b4d7ef603e1bb405000038600bd93bc0c",
+        "weights": {
+          "stage2_rf_shared": "1bbc480859b13c65e14b532d5a677accd7416e038c600737fd76212f3b79dd8a",
+          "stage2_xgb_shared": "1bbc480859b13c65e14b532d5a677accd7416e038c600737fd76212f3b79dd8a"
+        }
+      }
+    },
+    "validation": {
+      "count": 700000,
+      "rows": "35c545192b54e09d46c470e5272391c7c8492bc30cef6d01a1224e8304dd289e",
+      "tensor": "00d417f66b80dcde85ac1059583356c525a3f55aa2ab34933b6f04e53bd2068d",
+      "truth": "63393c9d9985416069a07290b81fc85a4564e957fba75fdad62dce98b511444e"
+    }
+  },
+  "implementation_provenance_sha256": "6889a26a90be42548136f2adee3a312a61bdca400cdebeb32e5e08335c7a0e1c",
+  "interpretation": [
+    "Combined TRAIN/validation preparation, serialization and reload completed within approved limits",
+    "Original live arrays released before verified reload",
+    "No classifier fitting, selection, test observations or GPU work",
+    "Artifacts remain engineering-only and cannot authorize scientific execution",
+    "Classifier memory/time/device/worker feasibility remains unvalidated"
+  ],
+  "local_review": ".release-audit/c03/combined-preparation-success-review-20261108.json",
+  "local_review_sha256": "30463e95dc253abe14269516743fbd24e1ef0dc03a4d9f926ab252e26bca25d5",
+  "reload_verified": true,
+  "run_id": "combined-prep-20261107T223843911512Z",
+  "schema_version": 1,
+  "scope": "ENGINEERING_TRAIN_VALIDATION_PREPARATION_ONLY",
+  "source_record": {
+    "plan_sha256": "43b178e2ad6c778dd29a0f71f0d6e702249c038dcff51a4123531cbc101f5480",
+    "probe_sources": {
+      "experiments/c03/engineering/combined_preparation_probe.py": "dbf39d4eefb9e5693285de17fd5bec66e223aa68ebf78df1cb221614d45414ee",
+      "experiments/c03/engineering/preparation_probe.py": "d2d81bfee3abcd025d97501878740b92c396e2afc5b946e4d41a97c18174ac80",
+      "tests/test_c03_combined_preparation_probe.py": "7c2da05fd5769b4c847856d8d0194d47c4aee2f052e29b33ddc8560a43bc8b8b",
+      "tests/test_c03_preparation_probe.py": "14666536343eb3a6830dd8d50926e8e9cf9d28bd972f50b1f80fb7eb18bbfe9d"
+    }
+  },
+  "status": "VERIFIED_COMBINED_PREPARATION_COMPLETE",
+  "summary": {
+    "limits": {
+      "interval": 0.3,
+      "max_artifacts": 5368709120,
+      "max_rss": 4294967296,
+      "min_available": 2147483648,
+      "min_disk": 10737418240,
+      "seconds": 900,
+      "start_available": 6442450944,
+      "start_disk": 21474836480
+    },
+    "max_observed_artifact_bytes": 2769444284,
+    "minimum_available": 3473092608,
+    "peak_tree_rss": 3981201408,
+    "reason": null,
+    "scope": "ENGINEERING_TRAIN_VALIDATION_PREPARATION_ONLY",
+    "status": "COMPLETE",
+    "wall_seconds": 437.06200000003446,
+    "worker_exit": 0
+  },
+  "tensors": {
+    "stage1": {
+      "csr_bytes": 629932896,
+      "dtype": "float64",
+      "shape": [
+        1270025,
+        46
+      ]
+    },
+    "stage2": {
+      "csr_bytes": 595905808,
+      "dtype": "float64",
+      "shape": [
+        1201422,
+        46
+      ]
+    },
+    "validation": {
+      "csr_bytes": 347200208,
+      "dtype": "float64",
+      "shape": [
+        700000,
+        46
+      ]
+    }
+  }
+}

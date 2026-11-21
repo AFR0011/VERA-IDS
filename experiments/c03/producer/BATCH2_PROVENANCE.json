@@ -1,0 +1,53 @@
+{
+  "batch": "C03-BATCH2",
+  "boundaries": [
+    "Only generated synthetic fixture execution",
+    "Five sequential tiny CPU model components; one shared Stage-2 RF",
+    "No benchmark observation reads or fitting",
+    "No test reader or evaluator",
+    "Synthetic seal cannot authorize scientific test evaluation",
+    "Hashes establish drift detection, not cryptographic authenticity",
+    "Full-fit resource review and execution remain outstanding"
+  ],
+  "date": "2026-11-07",
+  "focused_tests": {
+    "command": "uv run python -m pytest tests/test_c03_producer_validation.py tests/test_c03_producer_foundation.py -p no:cacheprovider -q",
+    "duration_seconds": 10.97,
+    "passed": 58
+  },
+  "original_policy_sha256": "bf56f938d1fb193d2b383deeeec29f9d84759a4be829f6a0011f1bc20fe5e099",
+  "original_snapshot_sha256": "13e667a86a6872ff6192d1662085383e2b526752ceb783f8fc372b51487de9f4",
+  "plan_sha256": "473c6a464ecd08b7108ada84c423ea83d094fd6fb4dc81b7e6c7716aa9bc1f71",
+  "predecessor_provenance_sha256": "692030559f2ab1615f39f3d778b7007346c4e35726cf8c543dff285d5dd97ebe",
+  "required_checks": {
+    "all_nine_passed": true,
+    "evidence": ".release-audit/c03/batch2-checks.json",
+    "full_pytest_passed": 172,
+    "full_pytest_seconds": 25.79
+  },
+  "schema_version": 1,
+  "source_revision": "ca13f1097f851ce6693658ccc0c6dd35480fabd6",
+  "sources": {
+    "experiments/c03/c03_paired_runner_core.py": "ca718589c04d4749c11e104a62f2b367111588dc4aab574c678e7d73a9a37c6d",
+    "experiments/c03/c03_paths.py": "ac607a45082f0e424dbd70f2226e6a930145795d11b81add00b8f7c0de099fdb",
+    "experiments/c03/c03_selector_reference.py": "3305585362114fd454e509949c2590112facf0fc3ab3a17cec487bb184771524",
+    "experiments/c03/producer/__init__.py": "c8bced903a2b92c1b9cb6fea85577d4b3ee0774ebed0d11d7200d31562607660",
+    "experiments/c03/producer/__main__.py": "530a7f278b33b9e7f93fbf471423849ff301aec476ed3878ff3500b62bfd59bc",
+    "experiments/c03/producer/artifacts.py": "177aa6554687a8ba71e0d9da02cb4de6c15762db776b0f87fcb305b25acf5119",
+    "experiments/c03/producer/checkpoints.py": "b84c6327b90ab1267905b1484f978daeaa9c6e3c447cda99d2319495f8e9747c",
+    "experiments/c03/producer/models.py": "780d048be2bc395288c223b8149f9a52f817459b05de5d0c53e845691f91ca7f",
+    "experiments/c03/producer/plan.py": "f49e20ac875a03384148b68b61a18d5edac997e174b50dd54a4a277ec5ff63f2",
+    "experiments/c03/producer/sampling.py": "192ebf687609236e536df272513bbc99284b99f3d4b3485b02502830647534f5",
+    "experiments/c03/producer/sealing.py": "98ea09661762e91d60f4b8c79e2db706c5241ed1f7f3ba40d7f4d7af53b0122c",
+    "experiments/c03/producer/sources.py": "97eb1f4615d6971cff11c78ea6314d410197ede479fb692005cc296522be0752",
+    "experiments/c03/producer/validation.py": "fc621495f5c1a0993ceb6bd3f9f4df64aa26ff792bfb7bca6f7d26a0e68a7c76",
+    "outputs/12_jisa_finalization/09_ciciot_seed_reliability/protocol_b_loao_ciciot2023/seed_123/runs/aggregate_results.csv": "c123192dcf89a766e1bbd681a11107e96e0d017c84299a5ecf7b374b2d4ad209",
+    "pyproject.toml": "0bfd0206fc952f74db0b1dac569b308535acf5ff7497c2057451ef447a034b42",
+    "src/ids_eval_framework/_native/protocol_b_grid.py": "120936f1715872b0c3883fc443c825b49fb7d0473ec286a6c0d40393e3841255",
+    "src/ids_eval_framework/src/two_stage_engine.py": "ccee9350988401db7b4773e91e11c33cc45b63ee9fc7622445e2d720830b354a",
+    "tests/test_c03_producer_foundation.py": "9a5795fed23a7d1ebc11b0f5ab2ee806935deb5e25d91ec8413e694fd6722a93",
+    "tests/test_c03_producer_validation.py": "3ce6f4d020a75e0d11cdbff916c376fe2401536de1906b4b7e0878c1c3c500ce",
+    "uv.lock": "bacc857ad43b78ce2448de223ea08aa6d50092cd64802a8ec9512a8ba24318b6"
+  },
+  "status": "IMPLEMENTED_SYNTHETIC_VERIFICATION"
+}
